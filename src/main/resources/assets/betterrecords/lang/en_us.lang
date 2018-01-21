@@ -1,6 +1,9 @@
+# PARSE_ESCAPES
+
 # MISC
 itemGroup.betterrecords=Better Records
 betterrecords.version.newAvailable=A new version of BetterRecords is available!
+betterrecords.warning=WARNING: Parts of Better Records make use of flashing lights.\nTo disable them, set flashMode to 0 in the config.
 
 # Items & Blocks
 ## Items
@@ -66,22 +69,6 @@ gui.betterrecords.frequencytuner.ready=Tuner ready!
 gui.betterrecords.frequencytuner.status.noCrystal=No crystal to tune
 gui.betterrecords.frequencytuner.status.notBlank=Crystal already tuned
 gui.betterrecords.frequencytuner.status.invalidUrl=Invalid Icy Stream URL
-
-## Disclaimer
-gui.betterrecords.disclaimer.title=Better Records Disclaimer
-gui.betterrecords.disclaimer.warning=WARNING: Parts of this mod make use of flashing lights and images. Consult a parent or guardian before continuing. I am not responsible for anything that may occur while using this mod.
-gui.betterrecords.disclaimer.flashmode.none=None
-gui.betterrecords.disclaimer.flashmode.none.line1=No flashing lights/images
-gui.betterrecords.disclaimer.flashmode.low=Low
-gui.betterrecords.disclaimer.flashmode.low.line1=Some flashing lights/images
-gui.betterrecords.disclaimer.flashmode.norm=Normal
-gui.betterrecords.disclaimer.flashmode.norm.line1=Flashing lights/images
-gui.betterrecords.disclaimer.flashmode.rave=RAVE
-gui.betterrecords.disclaimer.flashmode.rave.line1=For the truly daring.
-gui.betterrecords.disclaimer.flashmode.rave.line2=Way too much flashy stuff
-gui.betterrecords.disclaimer.flashmode.rave.line3=which makes the game almost
-gui.betterrecords.disclaimer.flashmode.rave.line4=unplayable at times.
-gui.betterrecords.disclaimer.flashmode.rave.line5=But it looks awesome.
 
 # Overlay
 betterrecords.overlay.downloading=Downloading: %s
