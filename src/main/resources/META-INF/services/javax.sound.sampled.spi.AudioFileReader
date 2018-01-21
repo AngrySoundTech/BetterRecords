@@ -1,0 +1,2 @@
+javazoom.spi.vorbis.sampled.file.VorbisAudioFileReader
+javazoom.spi.mpeg.sampled.file.MpegAudioFileReader
