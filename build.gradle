@@ -80,6 +80,10 @@ shadowJar {
     dependencies {
         exclude dependency('junit:junit')
     }
+
+    relocate 'com.jcraft', 'com.codingforcookies.betterrecords.repack.jcraft'
+    relocate 'javazoom', 'com.codingforcookies.betterecords.repack.javazoom'
+    relocate 'org.tritonus', 'com.codingforcookies.betterrecords.repack.tritonus'
 }
 
 reobf {
