@@ -9,7 +9,7 @@ Modpacks
 ========
 You may use this mod in your modpack as long as:
 
-* You link back to the [forum post](http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2155190-better-records-download-songs-from-the-internet)
+* You link back to the [Curse page][curse]
 * You don't make money off of your modpack
 * You do not take credit for making any part of this mod. Give credit where credit is due. (NicholasFeldman & Stumblinbear)
 
