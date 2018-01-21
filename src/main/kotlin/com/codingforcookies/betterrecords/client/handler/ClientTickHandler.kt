@@ -18,18 +18,6 @@ object ClientTickHandler {
 
     @JvmStatic
     @SubscribeEvent
-    fun showDisclaimer(event: TickEvent.ClientTickEvent) {
-        if (event.phase == TickEvent.Phase.END) {
-            Minecraft.getMinecraft().player?.let {
-                if (ModConfig.client.flashMode < 0) {
-                    it.openGui(BetterRecords, 2, Minecraft.getMinecraft().world, 0, 0, 0)
-                }
-            }
-        }
-    }
-
-    @JvmStatic
-    @SubscribeEvent
     fun incrementNowPlayingInt(event: TickEvent.ClientTickEvent) {
         if (event.phase == TickEvent.Phase.START) {
             if (SoundHandler.nowPlaying != "" && SoundHandler.nowPlayingEnd < System.currentTimeMillis()) {
