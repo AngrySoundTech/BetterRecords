@@ -19,7 +19,6 @@ class GuiHandler : IGuiHandler {
     override fun getClientGuiElement(id: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int) = when(id) {
         0 -> GuiRecordEtcher(player.inventory, world.getTileEntity(BlockPos(x, y, z)) as TileRecordEtcher)
         1 -> GuiFrequencyTuner(player.inventory, world.getTileEntity(BlockPos(x, y, z)) as TileFrequencyTuner)
-        2 -> GuiBetterDisclaimer()
         else -> null
     }
 }
