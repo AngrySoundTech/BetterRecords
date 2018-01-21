@@ -1,2 +1,2 @@
-com.codingforcookies.betterecords.repack.javazoom.spi.vorbis.sampled.convert.VorbisFormatConversionProvider
-com.codingforcookies.betterecords.repack.javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider
+com.codingforcookies.betterrecords.repack.javazoom.spi.vorbis.sampled.convert.VorbisFormatConversionProvider
+com.codingforcookies.betterrecords.repack.javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider
