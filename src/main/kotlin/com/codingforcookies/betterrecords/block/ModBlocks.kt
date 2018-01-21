@@ -22,8 +22,6 @@ object ModBlocks {
     val blockLaser = BlockLaser("laser")
     val blockLaserCluster = BlockLaserCluster("lasercluster")
 
-    // TODO: Use reflection to register declared fields
-
     @JvmStatic
     @SubscribeEvent
     fun registerBlocks(event: RegistryEvent.Register<Block>) {
