@@ -23,4 +23,4 @@ Developing / Compiling
 [discord]: https://discord.gg/uhQFPUs "Discord Invite Link"
 [discord badge]: https://img.shields.io/discord/392066220259803156.svg?colorB=7289DA "Discord Badge"
 [travis]: https://travis-ci.org/NicholasFeldman/BetterRecords
-[travis badge]: https://img.shields.io/travis/NicholasFeldman/BetterRecords.svg
+[travis badge]: https://img.shields.io/travis/NicholasFeldman/BetterRecords/dev.svg
