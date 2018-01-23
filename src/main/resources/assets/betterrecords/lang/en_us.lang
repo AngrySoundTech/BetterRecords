@@ -1,9 +1,7 @@
-# PARSE_ESCAPES
-
 # MISC
 itemGroup.betterrecords=Better Records
 betterrecords.version.newAvailable=A new version of BetterRecords is available!
-betterrecords.warning=WARNING: Parts of Better Records make use of flashing lights.\nTo disable them, set flashMode to 0 in the config.
+betterrecords.warning=WARNING: Parts of Better Records make use of flashing lights. To disable them, set flashMode to 0 in the config.
 
 # Items & Blocks
 ## Items
