@@ -42,11 +42,6 @@ abstract class ModBlock(material: Material, open val name: String) : BlockContai
     }
 
     /**
-     * If the parent class has a tile entity, overriding this method will cause the tile entity to be registered with it
-     */
-    //open fun getTileEntityClass(): KClass<out TileEntity>? = null
-
-    /**
      * TODO: Try to get this method out of this class
      */
     override fun createNewTileEntity(worldIn: World?, meta: Int) =

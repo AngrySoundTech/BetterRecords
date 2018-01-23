@@ -4,9 +4,8 @@ import com.codingforcookies.betterrecords.ModConfig;
 import com.codingforcookies.betterrecords.api.connection.RecordConnection;
 import com.codingforcookies.betterrecords.api.record.IRecordAmplitude;
 import com.codingforcookies.betterrecords.api.wire.IRecordWireHome;
-import com.codingforcookies.betterrecords.util.BetterUtils;
-import com.codingforcookies.betterrecords.util.ClasspathInjector;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.Loader;
@@ -33,16 +32,6 @@ public class SoundHandler{
     public static int nowPlayingInt = 0;
 
     public static void initalize(){
-        File libs = new File(Minecraft.getMinecraft().mcDataDir, "betterrecords/libs");
-        libs.mkdirs();
-        if(!new File(libs, "vorbisspi-1.0.3-1.jar").exists()) FileDownloader.downloadFile("vorbisspi-1.0.3-1.jar", "https://raw.githubusercontent.com/stumblinbear/Versions/master/betterrecords/libs/vorbisspi-1.0.3-1.jar", "vorbisspi-1.0.3-1", libs);
-        if(!new File(libs, "tritonus-share-0.3.7-2.jar").exists()) FileDownloader.downloadFile("tritonus-share-0.3.7-2.jar", "https://raw.githubusercontent.com/stumblinbear/Versions/master/betterrecords/libs/tritonus-share-0.3.7-2.jar", "tritonus-share-0.3.7-2.", libs);
-        if(!new File(libs, "mp3spi1.9.5.jar").exists()) FileDownloader.downloadFile("mp3spi1.9.5.jar", "https://raw.githubusercontent.com/stumblinbear/Versions/master/betterrecords/libs/mp3spi1.9.5.jar", "mp3spi1.9.5", libs);
-        if(!new File(libs, "mp3plugin.jar").exists()) FileDownloader.downloadFile("mp3plugin.jar", "https://raw.githubusercontent.com/stumblinbear/Versions/master/betterrecords/libs/mp3plugin.jar", "mp3plugin", libs);
-        loadLibrary(new File(libs, "vorbisspi-1.0.3-1.jar"));
-        loadLibrary(new File(libs, "tritonus-share-0.3.7-2.jar"));
-        loadLibrary(new File(libs, "mp3spi1.9.5.jar"));
-        loadLibrary(new File(libs, "mp3plugin.jar"));
         soundLocation = new File(Minecraft.getMinecraft().mcDataDir, "betterrecords/cache");
         soundList = new HashMap<>();
         soundPlaying = new HashMap<>();
@@ -51,21 +40,6 @@ public class SoundHandler{
             soundList.put(sound.getName(), sound);
         }
         System.out.println("Loaded sound cache of " + soundList.size() + " sounds.");
-    }
-
-    private static void loadLibrary(File file){
-        System.out.println("Injecting library " + file.getName() + ".");
-        try{
-            Loader.instance().getModClassLoader().addFile(file);
-        }catch(IOException e){
-            e.printStackTrace();
-            System.err.println("Failed to load library, trying another method: " + file.getName());
-            try{
-                ClasspathInjector.INSTANCE.addFile(file);
-            }catch(IOException e1){
-                e1.printStackTrace();
-            }
-        }
     }
 
     public static void playSound(final int x, final int y, final int z, final int dimension, final float playRadius, final List<Sound> sounds, boolean repeat, boolean shuffle){
@@ -98,7 +72,7 @@ public class SoundHandler{
                     if(ModConfig.client.downloadSongs) {
                         if(FileDownloader.isDownloading) {
                             System.err.println("Song downloading... Please wait...");
-                            nowPlaying = BetterUtils.INSTANCE.getTranslatedString("overlay.nowplaying.error1");
+                            nowPlaying = I18n.format("betterrecords.overlay.error.pleaseWait");
                             nowPlayingEnd = System.currentTimeMillis() + 5000;
                             return;
                         }
@@ -169,7 +143,7 @@ public class SoundHandler{
                 e.printStackTrace();
                 if (Minecraft.getMinecraft().player != null) {
                     System.err.println("Failed to stream: " + url);
-                    nowPlaying = BetterUtils.INSTANCE.getTranslatedString("overlay.nowplaying.error2");
+                    nowPlaying = I18n.format("betterrecords.overlay.error.cantReadStream");
                 }
                 nowPlayingEnd = System.currentTimeMillis() + 5000;
             }
@@ -204,11 +178,11 @@ public class SoundHandler{
             if (Minecraft.getMinecraft().player != null) {
                 switch (type) {
                     case SONG:
-                        nowPlaying = BetterUtils.INSTANCE.getTranslatedString("overlay.nowplaying.error3");
+                        nowPlaying = I18n.format("betterrecords.overlay.error.cantReadFile");
                         System.err.println("Could not read file: Local: " + snd.local + " File: " + snd.name);
                         break;
                     case RADIO:
-                        nowPlaying = BetterUtils.INSTANCE.getTranslatedString("overlay.nowplaying.error2");
+                        nowPlaying = I18n.format("betterrecords.overlay.error.cantReadStream");
                         System.err.println("Failed to stream: URL: " + snd.url);
                         break;
                     default:

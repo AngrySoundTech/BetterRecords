@@ -12,8 +12,16 @@ class TileSpeaker : ModTile(), IRecordWire {
     var rotation = 0f
 
     var size = BlockSpeaker.SpeakerSize.SMALL
-        get() = world?.getBlockState(pos)?.getValue(BlockSpeaker.PROPERTYSIZE) ?: BlockSpeaker.SpeakerSize.SMALL
-
+        get() {
+            // Horrible hacky solution to fix an issue that only seems to occur sometimes.
+            // This will get properly fixed in the next major refactoring pass of blocks / tiles.
+            // Which is planned very shortly. In order to properly fix the issue, the way I do many things should be refactored
+            return try {
+                world?.getBlockState(pos)?.getValue(BlockSpeaker.PROPERTYSIZE) ?: BlockSpeaker.SpeakerSize.SMALL
+            } catch (e: Exception) {
+                BlockSpeaker.SpeakerSize.SMALL
+            }
+        }
 
     override var connections = mutableListOf<RecordConnection>()
 
@@ -43,5 +51,4 @@ class TileSpeaker : ModTile(), IRecordWire {
         set("rotation", rotation)
         set("connections", ConnectionHelper.serializeConnections(connections))
     }
-
 }
