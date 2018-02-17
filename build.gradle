@@ -37,9 +37,21 @@ junitPlatform {
     }
 }
 
-if (project.hasProperty('projVersion')) {
-    version = "$minecraft_version-$project.projVersion"
+// Discern the environment we are building in,
+// Based on variables that would only be set in jenkins
+if (System.getenv('JENKINS_HOME') &&  !(System.getenv('GIT_BRANCH') == 'master')) {
+    // We are for sure in jenkins, and not building for
+    // release. This is a snapshot build of a branch.
+    version = "$minecraft_version-SNAPSHOT-jenkins-${System.getenv('BUILD_NUMBER')}"
 } else {
+    // We might be in jenkins, we might be local.
+    // Doesn't matter though.
+
+    // If we're local, we want to build as normal.
+
+    // If we're in Jenkins, and this is the master branch,
+    // We know we're not building a snapshot, because
+    // of our branching model. This is a release build.
     version = "$minecraft_version-$mod_version"
 }
 
