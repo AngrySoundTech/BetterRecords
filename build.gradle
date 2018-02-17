@@ -37,7 +37,11 @@ junitPlatform {
     }
 }
 
-version = "$minecraft_version-$mod_version"
+if (project.hasProperty('projVersion')) {
+    version = "$minecraft_version-$project.projVersion"
+} else {
+    version = "$minecraft_version-$mod_version"
+}
 
 minecraft {
     version = "$minecraft_version-$forge_version"
