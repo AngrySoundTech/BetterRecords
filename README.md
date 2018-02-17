@@ -1,6 +1,6 @@
 BetterRecords
 =============
-[![curse badge]][curse] [![discord badge]][discord] [![travis badge]][travis]
+[![curse badge]][curse] [![discord badge]][discord] [![jenkins badge]][jenkins]
 
 Better Records adds the ability to download your favorite songs
 from the internet directly into your game, for all your friends to hear!
@@ -22,5 +22,5 @@ Developing / Compiling
 [curse badge]: http://cf.way2muchnoise.eu/full_better-records_downloads.svg "Curse Badge"
 [discord]: https://discord.gg/uhQFPUs "Discord Invite Link"
 [discord badge]: https://img.shields.io/discord/392066220259803156.svg?colorB=7289DA "Discord Badge"
-[travis]: https://travis-ci.org/NicholasFeldman/BetterRecords
-[travis badge]: https://img.shields.io/travis/NicholasFeldman/BetterRecords/dev.svg
+[jenkins]: https://sebas.feldman.tech/job/BetterRecords/
+[jenkins badge]: https://img.shields.io/jenkins/s/https/sebas.feldman.tech/job/BetterRecords.svg
