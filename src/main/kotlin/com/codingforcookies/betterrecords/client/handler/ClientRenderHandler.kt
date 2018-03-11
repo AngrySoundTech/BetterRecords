@@ -20,6 +20,8 @@ object ClientRenderHandler {
 
     var strobeLinger = 0f
 
+    var nowDownloading: String? = null
+
     @SubscribeEvent
     fun onClientRender(event: TickEvent.RenderTickEvent) {
         if (event.phase == TickEvent.Phase.END) {
