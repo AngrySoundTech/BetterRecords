@@ -39,10 +39,10 @@ junitPlatform {
 
 // Discern the environment we are building in,
 // Based on variables that would only be set in jenkins
-if (System.getenv('JENKINS_HOME') &&  !(System.getenv('GIT_BRANCH') == 'master')) {
+if (System.getenv('CI') && System.getenv('GIT_BRANCH') != 'master') {
     // We are for sure in jenkins, and not building for
     // release. This is a snapshot build of a branch.
-    version = "$minecraft_version-SNAPSHOT-jenkins-${System.getenv('BUILD_NUMBER')}"
+    version = "$minecraft_version-SNAPSHOT-jenkins-${System.getenv('GIT_BRANCH')}-${System.getenv('BUILD_NUMBER')}".replaceAll("/", "-")
 } else {
     // We might be in jenkins, we might be local.
     // Doesn't matter though.
