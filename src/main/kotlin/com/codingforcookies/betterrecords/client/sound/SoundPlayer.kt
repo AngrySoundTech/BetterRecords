@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.util.math.BlockPos
 import org.apache.commons.io.FilenameUtils
 import java.io.File
+import java.io.InputStream
 import java.net.URL
 import javax.sound.sampled.*
 
@@ -36,6 +37,19 @@ object SoundPlayer {
         )
     }
 
+    fun playSoundFromStream(pos: BlockPos, dimension: Int, radius: Float, sound: Sound) {
+        BetterRecords.logger.info("Playing sound from stream at $pos in $dimension")
+
+        val urlConn = IcyURLConnection(URL(if (sound.url.startsWith("http")) sound.url else "http://${sound.url}")).apply {
+            instanceFollowRedirects = true
+        }
+
+        urlConn.connect()
+
+        playingSounds[Pair(pos, dimension)] = sound
+        playStream(urlConn.inputStream, pos, dimension)
+    }
+
     fun isSoundPlayingAt(pos: BlockPos, dimension: Int) =
             playingSounds.containsKey(Pair(pos, dimension))
 
@@ -45,7 +59,14 @@ object SoundPlayer {
     }
 
     private fun playFile(file: File, pos: BlockPos, dimension: Int) {
-        val ain = AudioSystem.getAudioInputStream(file)
+        play(AudioSystem.getAudioInputStream(file), pos, dimension)
+    }
+
+    private fun playStream(stream: InputStream, pos: BlockPos, dimension: Int) {
+        play(AudioSystem.getAudioInputStream(stream), pos, dimension)
+    }
+
+    private fun play(ain: AudioInputStream, pos: BlockPos, dimension: Int) {
         val baseFormat = ain.format
         val decodedFormat = AudioFormat(
                 AudioFormat.Encoding.PCM_SIGNED,
