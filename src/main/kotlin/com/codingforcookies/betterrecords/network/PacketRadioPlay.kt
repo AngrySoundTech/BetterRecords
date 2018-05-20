@@ -1,6 +1,6 @@
 package com.codingforcookies.betterrecords.network
 
-import com.codingforcookies.betterrecords.client.sound.Sound
+import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.client.sound.SoundPlayer
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
@@ -47,7 +47,7 @@ class PacketRadioPlay @JvmOverloads constructor(
 
             with (message) {
                 if (playRadius > 100000 || Math.abs(Math.sqrt(Math.pow(player.posX - pos.x, 2.0) + Math.pow(player.posY - pos.y, 2.0) + Math.pow(player.posZ - pos.z, 2.0))).toFloat() < playRadius) {
-                    SoundPlayer.playSoundFromStream(pos, dimension, playRadius, Sound(pos.x, pos.y, pos.z, dimension, playRadius).setInfo(local, url, local))
+                    SoundPlayer.playSoundFromStream(pos, dimension, playRadius, Sound(url, local))
                 }
             }
 

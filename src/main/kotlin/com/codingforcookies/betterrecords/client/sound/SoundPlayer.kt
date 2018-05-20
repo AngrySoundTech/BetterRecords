@@ -1,6 +1,7 @@
 package com.codingforcookies.betterrecords.client.sound
 
 import com.codingforcookies.betterrecords.BetterRecords
+import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.client.handler.ClientRenderHandler
 import com.codingforcookies.betterrecords.util.downloadAsync
 import net.minecraft.client.Minecraft
@@ -20,7 +21,7 @@ object SoundPlayer {
     fun playSound(pos: BlockPos, dimension: Int, radius: Float, sound: Sound) {
         BetterRecords.logger.info("Playing sound at $pos in Dimension $dimension")
 
-        ClientRenderHandler.nowDownloading = sound.local
+        ClientRenderHandler.nowDownloading = sound.localName
         ClientRenderHandler.showDownloading = true
         downloadAsync(URL(sound.url), File(downloadFolder, FilenameUtils.getName(sound.url)),
                 update = { curr, total ->
