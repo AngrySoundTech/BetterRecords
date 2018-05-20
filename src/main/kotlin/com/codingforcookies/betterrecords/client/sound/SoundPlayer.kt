@@ -4,6 +4,7 @@ import com.codingforcookies.betterrecords.BetterRecords
 import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.client.handler.ClientRenderHandler
 import com.codingforcookies.betterrecords.util.downloadAsync
+import kotlinx.coroutines.experimental.launch
 import net.minecraft.client.Minecraft
 import net.minecraft.util.math.BlockPos
 import org.apache.commons.io.FilenameUtils
@@ -48,7 +49,10 @@ object SoundPlayer {
         urlConn.connect()
 
         playingSounds[Pair(pos, dimension)] = sound
-        playStream(urlConn.inputStream, pos, dimension)
+
+        launch {
+            playStream(urlConn.inputStream, pos, dimension)
+        }
     }
 
     fun isSoundPlayingAt(pos: BlockPos, dimension: Int) =
