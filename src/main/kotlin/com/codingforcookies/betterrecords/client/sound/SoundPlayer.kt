@@ -4,6 +4,7 @@ import com.codingforcookies.betterrecords.BetterRecords
 import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.client.handler.ClientRenderHandler
 import com.codingforcookies.betterrecords.util.downloadAsync
+import com.codingforcookies.betterrecords.util.getVolumeForPlayerFromBlock
 import kotlinx.coroutines.experimental.launch
 import net.minecraft.client.Minecraft
 import net.minecraft.util.math.BlockPos
@@ -90,30 +91,31 @@ object SoundPlayer {
     private fun rawPlay(targetFormat: AudioFormat, din: AudioInputStream, pos: BlockPos, dimension: Int) {
         val line = getLine(targetFormat)
 
-        line?.let {
-            line.start()
+        val volumeControl = line.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl
 
-            val buffer = ByteArray(4096)
-            var bytes = din.read(buffer)
+        line.start()
 
-            while (bytes >= 0 && isSoundPlayingAt(pos, dimension)) {
-                line.write(buffer, 0, bytes)
-                bytes = din.read(buffer)
-            }
+        val buffer = ByteArray(4096)
+        var bytes = din.read(buffer)
 
-            stopPlayingAt(pos, dimension)
-
-            line.drain()
-            line.stop()
-            line.close()
-            din.close()
+        while (bytes >= 0 && isSoundPlayingAt(pos, dimension)) {
+            volumeControl.value = getVolumeForPlayerFromBlock(pos)
+            line.write(buffer, 0, bytes)
+            bytes = din.read(buffer)
         }
+
+        stopPlayingAt(pos, dimension)
+
+        line.drain()
+        line.stop()
+        line.close()
+        din.close()
     }
 
-    private fun getLine(audioFormat: AudioFormat): SourceDataLine? {
+    private fun getLine(audioFormat: AudioFormat): SourceDataLine {
         val info = DataLine.Info(SourceDataLine::class.java, audioFormat)
         val res = AudioSystem.getLine(info)
         res.open()
-        return res as? SourceDataLine
+        return res as SourceDataLine
     }
 }
