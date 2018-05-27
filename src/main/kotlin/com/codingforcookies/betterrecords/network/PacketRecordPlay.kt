@@ -1,5 +1,6 @@
 package com.codingforcookies.betterrecords.network
 
+import com.codingforcookies.betterrecords.api.event.RecordInsertEvent
 import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.client.sound.SoundPlayer
 import com.codingforcookies.betterrecords.extensions.forEachTag
@@ -7,6 +8,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.network.ByteBufUtils
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler
@@ -81,12 +83,8 @@ class PacketRecordPlay @JvmOverloads constructor(
     class Handler : IMessageHandler<PacketRecordPlay, IMessage> {
 
         override fun onMessage(message: PacketRecordPlay, ctx: MessageContext): IMessage? {
-            val player = Minecraft.getMinecraft().player
-
             with(message) {
-                if (playRadius > 100000 || Math.abs(Math.sqrt(Math.pow(player.posX - pos.x, 2.0) + Math.pow(player.posY - pos.y, 2.0) + Math.pow(player.posZ - pos.z, 2.0))).toFloat() < playRadius) {
-                    SoundPlayer.playSound(pos, dimension, playRadius, sounds.first())
-                }
+                MinecraftForge.EVENT_BUS.post(RecordInsertEvent(pos, dimension, playRadius, sounds))
             }
 
             return null
