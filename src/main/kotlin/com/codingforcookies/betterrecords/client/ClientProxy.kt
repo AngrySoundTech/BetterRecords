@@ -26,11 +26,6 @@ class ClientProxy : CommonProxy() {
                 "audio/wav", "audio/x-wav")
     }
 
-    override fun preInit(event: FMLPreInitializationEvent) {
-        super.preInit(event)
-        SoundHandler.initalize()
-    }
-
     override fun init(event: FMLInitializationEvent) {
         super.init(event)
 
