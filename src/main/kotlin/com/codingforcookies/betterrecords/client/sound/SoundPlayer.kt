@@ -32,6 +32,7 @@ object SoundPlayer {
                 success = {
                     ClientRenderHandler.showDownloading = false
                     playingSounds[Pair(pos, dimension)] = sound
+                    ClientRenderHandler.showPlayingWithTimeout(sound.localName)
                     playFile(File(downloadFolder, FilenameUtils.getName(sound.url)), pos, dimension)
                 },
                 failure = {
@@ -58,6 +59,9 @@ object SoundPlayer {
 
     fun isSoundPlayingAt(pos: BlockPos, dimension: Int) =
             playingSounds.containsKey(Pair(pos, dimension))
+
+    fun getSoundPlayingAt(pos: BlockPos, dimension: Int) =
+            playingSounds[Pair(pos, dimension)]
 
     fun stopPlayingAt(pos: BlockPos, dimension: Int) {
         BetterRecords.logger.info("Stopping sound at $pos in Dimension $dimension")
