@@ -20,7 +20,6 @@ object ClientRenderHandler {
 
     var strobeLinger = 0f
 
-    @JvmStatic
     @SubscribeEvent
     fun onClientRender(event: TickEvent.RenderTickEvent) {
         if (event.phase == TickEvent.Phase.END) {
