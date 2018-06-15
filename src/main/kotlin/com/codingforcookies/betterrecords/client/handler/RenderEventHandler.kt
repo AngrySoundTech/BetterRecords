@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL11
 @Mod.EventBusSubscriber(modid = ID, value = [Side.CLIENT])
 object RenderEventHandler {
 
-    @JvmStatic
     @SubscribeEvent
     fun onRenderEvent(event: RenderWorldLastEvent) {
         val mc = Minecraft.getMinecraft()
