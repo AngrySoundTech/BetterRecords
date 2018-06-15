@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side
 @Mod.EventBusSubscriber(modid = ID, value = [Side.CLIENT])
 object ClientTickHandler {
 
-    @JvmStatic
     @SubscribeEvent
     fun incrementNowPlayingInt(event: TickEvent.ClientTickEvent) {
         if (event.phase == TickEvent.Phase.START) {
@@ -28,7 +27,6 @@ object ClientTickHandler {
         }
     }
 
-    @JvmStatic
     @SubscribeEvent
     fun updateVolumeBasedOnDistance(event: TickEvent.ClientTickEvent) {
         if (event.phase == TickEvent.Phase.START) {
