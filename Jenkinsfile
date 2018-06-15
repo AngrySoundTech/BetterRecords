@@ -35,15 +35,13 @@ pipeline {
 
     post {
         success {
-            discordSend webhookURL: "https://discordapp.com/api/webhooks/456986000447766534/${DISCORD_TOKEN}",
-                        title: 'A New Development Build is Available!',
-                        link: env.BUILD_URL,
-                        description: """
-${env.BUILD_TAG}-${env.GIT_COMMIT}
-
-Please report any issues to https://github.com/NicholasFeldman/BetterRecords/issues
-                                     """,
-                        footer: 'Thank you for testing!'
+            script {
+                discordSend webhookURL: "https://discordapp.com/api/webhooks/456986000447766534/${DISCORD_TOKEN}",
+                            title: 'A New Development Build is Available!',
+                            link: env.BUILD_URL,
+                            description: "${env.BUILD_TAG}-${env.GIT_COMMIT}\n\nPlease report any issues to https://github.com/NicholasFeldman/BetterRecords/issues",
+                            footer: 'Thank you for testing!'
+            }
         }
     }
 }
