@@ -16,7 +16,7 @@ fun getVolumeForPlayerFromBlock(pos: BlockPos): Float {
 
     // The record player or Radio.
     // If it isn't one of those, we return a volume of zero.
-    val te = world.getTileEntity(pos) as? IRecordWireHome ?: return 0F
+    val te = world.getTileEntity(pos) as? IRecordWireHome ?: return -80F
 
     var distance = player.position.distanceTo(pos)
 
