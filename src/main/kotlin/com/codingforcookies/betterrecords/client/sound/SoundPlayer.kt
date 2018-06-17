@@ -27,7 +27,7 @@ object SoundPlayer {
         ClientRenderHandler.showDownloading = true
         downloadAsync(URL(sound.url), File(downloadFolder, FilenameUtils.getName(sound.url)),
                 update = { curr, total ->
-                    ClientRenderHandler.downloadPercent = (curr / total).toFloat()
+                    ClientRenderHandler.downloadPercent = curr / total
                 },
                 success = {
                     ClientRenderHandler.showDownloading = false

@@ -11,7 +11,7 @@ import java.net.URL
  * Downloads a resource asynchronously.
  */
 fun downloadAsync(url: URL, target: File,
-                  update: (curr: Long, total: Long) -> Unit = { _, _ -> },
+                  update: (curr: Float, total: Float) -> Unit = { _, _ -> },
                   success: () -> Unit = {},
                   failure: () -> Unit = {}) {
 
@@ -34,7 +34,7 @@ fun downloadAsync(url: URL, target: File,
         while (bytes >= 0) {
             outputStream.write(buffer, 0, bytes)
             bytesCopied += bytes
-            update(bytesCopied, size)
+            update(bytesCopied.toFloat(), size.toFloat())
             bytes = inputStream.read(buffer)
         }
 
