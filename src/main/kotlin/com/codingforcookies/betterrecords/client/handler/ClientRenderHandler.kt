@@ -23,12 +23,14 @@ object ClientRenderHandler {
     var nowDownloading: String? = null
     var downloadPercent = 0F
 
+    var showPlayingColor = 0
     var showPlaying = false
     var nowPlaying: String? = null
 
     fun showPlayingWithTimeout(playing: String) {
         nowPlaying = playing
         showPlaying = true
+        showPlayingColor = 0
 
         launch {
             Thread.sleep(3 * 1000)
@@ -101,8 +103,23 @@ object ClientRenderHandler {
                         return
                     }
 
-                    fontRenderer.drawStringWithShadow(I18n.format("betterrecords.overlay.nowplaying", it), (width / 2 - fontRenderer.getStringWidth(I18n.format("betterrecords.overlay.nowplaying", it)) / 2).toFloat(), (height - height / 4).toFloat(), 0xFFFF33)
+                    // I don't understand this but it works
+                    val f3 = showPlayingColor
+                    val l1 = Color.HSBtoRGB(f3 / 50.0f, 0.7f, 0.6f) and 16777215
+                    var k1 = (f3 * 255.0f / 20.0f).toInt()
+                    if (k1 > 255) k1 = 255
+
+                    fontRenderer.drawStringWithShadow(I18n.format("betterrecords.overlay.nowplaying", it), (width / 2 - fontRenderer.getStringWidth(I18n.format("betterrecords.overlay.nowplaying", it)) / 2).toFloat(), (height - height / 4).toFloat(), l1 + (k1 shl 24 and -16777216))
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun incrementNowPlayingInt(event: TickEvent.ClientTickEvent) {
+        if (event.phase == TickEvent.Phase.START) {
+            if (showPlaying) {
+                showPlayingColor += 3
             }
         }
     }
