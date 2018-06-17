@@ -7,9 +7,6 @@ import net.minecraft.client.Minecraft
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.BlockPos
 
-/**
- *
- */
 fun getVolumeForPlayerFromBlock(pos: BlockPos): Float {
     val player = Minecraft.getMinecraft().player
     val world = Minecraft.getMinecraft().world
