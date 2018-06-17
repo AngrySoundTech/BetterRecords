@@ -17,13 +17,20 @@ fun downloadAsync(url: URL, target: File,
 
     launch {
         val connection = url.openConnection()
-
         val size = connection.contentLength.toLong()
+
+        if (size == target.length()) {
+            success()
+            return@launch
+        }
 
         if (size / 1024 / 1024 > ModConfig.client.downloadMax) {
             failure()
             return@launch
         }
+
+        // Delete the target in case it is broken / A different file in the cache for whatever reason
+        target.delete()
 
         val inputStream = BufferedInputStream(url.openStream())
         val outputStream = FileOutputStream(target)
