@@ -8,5 +8,6 @@ data class RecordInsertEvent(
         val pos: BlockPos,
         val dimension: Int,
         val playRadius: Float,
-        val sounds: List<Sound>
+        val sounds: List<Sound>,
+        val repeat: Boolean
 ) : Event()

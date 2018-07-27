@@ -1,27 +1,22 @@
 package com.codingforcookies.betterrecords.client.sound
 
 import com.codingforcookies.betterrecords.api.sound.Sound
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
 import net.minecraft.util.math.BlockPos
+import kotlin.concurrent.thread
 
 object SoundManager {
 
-    private val jobs = hashMapOf<Pair<BlockPos, Int>, Job>()
+    private val jobs = hashMapOf<Pair<BlockPos, Int>, Thread>()
 
     fun queueSongsAt(pos: BlockPos, dimension: Int, sounds: List<Sound>, shuffle: Boolean = false, repeat: Boolean = false) {
-        val job = launch {
+        val job = thread {
             while(true) {
-                (if (shuffle) {
-                    sounds.shuffled()
-                } else {
-                    sounds
-                }).forEach {
+                sounds.forEach {
                     SoundPlayer.playSound(pos, dimension, it)
+                }
 
-                    if (!repeat) {
-                        return@launch
-                    }
+                if (!repeat) {
+                    return@thread
                 }
             }
         }
@@ -30,7 +25,7 @@ object SoundManager {
     }
 
     fun queueStreamAt(pos: BlockPos, dimension: Int, sound: Sound) {
-        val job = launch {
+        val job = thread {
             SoundPlayer.playSoundFromStream(pos, dimension, sound)
         }
 
@@ -38,6 +33,8 @@ object SoundManager {
     }
 
     fun stopQueueAt(pos: BlockPos, dimension: Int) {
+        SoundPlayer.stopPlayingAt(pos, dimension)
+        jobs[Pair(pos, dimension)]?.stop()
         jobs.remove(Pair(pos, dimension))
     }
 }

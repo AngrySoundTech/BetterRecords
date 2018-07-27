@@ -5,7 +5,6 @@ import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.client.handler.ClientRenderHandler
 import com.codingforcookies.betterrecords.util.downloadFile
 import com.codingforcookies.betterrecords.util.getVolumeForPlayerFromBlock
-import kotlinx.coroutines.experimental.launch
 import net.minecraft.client.Minecraft
 import net.minecraft.util.math.BlockPos
 import org.apache.commons.io.FilenameUtils
@@ -25,7 +24,10 @@ object SoundPlayer {
 
         ClientRenderHandler.nowDownloading = sound.localName
         ClientRenderHandler.showDownloading = true
-        downloadFile(URL(sound.url), File(downloadFolder, FilenameUtils.getName(sound.url)),
+
+        val targetFile = File(downloadFolder, FilenameUtils.getName(sound.url).replace(Regex("\\W+"), ""))
+
+        downloadFile(URL(sound.url), targetFile,
                 update = { curr, total ->
                     ClientRenderHandler.downloadPercent = curr / total
                 },
@@ -33,7 +35,7 @@ object SoundPlayer {
                     ClientRenderHandler.showDownloading = false
                     playingSounds[Pair(pos, dimension)] = sound
                     ClientRenderHandler.showPlayingWithTimeout(sound.localName)
-                    playFile(File(downloadFolder, FilenameUtils.getName(sound.url)), pos, dimension)
+                    playFile(targetFile, pos, dimension)
                 },
                 failure = {
                     ClientRenderHandler.showDownloading = false

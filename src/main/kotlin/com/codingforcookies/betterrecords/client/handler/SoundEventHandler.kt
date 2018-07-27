@@ -16,11 +16,11 @@ object SoundEventHandler {
     @JvmStatic
     @SubscribeEvent
     fun onRecordInserted(event: RecordInsertEvent) {
-        val (pos, dimension, playRadius, sounds) = event
+        val (pos, dimension, playRadius, sounds, repeat) = event
         val player = Minecraft.getMinecraft().player
 
         if (playRadius > 100000 || Math.abs(Math.sqrt(Math.pow(player.posX - pos.x, 2.0) + Math.pow(player.posY - pos.y, 2.0) + Math.pow(player.posZ - pos.z, 2.0))).toFloat() < playRadius) {
-            SoundManager.queueSongsAt(pos, dimension, sounds)
+            SoundManager.queueSongsAt(pos, dimension, sounds, repeat = repeat )
         }
 
     }

@@ -1,5 +1,6 @@
 package com.codingforcookies.betterrecords.util
 
+import com.codingforcookies.betterrecords.BetterRecords
 import com.codingforcookies.betterrecords.ModConfig
 import kotlinx.coroutines.experimental.launch
 import java.io.BufferedInputStream
@@ -19,6 +20,7 @@ fun downloadFile(url: URL, target: File,
         val size = connection.contentLength.toLong()
 
         if (size == target.length()) {
+            BetterRecords.logger.info("Target file exists in cache")
             success()
             return
         }

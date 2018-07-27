@@ -84,7 +84,11 @@ class PacketRecordPlay @JvmOverloads constructor(
 
         override fun onMessage(message: PacketRecordPlay, ctx: MessageContext): IMessage? {
             with(message) {
-                MinecraftForge.EVENT_BUS.post(RecordInsertEvent(pos, dimension, playRadius, sounds))
+                if (shuffle) {
+                    sounds.shuffle()
+                }
+
+                MinecraftForge.EVENT_BUS.post(RecordInsertEvent(pos, dimension, playRadius, sounds, repeat))
             }
 
             return null
