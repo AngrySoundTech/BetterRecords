@@ -13,9 +13,9 @@ item.betterrecords:wire.name=Speaker Wire
 item.betterrecords:wirecutters.name=Wire Cutters
 
 ### Item Descriptions
-item.betterercords:record.desc.by=By: %s
-item.betterercords:record.desc.size=Size: %dmb
-item.betterercords:record.desc.repeat=Repeat Enabled
+item.betterrecords:record.desc.by=By: %s
+item.betterrecords:record.desc.size=Size: %dmb
+item.betterrecords:record.desc.repeat=Repeat Enabled
 
 item.betterrecords:multirecord.desc.song=Song %d: %s
 item.betterrecords:multirecord.desc.shuffle=Shuffle Enabled
