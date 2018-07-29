@@ -42,11 +42,11 @@ open class ItemRecord(name: String) : ModItem(name), IRecord {
     @SideOnly(Side.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         stack.tagCompound?.let {
-            tooltip += I18n.format("item.betterercords:record.desc.by", it.getString("author"))
-            tooltip += I18n.format("item.betterercords:record.desc.size", it.getInteger("size"))
+            tooltip += I18n.format("item.betterrecords:record.desc.by", it.getString("author"))
+            tooltip += I18n.format("item.betterrecords:record.desc.size", it.getInteger("size"))
             if (it.getBoolean("repeat")) {
                 tooltip += ""
-                tooltip += "\u00a7e" + I18n.format("item.betterercords:record.desc.repeat")
+                tooltip += "\u00a7e" + I18n.format("item.betterrecords:record.desc.repeat")
             }
         }
     }
