@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import net.minecraftforge.fml.relauncher.Side
 import java.io.File
+import java.net.MalformedURLException
 import java.net.URL
 
 /**
@@ -70,14 +71,20 @@ object Libraries {
         if (ModConfig.client.loadDefaultLibraries) {
             listOf("assets/betterrecords/libraries/kevin_macleod.json")
                     .map { RemoteLibrary(BetterUtils.getResourceFromJar(it)) }
-                    .forEach { libraries.add(it) }
+                    .forEach {
+                        libraries.add(it)
+                        BetterRecords.logger.info("Loaded Built-in Library: ${it.name}")
+                    }
         }
 
         // Load all of the local library files
         LOCAL_LIBRARY_DIR
                 .listFiles()
                 .map { LocalLibrary(it) }
-                .forEach { libraries.add(it) }
+                .forEach {
+                    libraries.add(it)
+                    BetterRecords.logger.info("Loaded Local Library: ${it.file}")
+                }
 
         if (ModConfig.useRemoteLibraries) {
             // Load remote libraries
@@ -85,8 +92,18 @@ object Libraries {
                     .readLines()
                     .map(String::trim)
                     .filter { !it.startsWith("#") }
-                    .map { RemoteLibrary(URL(it)) }
-                    .forEach { libraries.add(it) }
+                    .mapNotNull {
+                        try {
+                            RemoteLibrary(URL(it))
+                        } catch (e: MalformedURLException) {
+                            BetterRecords.logger.error("Unable to load remote library: $it")
+                            null
+                        }
+                    }
+                    .forEach {
+                        libraries.add(it)
+                        BetterRecords.logger.info("Loaded Remote Library: ${it.name}")
+                    }
         }
     }
 
