@@ -25,7 +25,7 @@ object SoundPlayer {
         ClientRenderHandler.nowDownloading = sound.localName
         ClientRenderHandler.showDownloading = true
 
-        val targetFile = File(downloadFolder, FilenameUtils.getName(sound.url).replace(Regex("\\W+"), ""))
+        val targetFile = File(downloadFolder, FilenameUtils.getName(sound.url).replace(Regex("[^a-zA-Z0-9_\\.]"), "_"))
 
         downloadFile(URL(sound.url), targetFile,
                 update = { curr, total ->

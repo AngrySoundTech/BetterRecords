@@ -33,6 +33,9 @@ fun downloadFile(url: URL, target: File,
         // Delete the target in case it is broken / A different file in the cache for whatever reason
         target.delete()
 
+        // Create the cache folder if it doesn't exist
+        target.parentFile.mkdirs()
+
         val inputStream = BufferedInputStream(url.openStream())
         val outputStream = FileOutputStream(target)
 
