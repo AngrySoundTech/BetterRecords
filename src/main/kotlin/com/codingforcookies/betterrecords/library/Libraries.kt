@@ -71,14 +71,20 @@ object Libraries {
         if (ModConfig.client.loadDefaultLibraries) {
             listOf("assets/betterrecords/libraries/kevin_macleod.json")
                     .map { RemoteLibrary(BetterUtils.getResourceFromJar(it)) }
-                    .forEach { libraries.add(it) }
+                    .forEach {
+                        libraries.add(it)
+                        BetterRecords.logger.info("Loaded Built-in Library: ${it.name}")
+                    }
         }
 
         // Load all of the local library files
         LOCAL_LIBRARY_DIR
                 .listFiles()
                 .map { LocalLibrary(it) }
-                .forEach { libraries.add(it) }
+                .forEach {
+                    libraries.add(it)
+                    BetterRecords.logger.info("Loaded Local Library: ${it.file}")
+                }
 
         if (ModConfig.useRemoteLibraries) {
             // Load remote libraries
@@ -94,7 +100,10 @@ object Libraries {
                             null
                         }
                     }
-                    .forEach { libraries.add(it) }
+                    .forEach {
+                        libraries.add(it)
+                        BetterRecords.logger.info("Loaded Remote Library: ${it.name}")
+                    }
         }
     }
 
