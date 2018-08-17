@@ -1,10 +1,19 @@
 package com.codingforcookies.betterrecords.library
 
+import com.codingforcookies.betterrecords.BetterRecords
+import com.codingforcookies.betterrecords.ID
 import com.codingforcookies.betterrecords.ModConfig
+import com.codingforcookies.betterrecords.network.PacketHandler
+import com.codingforcookies.betterrecords.network.PacketSendLibrary
 import com.codingforcookies.betterrecords.util.BetterUtils
 import net.minecraft.client.Minecraft
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.server.MinecraftServer
 import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.PlayerEvent
+import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import net.minecraftforge.fml.relauncher.Side
 import java.io.File
 import java.net.URL
@@ -22,6 +31,7 @@ import java.net.URL
  * If we are running on the server, entries in this library will be sent to the client.
  * If we are running on the client, entries from the server will be added to this library.
  */
+@Mod.EventBusSubscriber(Side.SERVER, modid = ID)
 object Libraries {
 
     /** The directory where local libraries are stored */
@@ -76,5 +86,15 @@ object Libraries {
                 .filter { !it.startsWith("#") }
                 .map { RemoteLibrary(URL(it)) }
                 .forEach { libraries.add(it) }
+    }
+
+    @SubscribeEvent
+    fun onClientConnect(event: PlayerEvent.PlayerLoggedInEvent) {
+        libraries.forEach {
+            BetterRecords.logger.info("Sending library \"${it.name}\" to client: ${event.player.name}")
+
+            // We can safely cast the player because this event should only be listened to on the server
+            PacketHandler.sendToPlayer(PacketSendLibrary(it), event.player as EntityPlayerMP)
+        }
     }
 }
