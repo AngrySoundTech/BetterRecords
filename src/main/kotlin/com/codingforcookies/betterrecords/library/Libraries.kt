@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent
 import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import net.minecraftforge.fml.relauncher.Side
 import java.io.File
+import java.net.MalformedURLException
 import java.net.URL
 
 /**
@@ -85,7 +86,14 @@ object Libraries {
                     .readLines()
                     .map(String::trim)
                     .filter { !it.startsWith("#") }
-                    .map { RemoteLibrary(URL(it)) }
+                    .mapNotNull {
+                        try {
+                            RemoteLibrary(URL(it))
+                        } catch (e: MalformedURLException) {
+                            BetterRecords.logger.error("Unable to load remote library: $it")
+                            null
+                        }
+                    }
                     .forEach { libraries.add(it) }
         }
     }
