@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
-class BlockLaserCluster(name: String) : ModBlock(Material.IRON, name), TESRProvider<TileLaserCluster>, ItemModelProvider  {
+class BlockLaserCluster(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileLaserCluster>, ItemModelProvider  {
 
     init {
         setHardness(4.8f)
