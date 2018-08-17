@@ -79,13 +79,15 @@ object Libraries {
                 .map { LocalLibrary(it) }
                 .forEach { libraries.add(it) }
 
-        // Load remote libraries
-        remoteLibrariesFile
-                .readLines()
-                .map(String::trim)
-                .filter { !it.startsWith("#") }
-                .map { RemoteLibrary(URL(it)) }
-                .forEach { libraries.add(it) }
+        if (ModConfig.useRemoteLibraries) {
+            // Load remote libraries
+            remoteLibrariesFile
+                    .readLines()
+                    .map(String::trim)
+                    .filter { !it.startsWith("#") }
+                    .map { RemoteLibrary(URL(it)) }
+                    .forEach { libraries.add(it) }
+        }
     }
 
     @SubscribeEvent
