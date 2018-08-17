@@ -1,6 +1,7 @@
 package com.codingforcookies.betterrecords.network
 
 import com.codingforcookies.betterrecords.BetterRecords
+import com.codingforcookies.betterrecords.ModConfig
 import com.codingforcookies.betterrecords.library.Libraries
 import com.codingforcookies.betterrecords.library.Library
 import io.netty.buffer.ByteBuf
@@ -26,9 +27,11 @@ class PacketSendLibrary @JvmOverloads constructor(
         override fun onMessage(message: PacketSendLibrary, ctx: MessageContext): IMessage? {
             with(message) {
                 library?.let {
-                    BetterRecords.logger.info("Received library from server: ${it.name}")
+                    if (ModConfig.useRemoteLibraries) {
+                        BetterRecords.logger.info("Received library from server: ${it.name}")
 
-                    Libraries.libraries.add(it)
+                        Libraries.libraries.add(it)
+                    }
                 }
             }
 
