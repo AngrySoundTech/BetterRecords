@@ -52,7 +52,7 @@ class ItemWire(name: String) : ModItem(name), IRecordWireManipulator {
                         ConnectionHelper.addConnection((te as TileEntity).world, te1 as IRecordWire, connection!!, world.getBlockState(te.pos))
                         ConnectionHelper.addConnection((te as TileEntity).world, te2 as IRecordWire, connection!!, world.getBlockState(te.pos))
                         PacketHandler.sendToServer(PacketWireConnection(connection!!))
-                        // stack.count-- TODO: Decrement player's amount of wire.
+                        player.getHeldItem(hand).count--
                     }
                 }
 

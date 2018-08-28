@@ -22,14 +22,14 @@ object ModConfig {
     var maxSpeakerRadius = -1
 
     @JvmField
+    @Config.Comment("Should the mod download libraries from the internet or the server?")
+    var useRemoteLibraries = true
+
+    @JvmField
     @Config.Comment("Client-Specific config settings")
     @Config.LangKey("betterrecords.config.client.title")
     var client = Client()
     class Client {
-
-        @JvmField
-        @Config.Comment("Should the mod download songs from the internet?")
-        var downloadSongs = true
 
         @JvmField
         @Config.Comment("Enable developer mode")

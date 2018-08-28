@@ -2,7 +2,7 @@ package com.codingforcookies.betterrecords.item
 
 import com.codingforcookies.betterrecords.api.record.IRecord
 import com.codingforcookies.betterrecords.api.wire.IRecordWireHome
-import com.codingforcookies.betterrecords.client.sound.Sound
+import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.network.PacketHandler
 import com.codingforcookies.betterrecords.network.PacketRecordPlay
 import net.minecraft.client.resources.I18n
@@ -30,11 +30,7 @@ open class ItemRecord(name: String) : ModItem(name), IRecord {
                     wireHome.songRadius,
                     it.getBoolean("repeat"),
                     it.getBoolean("shuffle"),
-                    sound = Sound().setInfo(
-                            it.getString("name"),
-                            it.getString("url"),
-                            it.getString("local")
-                    )
+                    sound = Sound(it.getString("url"), it.getString("local"))
             ))
         }
     }
@@ -42,11 +38,11 @@ open class ItemRecord(name: String) : ModItem(name), IRecord {
     @SideOnly(Side.CLIENT)
     override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
         stack.tagCompound?.let {
-            tooltip += I18n.format("item.betterercords:record.desc.by", it.getString("author"))
-            tooltip += I18n.format("item.betterercords:record.desc.size", it.getInteger("size"))
+            tooltip += I18n.format("item.betterrecords:record.desc.by", it.getString("author"))
+            tooltip += I18n.format("item.betterrecords:record.desc.size", it.getInteger("size"))
             if (it.getBoolean("repeat")) {
                 tooltip += ""
-                tooltip += "\u00a7e" + I18n.format("item.betterercords:record.desc.repeat")
+                tooltip += "\u00a7e" + I18n.format("item.betterrecords:record.desc.repeat")
             }
         }
     }

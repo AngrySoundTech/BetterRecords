@@ -22,6 +22,16 @@ sealed class Library {
      */
     val songs: MutableList<Song>
         get() = libraryContent.songs
+
+    override fun toString(): String {
+        return libraryContent.toJson()
+    }
+
+    companion object {
+        fun fromString(string: String): Library {
+            return StringLibrary(string)
+        }
+    }
 }
 
 /**
@@ -46,4 +56,12 @@ class RemoteLibrary(url: URL) : Library() {
 
     override val libraryContent = LibraryContent.fromJson(url.readText())
 
+}
+
+/**
+ * Class representing a library that is loaded from a string (e.g. sent from the server)
+ */
+class StringLibrary(string: String) : Library() {
+
+    override val libraryContent = LibraryContent.fromJson(string)
 }
