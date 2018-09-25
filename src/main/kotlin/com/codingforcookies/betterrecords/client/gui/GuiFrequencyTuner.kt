@@ -131,7 +131,7 @@ class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFr
                         I18n.format("gui.betterrecords.frequencytuner.status.invalidUrl")
                     }
 
-                } catch(e: MalformedURLException) {
+                } catch(e: Exception) {
                     error = I18n.format("gui.betterrecords.frequencytuner.status.invalidUrl")
                 }
 
