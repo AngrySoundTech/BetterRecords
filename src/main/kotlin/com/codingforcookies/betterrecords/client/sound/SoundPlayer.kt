@@ -58,6 +58,7 @@ object SoundPlayer {
 
         playingSounds[Pair(pos, dimension)] = sound
 
+        ClientRenderHandler.showPlayingWithTimeout(sound.localName)
         playStream(urlConn.inputStream, pos, dimension)
     }
 
