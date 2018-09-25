@@ -1,7 +1,10 @@
 package com.codingforcookies.betterrecords.client.sound
 
 import com.codingforcookies.betterrecords.BetterRecords
+import com.codingforcookies.betterrecords.ModConfig
+import com.codingforcookies.betterrecords.api.record.IRecordAmplitude
 import com.codingforcookies.betterrecords.api.sound.Sound
+import com.codingforcookies.betterrecords.api.wire.IRecordWireHome
 import com.codingforcookies.betterrecords.client.handler.ClientRenderHandler
 import com.codingforcookies.betterrecords.util.downloadFile
 import com.codingforcookies.betterrecords.util.getVolumeForPlayerFromBlock
@@ -12,6 +15,7 @@ import java.io.File
 import java.io.InputStream
 import java.net.URL
 import javax.sound.sampled.*
+import kotlin.math.absoluteValue
 
 object SoundPlayer {
 
@@ -105,6 +109,7 @@ object SoundPlayer {
         while (bytes >= 0 && isSoundPlayingAt(pos, dimension)) {
             volumeControl.value = getVolumeForPlayerFromBlock(pos)
             line.write(buffer, 0, bytes)
+            updateLights(buffer, pos, dimension)
             bytes = din.read(buffer)
         }
 
@@ -121,5 +126,63 @@ object SoundPlayer {
         val res = AudioSystem.getLine(info)
         res.open()
         return res as SourceDataLine
+    }
+
+    private fun updateLights(buffer: ByteArray, pos: BlockPos, dimension: Int) {
+        if (Minecraft.getMinecraft().world.provider.dimension != dimension) {
+            return
+        }
+
+        var unscaledTreble = -1F
+        var unscaledBass = -1F
+
+        val te = Minecraft.getMinecraft().world.getTileEntity(pos)
+
+        (te as? IRecordWireHome)?.let {
+                      te.addTreble(getUnscaledWaveform(buffer, true, false))
+                      te.addBass(getUnscaledWaveform(buffer, false, false))
+
+            for (connection in te.connections) {
+                val connectedTe = Minecraft.getMinecraft().world.getTileEntity(BlockPos(connection.x2, connection.y2, connection.z2))
+
+                (connectedTe as? IRecordAmplitude)?.let {
+                    if (unscaledTreble == -1F || unscaledBass == 11F) {
+                        unscaledTreble = getUnscaledWaveform(buffer, true, true)
+                        unscaledBass = getUnscaledWaveform(buffer, false, true)
+                    }
+
+                    connectedTe.treble = unscaledTreble
+                    connectedTe.bass = unscaledBass
+                }
+            }
+        }
+    }
+
+    private fun getUnscaledWaveform(buffer: ByteArray, high: Boolean, control: Boolean): Float {
+        val toReturn = ByteArray(buffer.size / 2)
+
+        var avg = 0.0F
+
+        for ((index, audioByte) in ((if (high) 0 else 1) until (buffer.size) step 2).withIndex()) {
+            toReturn[index] = buffer[audioByte]
+            avg += toReturn[index]
+        }
+
+        avg /= toReturn.size
+
+        if (control) {
+            if (avg < 0F) {
+                avg = avg.absoluteValue
+            }
+
+            if (avg > 20F) {
+                return if (ModConfig.client.flashMode < 3) {
+                    1F
+                } else {
+                    2F
+                }
+            }
+        }
+        return avg
     }
 }
