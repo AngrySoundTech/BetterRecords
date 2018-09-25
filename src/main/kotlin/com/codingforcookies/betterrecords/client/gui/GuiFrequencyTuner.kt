@@ -2,6 +2,7 @@ package com.codingforcookies.betterrecords.client.gui
 
 import com.codingforcookies.betterrecords.ID
 import com.codingforcookies.betterrecords.block.tile.TileFrequencyTuner
+import com.codingforcookies.betterrecords.client.ClientProxy
 import com.codingforcookies.betterrecords.client.sound.IcyURLConnection
 import com.codingforcookies.betterrecords.network.PacketHandler
 import com.codingforcookies.betterrecords.network.PacketURLWrite
@@ -120,12 +121,17 @@ class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFr
                         connect()
                     }
 
-                    error = if (connection.responseCode == 200) {
-                        I18n.format("gui.betterrecords.frequencytuner.ready")
+                    error = if (ClientProxy.encodings.contains(connection.getHeaderField("Content-Type"))) {
+                        if (connection.responseCode == 200) {
+                            I18n.format("gui.betterrecords.frequencytuner.ready")
+                        } else {
+                            I18n.format("gui.betterrecords.status.urlUnavailable")
+                        }
                     } else {
-                        I18n.format("gui.betterrecords.status.urlUnavailable")
+                        I18n.format("gui.betterrecords.frequencytuner.status.invalidUrl")
                     }
-                } catch(e: MalformedURLException) {
+
+                } catch(e: Exception) {
                     error = I18n.format("gui.betterrecords.frequencytuner.status.invalidUrl")
                 }
 

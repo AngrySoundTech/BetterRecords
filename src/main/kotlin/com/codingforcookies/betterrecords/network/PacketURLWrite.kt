@@ -96,6 +96,7 @@ class PacketURLWrite @JvmOverloads constructor(
 
                         with (itemStack.tagCompound!!) {
                             setString("url", url)
+                            setString("name", local)
                             setString("local", local)
 
                             if (color != -1) {

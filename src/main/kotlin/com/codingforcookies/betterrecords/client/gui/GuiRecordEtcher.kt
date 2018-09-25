@@ -294,6 +294,8 @@ class GuiRecordEtcher(inventoryPlayer: InventoryPlayer, val tileEntity: TileReco
                     status = Status.INVALID_URL
                 } catch (e: StringIndexOutOfBoundsException) {
                     status = Status.INVALID_URL
+                } catch (e: IllegalArgumentException) {
+                    status = Status.INVALID_URL
                 } catch (e: IOException) {
                     status = Status.IO_EXCEPTION
                 } finally {
