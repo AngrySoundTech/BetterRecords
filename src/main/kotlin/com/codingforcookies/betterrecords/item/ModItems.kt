@@ -11,6 +11,7 @@ object ModItems {
 
     val itemRecord: ModItem = ItemRecord("record")
     val itemMultiRecord: ModItem = ItemMultiRecord("multirecord")
+    val itemNewRecord: ModItem = ItemNewRecord("newrecord")
     val itemFrequencyCrystal: ModItem = ItemFrequencyCrystal("frequencycrystal")
     val itemWire: ModItem = ItemWire("wire")
     val itemWireCutters: ModItem = ItemWireCutter("wirecutters")
@@ -20,6 +21,7 @@ object ModItems {
         event.registry.registerAll(
                 itemRecord,
                 itemMultiRecord,
+                itemNewRecord,
                 itemFrequencyCrystal,
                 itemWire,
                 itemWireCutters
