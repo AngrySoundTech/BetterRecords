@@ -1,9 +1,11 @@
 package com.codingforcookies.betterrecords.item
 
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
+import com.codingforcookies.betterrecords.helper.RecordHelper
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack
+
 import net.minecraft.world.World
 
 class ItemNewRecord(name: String) : ModItem(name), ISoundHolder {
@@ -31,42 +33,24 @@ class ItemNewRecord(name: String) : ModItem(name), ISoundHolder {
     }
 
     override fun addInformation(stack: ItemStack, world: World?, tooltip: MutableList<String>, flag: ITooltipFlag) {
-        if (!stack.hasTagCompound()) {
-            return
-        }
+        val songs = RecordHelper.getSongsOnRecord(stack)
 
-        val tagCompound = stack.tagCompound!!
+        // We only want to add a tooltip to the record if it is not empty
+        if (songs.isNotEmpty()) {
 
-        // We only want to add information to the record if it has songs, otherwise it's blank.
-        if (tagCompound.hasKey("songs")) {
-            val tagList = tagCompound.getTagList("songs", 10)
-
-            if (tagList.tagCount() > 1) {
-                // If we have multiple songs on the record,
-                // we want to list them out and display the total size.
-
-                // Add all the songs in an itemized list
-                (0 until tagList.tagCount())
-                        .map(tagList::getCompoundTagAt)
-                        .forEachIndexed { index, songTag ->
-                            tooltip += I18n.format(
-                                    "item.betterrecords:record.desc.songentry", index + 1, songTag.getString("name"))
-                        }
+            // Add the song info to the tooltip
+            if (songs.size > 1) {
+                // If there are multiple songs on the record, we want to display them all in an itemized list
+                songs.forEachIndexed { index, sound ->
+                    tooltip += I18n.format("item.betterrecords:record.desc.songentry", index + 1, sound.localName)
+                }
             } else {
-                // If we only have one song on the record,
-                // we don't want to display an itemized list.
-
-                val songTag = tagList.getCompoundTagAt(0)
-                // Add our one song to the tooltip, with a different formatting
-                tooltip += I18n.format("item.betterrecords:record.desc.song", songTag.getString("name"))
+                // If there is only one song on the record, we want to display just it.
+                tooltip += I18n.format("item.betterrecords:record.desc.song", songs.first().localName)
             }
 
-            // Calculate total size of the record from tags
-            val size = (0 until tagList.tagCount())
-                    .map(tagList::getCompoundTagAt)
-                    .sumBy { it.getInteger("size") }
-
-            // Add our total size to the record
+            // Add the size to the record.
+            val size = songs.sumBy { it.size }
             tooltip += I18n.format("item.betterrecords:record.desc.size", size)
         }
     }
