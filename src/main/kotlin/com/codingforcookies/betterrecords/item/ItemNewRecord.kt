@@ -1,7 +1,6 @@
 package com.codingforcookies.betterrecords.item
 
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
-import com.codingforcookies.betterrecords.helper.RecordHelper
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack
@@ -14,7 +13,7 @@ class ItemNewRecord(name: String) : ModItem(name), ISoundHolder {
     }
 
     override fun getUnlocalizedName(stack: ItemStack): String {
-        val songCount = RecordHelper.getSongsOnRecord(stack).count()
+        val songCount = getSounds(stack).count()
 
         return when (songCount) {
             0    -> "item.betterrecords:record.blank"
@@ -24,7 +23,7 @@ class ItemNewRecord(name: String) : ModItem(name), ISoundHolder {
     }
 
     override fun addInformation(stack: ItemStack, world: World?, tooltip: MutableList<String>, flag: ITooltipFlag) {
-        val songs = RecordHelper.getSongsOnRecord(stack)
+        val songs = getSounds(stack)
 
         // We only want to add a tooltip to the record if it is not empty
         if (songs.isNotEmpty()) {
