@@ -5,7 +5,6 @@ import com.codingforcookies.betterrecords.helper.RecordHelper
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack
-
 import net.minecraft.world.World
 
 class ItemNewRecord(name: String) : ModItem(name), ISoundHolder {
@@ -15,21 +14,13 @@ class ItemNewRecord(name: String) : ModItem(name), ISoundHolder {
     }
 
     override fun getUnlocalizedName(stack: ItemStack): String {
-        if (stack.hasTagCompound()) {
-            val tagCompound = stack.tagCompound!!
+        val songCount = RecordHelper.getSongsOnRecord(stack).count()
 
-            if (tagCompound.hasKey("songs")) {
-                val tagList = tagCompound.getTagList("songs", 10)
-
-                return if (tagList.tagCount() == 1) {
-                    "item.betterrecords:record.single"
-                } else {
-                    "item.betterrecords:record.multi"
-                }
-            }
+        return when (songCount) {
+            0    -> "item.betterrecords:record.blank"
+            1    -> "item.betterrecords:record.single"
+            else -> "item.betterrecords:record.multi"
         }
-
-        return "item.betterrecords:record.blank"
     }
 
     override fun addInformation(stack: ItemStack, world: World?, tooltip: MutableList<String>, flag: ITooltipFlag) {
