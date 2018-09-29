@@ -1,12 +1,14 @@
 package com.codingforcookies.betterrecords.item
 
+import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
-class ItemNewRecord(name: String) : ModItem(name), ISoundHolder {
+class ItemNewRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoundHolder, IShufflableSoundHolder {
 
     init {
         maxStackSize = 1
