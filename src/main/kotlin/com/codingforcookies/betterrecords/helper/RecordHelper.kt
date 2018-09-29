@@ -1,5 +1,6 @@
 package com.codingforcookies.betterrecords.helper
 
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.sound.Sound
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -8,6 +9,10 @@ import net.minecraft.nbt.NBTTagList
 object RecordHelper {
 
     fun isRecordFull(stack: ItemStack): Boolean {
+        if (stack.item !is ISoundHolder) {
+            return true
+        }
+
         if (stack.hasTagCompound()) {
             val tagCompound = stack.tagCompound!!
 
@@ -25,6 +30,10 @@ object RecordHelper {
     }
 
     fun addSongToRecord(stack: ItemStack, sound: Sound) {
+        if (stack.item !is ISoundHolder) {
+            return
+        }
+
         val tagCompound = if (stack.hasTagCompound()) {
             stack.tagCompound!!
         } else {
@@ -49,6 +58,10 @@ object RecordHelper {
     }
 
     fun getSongsOnRecord(stack: ItemStack): List<Sound> {
+        if (stack.item !is ISoundHolder) {
+            return emptyList()
+        }
+
         if (stack.hasTagCompound()) {
             val tagCompound = stack.tagCompound!!
 
