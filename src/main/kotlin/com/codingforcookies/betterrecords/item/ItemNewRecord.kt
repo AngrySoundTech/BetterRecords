@@ -44,6 +44,16 @@ class ItemNewRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoun
             // Add the size to the record.
             val size = songs.sumBy { it.size }
             tooltip += I18n.format("item.betterrecords:record.desc.size", size)
+
+            // If it's repeatable, we show that.
+            if (isRepeatable(stack)) {
+                tooltip += "\u00a7e" + I18n.format("item.betterrecords:record.desc.repeatable")
+            }
+
+            // If it's shufflable, we show that.
+            if (isShufflable(stack)) {
+                tooltip += "\u00a7e" + I18n.format("item.betterrecords:record.desc.shufflable")
+            }
         }
     }
 }
