@@ -12,13 +12,12 @@ item.betterrecords:wirecutters.name=Wire Cutters
 
 ### Record
 item.betterrecords:record.blank.name=Blank Record
-item.betterrecords:record.single.name=Record
 item.betterrecords:record.multi.name=Multi Record
 
-item.betterrecords:record.desc.songentry=Song %d: %s
-item.betterrecords:record.desc.song=%s
-
 item.betterrecords:record.desc.by=By: %s
+
+item.betterrecords:record.desc.song=Song %d: %s
+
 item.betterrecords:record.desc.size=Size: %dmb
 
 item.betterrecords:multirecord.desc.song=Song %d: %s

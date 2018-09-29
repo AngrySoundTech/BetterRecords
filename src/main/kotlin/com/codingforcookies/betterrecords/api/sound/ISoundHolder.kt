@@ -44,6 +44,7 @@ interface ISoundHolder {
         newSongTag.setString("name", sound.localName)
         newSongTag.setString("url", sound.url)
         newSongTag.setInteger("size", sound.size)
+        newSongTag.setString("author", sound.author)
 
         songList.appendTag(newSongTag)
         tagCompound.setTag("songs", songList)
@@ -69,7 +70,8 @@ interface ISoundHolder {
                             Sound(
                                     localName = it.getString("name"),
                                     url = it.getString("url"),
-                                    size = it.getInteger("size")
+                                    size = it.getInteger("size"),
+                                    author = it.getString("author")
                             )
                         }
             }
