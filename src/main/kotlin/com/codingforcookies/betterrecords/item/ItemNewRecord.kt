@@ -30,7 +30,7 @@ class ItemNewRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoun
         // If there's only one song on the record, we don't want to localize anything
         // and just use that name instead
         if (songs.count() == 1) {
-            return songs.first().localName
+            return songs.first().name
         }
 
         // If it has no songs or more than one, we fall back on localizing it.
@@ -47,7 +47,7 @@ class ItemNewRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoun
             if (songs.size > 1) {
                 // If there are multiple songs on the record, we want to display them all in an itemized list
                 songs.forEachIndexed { index, sound ->
-                    tooltip += I18n.format("item.betterrecords:record.desc.song", index + 1, sound.localName)
+                    tooltip += I18n.format("item.betterrecords:record.desc.song", index + 1, sound.name)
                 }
             } else {
                 // If there is only one song on the record, we only want to display the author,

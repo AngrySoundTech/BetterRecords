@@ -41,7 +41,7 @@ interface ISoundHolder {
         }
 
         val newSongTag = NBTTagCompound()
-        newSongTag.setString("name", sound.localName)
+        newSongTag.setString("name", sound.name)
         newSongTag.setString("url", sound.url)
         newSongTag.setInteger("size", sound.size)
         newSongTag.setString("author", sound.author)
@@ -68,7 +68,7 @@ interface ISoundHolder {
                         .map(tagList::getCompoundTagAt)
                         .map {
                             Sound(
-                                    localName = it.getString("name"),
+                                    name = it.getString("name"),
                                     url = it.getString("url"),
                                     size = it.getInteger("size"),
                                     author = it.getString("author")

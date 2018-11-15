@@ -2,10 +2,8 @@ package com.codingforcookies.betterrecords.network
 
 import com.codingforcookies.betterrecords.api.event.RecordInsertEvent
 import com.codingforcookies.betterrecords.api.sound.Sound
-import com.codingforcookies.betterrecords.client.sound.SoundPlayer
 import com.codingforcookies.betterrecords.extensions.forEachTag
 import io.netty.buffer.ByteBuf
-import net.minecraft.client.Minecraft
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.MinecraftForge
@@ -54,7 +52,7 @@ class PacketRecordPlay @JvmOverloads constructor(
         buf.writeInt(sounds.size)
         sounds.forEach {
             ByteBufUtils.writeUTF8String(buf, it.url)
-            ByteBufUtils.writeUTF8String(buf, it.localName)
+            ByteBufUtils.writeUTF8String(buf, it.name)
         }
 
         buf.writeBoolean(repeat)
