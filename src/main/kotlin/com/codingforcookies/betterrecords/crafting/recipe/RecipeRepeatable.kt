@@ -2,7 +2,6 @@ package com.codingforcookies.betterrecords.crafting.recipe
 
 import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
-import com.codingforcookies.betterrecords.item.ItemRecord
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.init.Items
 import net.minecraft.inventory.InventoryCrafting
@@ -53,7 +52,7 @@ class RecipeRepeatable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
         }
     }
 
-    override fun getRecipeOutput() = ItemStack(ModItems.itemRecord)
+    override fun getRecipeOutput() = ItemStack(ModItems.itemNewRecord)
 
     override fun getRemainingItems(inv: InventoryCrafting): NonNullList<ItemStack> {
         inv.clear()
