@@ -5,7 +5,7 @@ betterrecords.warning=WARNING: Parts of Better Records make use of flashing ligh
 
 # Items & Blocks
 ## Items
-item.betterrecords:frequencycrystal.name=Frequency Crystal
+item.betterrecords:frequencycrystal.blank.name=Frequency Crystal
 
 item.betterrecords:wire.name=Speaker Wire
 item.betterrecords:wirecutters.name=Wire Cutters
