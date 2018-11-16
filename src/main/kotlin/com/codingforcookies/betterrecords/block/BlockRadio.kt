@@ -58,7 +58,7 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
                     if (!world.isRemote) dropItem(world, pos)
                     te.crystal = ItemStack.EMPTY
                     world.notifyBlockUpdate(pos, state, state, 3)
-                } else if (player.heldItemMainhand?.item == ModItems.itemFrequencyCrystal && player.heldItemMainhand.hasTagCompound() && player.heldItemMainhand.tagCompound!!.hasKey("url")) {
+                } else if (player.heldItemMainhand.item == ModItems.itemFrequencyCrystal && (player.heldItemMainhand.item as ISoundHolder).getSounds(player.heldItemMainhand).isNotEmpty()) {
                     te.crystal = player.heldItemMainhand
                     world.notifyBlockUpdate(pos, state, state, 3)
                     player.heldItemMainhand.count--
