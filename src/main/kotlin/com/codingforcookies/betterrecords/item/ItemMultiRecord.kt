@@ -24,7 +24,7 @@ class ItemMultiRecord(name: String) : ItemRecord(name) {
                     wireHome.songRadius,
                     it.getBoolean("repeat"),
                     it.getBoolean("shuffle"),
-                    nbt = it
+                    itemStack
             ))
         }
     }

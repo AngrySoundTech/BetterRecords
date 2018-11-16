@@ -81,7 +81,8 @@ class BlockRecordPlayer(name: String) : ModBlock(Material.WOOD, name), TESRProvi
                                 tileRecordPlayer.world.provider.dimension,
                                 tileRecordPlayer.songRadius,
                                 (tileEntity.record.item as IRepeatableSoundHolder).isRepeatable(tileEntity.record),
-                                (tileEntity.record.item as IShufflableSoundHolder).isShufflable(tileEntity.record)
+                                (tileEntity.record.item as IShufflableSoundHolder).isShufflable(tileEntity.record),
+                                tileEntity.record
                         ))
                     }
                 }

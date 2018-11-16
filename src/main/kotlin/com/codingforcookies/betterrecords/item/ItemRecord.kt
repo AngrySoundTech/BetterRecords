@@ -30,7 +30,7 @@ open class ItemRecord(name: String) : ModItem(name), IRecord {
                     wireHome.songRadius,
                     it.getBoolean("repeat"),
                     it.getBoolean("shuffle"),
-                    sound = Sound(it.getString("url"), it.getString("local"))
+                    itemStack
             ))
         }
     }
