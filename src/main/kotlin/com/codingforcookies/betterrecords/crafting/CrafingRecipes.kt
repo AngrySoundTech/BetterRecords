@@ -16,7 +16,6 @@ object CrafingRecipes {
                 RecipeMultiRecord(),
                 RecipeRepeatable(),
                 RecipeShufflable(),
-                RecipeColoredFreqCrystal(),
                 RecipeColoredRecord()
         )
     }

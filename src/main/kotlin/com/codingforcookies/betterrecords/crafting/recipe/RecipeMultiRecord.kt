@@ -2,7 +2,6 @@ package com.codingforcookies.betterrecords.crafting.recipe
 
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.item.ItemNewRecord
-import com.codingforcookies.betterrecords.item.ItemRecord
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.client.audio.ISound
 import net.minecraft.inventory.InventoryCrafting

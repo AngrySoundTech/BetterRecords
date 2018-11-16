@@ -4,7 +4,6 @@ import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.block.tile.delegate.CopyOnSetDelegate
 import com.codingforcookies.betterrecords.item.ItemFrequencyCrystal
 import com.codingforcookies.betterrecords.item.ItemNewRecord
-import com.codingforcookies.betterrecords.item.ItemRecord
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
