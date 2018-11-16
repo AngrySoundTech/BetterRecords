@@ -58,7 +58,7 @@ class TileRecordEtcher : ModInventoryTile(), IInventory, ITickable {
     }
 
     override fun isItemValidForSlot(index: Int, stack: ItemStack): Boolean {
-        return stack.item is ItemNewRecord && (stack.item as ISoundHolder).getSounds(stack).isEmpty()
+        return stack.item is ItemNewRecord
     }
 
     override fun readFromNBT(compound: NBTTagCompound) = compound.run {
