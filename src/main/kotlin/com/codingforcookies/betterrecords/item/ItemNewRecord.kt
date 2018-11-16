@@ -1,5 +1,6 @@
 package com.codingforcookies.betterrecords.item
 
+import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
@@ -8,7 +9,9 @@ import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
-class ItemNewRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoundHolder, IShufflableSoundHolder {
+class ItemNewRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoundHolder, IShufflableSoundHolder, IColorableSoundHolder {
+
+    override val maxSounds = 12
 
     init {
         maxStackSize = 1

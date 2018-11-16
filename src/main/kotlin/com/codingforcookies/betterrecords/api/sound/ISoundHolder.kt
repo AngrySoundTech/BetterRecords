@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagList
 
 interface ISoundHolder {
 
+    val maxSounds: Int
+
     fun isFullOfSounds(stack: ItemStack): Boolean {
         if (stack.hasTagCompound()) {
             val tagCompound = stack.tagCompound!!
@@ -14,7 +16,7 @@ interface ISoundHolder {
 
                 val tagList = tagCompound.getTagList("songs", 10)
 
-                if (tagList.tagCount() >= 12) {
+                if (tagList.tagCount() >= maxSounds) {
                     return true
                 }
             }
