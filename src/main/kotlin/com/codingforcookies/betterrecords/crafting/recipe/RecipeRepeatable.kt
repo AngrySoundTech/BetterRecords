@@ -1,5 +1,7 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
+import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
 import com.codingforcookies.betterrecords.item.ItemRecord
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.init.Items
@@ -11,24 +13,24 @@ import net.minecraft.util.NonNullList
 import net.minecraft.world.World
 import net.minecraftforge.registries.IForgeRegistryEntry
 
-class RecipeRecordRepeatable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
+class RecipeRepeatable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
 
     init {
-        setRegistryName("reciperecordrepeatable")
+        setRegistryName("reciperepeatable")
     }
 
     override fun canFit(width: Int, height: Int) = width * height >= 2
 
     override fun matches(inventoryCrafting: InventoryCrafting, worldIn: World?): Boolean {
-        var foundRecord = false
+        var foundRepeatable = false
         var foundComparator = false
 
         (0 until inventoryCrafting.sizeInventory)
                 .map { inventoryCrafting.getStackInSlot(it) }
                 .filter { !it.isEmpty }
                 .forEach {
-                    if (it.item is ItemRecord && !foundRecord) {
-                        foundRecord = true
+                    if (it.item is IRepeatableSoundHolder && !foundRepeatable) {
+                        foundRepeatable = true
                     } else if (it.item == Items.COMPARATOR && !foundComparator) {
                         foundComparator = true
                     } else {
@@ -36,21 +38,18 @@ class RecipeRecordRepeatable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
                     }
                 }
 
-        return foundRecord && foundComparator
+        return foundRepeatable && foundComparator
     }
 
     override fun getCraftingResult(inventoryCrafting: InventoryCrafting): ItemStack? {
-        val record =
+        val repeatable =
                 (0 until inventoryCrafting.sizeInventory)
                         .map { inventoryCrafting.getStackInSlot(it) }
                         .filter { !it.isEmpty }
-                        .find { it.item is ItemRecord }
+                        .find { it.item is IRepeatableSoundHolder }
 
-        return record?.copy()?.apply {
-            if (!hasTagCompound()) {
-                tagCompound = NBTTagCompound()
-            }
-            tagCompound!!.setBoolean("repeat", true)
+        return repeatable?.copy()?.apply {
+            (this.item as IRepeatableSoundHolder).setRepeatable(this, true)
         }
     }
 
