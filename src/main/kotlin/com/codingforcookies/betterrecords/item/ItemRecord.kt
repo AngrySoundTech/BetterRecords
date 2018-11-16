@@ -21,8 +21,8 @@ class ItemRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoundHo
         val songs = getSounds(stack)
 
         return when (songs.count()) {
-            0    -> "item.betterrecords:record.blank"
-            // If there's only one song, the name will be set in [getItemStackDisplayName]
+            0 -> "item.betterrecords:record.blank"
+        // If there's only one song, the name will be set in [getItemStackDisplayName]
             else -> "item.betterrecords:record.multi"
         }
     }

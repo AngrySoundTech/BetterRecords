@@ -10,7 +10,9 @@ class TileRadio : SimpleRecordWireHome(), IRecordWire {
 
     var crystal by CopyOnSetDelegate()
     override val record: ItemStack
-        get() { return crystal }
+        get() {
+            return crystal
+        }
 
     var crystalFloaty = 0F
 

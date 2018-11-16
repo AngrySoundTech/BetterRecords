@@ -21,7 +21,7 @@ object SoundEventHandler {
         val player = Minecraft.getMinecraft().player
 
         if (playRadius > 100000 || player.position.distanceTo(pos) < playRadius) {
-            SoundManager.queueSongsAt(pos, dimension, sounds, repeat = repeat )
+            SoundManager.queueSongsAt(pos, dimension, sounds, repeat = repeat)
         }
 
     }

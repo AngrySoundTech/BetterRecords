@@ -52,14 +52,14 @@ object Libraries {
 
         // Create the remoteLibraries file if it doesn't exist.
         val remoteLibrariesFile = File(LOCAL_LIBRARY_DIR.parent, "remoteLibraries.txt")
-        with (remoteLibrariesFile) {
+        with(remoteLibrariesFile) {
             if (!exists()) {
                 writeText(BetterUtils.getResourceFromJar("assets/betterrecords/libraries/remoteLibraries.txt").readText())
             }
         }
 
         // Create an empty library for their etchings if it doesn't exist. We need at least one library.
-        with (File(LOCAL_LIBRARY_DIR, "myEtchings.json")) {
+        with(File(LOCAL_LIBRARY_DIR, "myEtchings.json")) {
             if (!exists()) {
                 writeText(BetterUtils.getResourceFromJar("assets/betterrecords/libraries/empty_library.json").readText())
             }

@@ -34,7 +34,7 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
     override fun getRenderClass() = RenderRadio::class
 
     override fun onBlockAdded(world: World, pos: BlockPos, state: IBlockState) =
-        world.notifyBlockUpdate(pos, state, state, 3)
+            world.notifyBlockUpdate(pos, state, state, 3)
 
     override fun getBoundingBox(state: IBlockState, block: IBlockAccess, pos: BlockPos) = when (getMetaFromState(state)) {
         0, 2 -> AxisAlignedBB(0.13, 0.0, 0.2, 0.87, 0.98, 0.8)

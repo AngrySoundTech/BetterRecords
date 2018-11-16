@@ -75,7 +75,7 @@ class ModelFrequencyTuner : ModelBase() {
         super.render(entity, f, f1, f2, f3, f4, f5)
         setRotationAngles(f, f1, f2, f3, f4, f5, entity)
 
-       if (!crystal.isEmpty) {
+        if (!crystal.isEmpty) {
             GlStateManager.pushMatrix()
 
             GlStateManager.enableBlend()

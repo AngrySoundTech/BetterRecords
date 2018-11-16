@@ -17,7 +17,7 @@ import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
-class BlockLaser(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileLaser>, ItemModelProvider  {
+class BlockLaser(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileLaser>, ItemModelProvider {
 
     init {
         setHardness(3.2f)
@@ -27,7 +27,7 @@ class BlockLaser(name: String) : ModBlock(Material.WOOD, name), TESRProvider<Til
     override fun getTileEntityClass() = TileLaser::class
     override fun getRenderClass() = RenderLaser::class
 
-            override fun getBoundingBox(state: IBlockState?, block: IBlockAccess?, pos: BlockPos?) =
+    override fun getBoundingBox(state: IBlockState?, block: IBlockAccess?, pos: BlockPos?) =
             AxisAlignedBB(0.25, 0.0, 0.25, 0.75, 0.75, 0.74)
 
     override fun onBlockAdded(world: World?, pos: BlockPos?, state: IBlockState?) =
@@ -65,7 +65,7 @@ class BlockLaser(name: String) : ModBlock(Material.WOOD, name), TESRProvider<Til
                 val adjustment = if (te.length > length) "increase" else "decrease"
                 player.sendMessage(TextComponentTranslation("tile.betterrecords:laser.msg.$adjustment", te.length))
             }
-          return true
+            return true
         }
         return false
     }

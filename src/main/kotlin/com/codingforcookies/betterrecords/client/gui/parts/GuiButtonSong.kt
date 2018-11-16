@@ -17,7 +17,7 @@ class GuiButtonSong(id: Int, xPos: Int, yPos: Int, width: Int, height: Int, disp
         if (visible) {
             GlStateManager.disableTexture2D()
             glVertices(GL11.GL_QUADS) {
-                with (Color(entry.colorInt)) {
+                with(Color(entry.colorInt)) {
                     GlStateManager.color(red / 255F, green / 255F, blue / 255F)
                 }
 

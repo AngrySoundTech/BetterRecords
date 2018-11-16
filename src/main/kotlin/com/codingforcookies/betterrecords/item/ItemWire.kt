@@ -37,7 +37,7 @@ class ItemWire(name: String) : ModItem(name), IRecordWireManipulator {
                     connection = null
                     return EnumActionResult.PASS
                 }
-                
+
                 if (!it.fromHome) {
                     it.setConnection1(pos.x, pos.y, pos.z)
                 } else {

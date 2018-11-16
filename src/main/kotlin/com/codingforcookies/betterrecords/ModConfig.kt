@@ -29,6 +29,7 @@ object ModConfig {
     @Config.Comment("Client-Specific config settings")
     @Config.LangKey("betterrecords.config.client.title")
     var client = Client()
+
     class Client {
 
         @JvmField

@@ -34,7 +34,7 @@ class RenderRadio : TileEntitySpecialRenderer<TileRadio>() {
         popMatrix()
 
         te?.let {
-            renderConnectionsAndInfo(te, te.pos, x , y ,z)
+            renderConnectionsAndInfo(te, te.pos, x, y, z)
         }
     }
 }

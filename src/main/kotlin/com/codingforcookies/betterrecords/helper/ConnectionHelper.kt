@@ -27,7 +27,7 @@ object ConnectionHelper {
             ret += recc.toString() + "]"
         }
 
-        return ret.substring(0, ret.length -1)
+        return ret.substring(0, ret.length - 1)
     }
 
     fun unserializeConnections(rec: String): List<RecordConnection> {

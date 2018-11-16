@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import java.util.*
 
-class BlockRecordEtcher(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileRecordEtcher>, ItemModelProvider  {
+class BlockRecordEtcher(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileRecordEtcher>, ItemModelProvider {
 
     init {
         setHardness(1.5f)
@@ -27,10 +27,10 @@ class BlockRecordEtcher(name: String) : ModBlock(Material.WOOD, name), TESRProvi
     override fun getRenderClass() = RenderRecordEtcher::class
 
     override fun getBoundingBox(state: IBlockState?, block: IBlockAccess?, pos: BlockPos?) =
-        AxisAlignedBB(.065, 0.0, .065, .935, .875, .935)
+            AxisAlignedBB(.065, 0.0, .065, .935, .875, .935)
 
     override fun onBlockAdded(world: World, pos: BlockPos, state: IBlockState) =
-        world.notifyBlockUpdate(pos, state, state, 3)
+            world.notifyBlockUpdate(pos, state, state, 3)
 
     override fun onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         (world.getTileEntity(pos) as? TileRecordEtcher)?.let {

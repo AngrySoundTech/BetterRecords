@@ -18,7 +18,7 @@ class RenderStrobeLight : TileEntitySpecialRenderer<TileStrobeLight>() {
     override fun render(te: TileStrobeLight?, x: Double, y: Double, z: Double, scale: Float, destroyStage: Int, alpha: Float) {
 
         pushMatrix()
-        
+
         translate(x.toFloat() + 0.5f, y.toFloat() + 1.5f, z.toFloat() + 0.5f)
         rotate(180f, 0.0f, 0.0f, 1.0f)
 
@@ -26,14 +26,14 @@ class RenderStrobeLight : TileEntitySpecialRenderer<TileStrobeLight>() {
         MODEL.render(null, 0f, 0f, 0f, 0.0f, 0.0f, 0.0625f)
 
         translate(0.0f, 1.0f, 0.0f)
-        
+
         te?.let {
 
             if (te.bass != 0F && ModConfig.client.flashMode > 0) {
                 val incr = (2 * Math.PI / 10).toFloat()
 
                 pushMatrix()
-                
+
                 rotate(Minecraft.getMinecraft().renderManager.playerViewY - 180f, 0f, 1f, 0f)
                 rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1f, 0f, 0f)
 
@@ -69,7 +69,7 @@ class RenderStrobeLight : TileEntitySpecialRenderer<TileStrobeLight>() {
                 enableTexture2D()
                 enableLighting()
                 enableDepth()
-                
+
                 popMatrix()
 
                 color(1f, 1f, 1f, 1f)
@@ -80,12 +80,12 @@ class RenderStrobeLight : TileEntitySpecialRenderer<TileStrobeLight>() {
                     if (dist < 4 * te.bass) {
                         val newStrobe = Math.abs(dist - 4f * te.bass) / 100f
                         // TODO if (newStrobe > 0f && BetterEventHandler.strobeLinger < newStrobe)
-                            //BetterEventHandler.strobeLinger = newStrobe
+                        //BetterEventHandler.strobeLinger = newStrobe
                     }
                 }
             }
         }
-        
+
         popMatrix()
     }
 }

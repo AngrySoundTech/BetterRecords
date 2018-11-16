@@ -16,7 +16,7 @@ class TileRecordPlayer : SimpleRecordWireHome(), IRecordWire {
         set(value) {
             field = value.copy()
             recordEntity = EntityItem(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), field)
-            recordEntity?.hoverStart= 0F
+            recordEntity?.hoverStart = 0F
             recordEntity?.rotationPitch = 0F
             recordEntity?.rotationYaw = 0F
             recordRotation = 0F

@@ -17,7 +17,7 @@ class RenderLaser : TileEntitySpecialRenderer<TileLaser>() {
     override fun render(te: TileLaser?, x: Double, y: Double, z: Double, scale: Float, destroyStage: Int, alpha: Float) {
 
         pushMatrix()
-        
+
         translate(x.toFloat() + 0.5f, y.toFloat() + 1.5f, z.toFloat() + 0.5f)
         rotate(180f, 0.0f, 0.0f, 1.0f)
 
@@ -79,7 +79,7 @@ class RenderLaser : TileEntitySpecialRenderer<TileLaser>() {
                 color(1f, 1f, 1f, 1f)
             }
         }
-        
+
         popMatrix()
     }
 }
