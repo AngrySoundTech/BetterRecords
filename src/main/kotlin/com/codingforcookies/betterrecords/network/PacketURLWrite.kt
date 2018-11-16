@@ -21,7 +21,6 @@ class PacketURLWrite @JvmOverloads constructor(
         var size: Int = -1,
         var name: String = "",
         var url: String = "",
-        var local: String = "",
         // Color and author can actually be
         // considered optional
         var color: Int = -1,
@@ -34,7 +33,6 @@ class PacketURLWrite @JvmOverloads constructor(
         buf.writeInt(size)
         ByteBufUtils.writeUTF8String(buf, name)
         ByteBufUtils.writeUTF8String(buf, url)
-        ByteBufUtils.writeUTF8String(buf, local)
 
         buf.writeInt(color)
         ByteBufUtils.writeUTF8String(buf, author)
@@ -46,7 +44,6 @@ class PacketURLWrite @JvmOverloads constructor(
         size = buf.readInt()
         name = ByteBufUtils.readUTF8String(buf)
         url = ByteBufUtils.readUTF8String(buf)
-        local = ByteBufUtils.readUTF8String(buf)
 
         color = buf.readInt()
         author = ByteBufUtils.readUTF8String(buf)
