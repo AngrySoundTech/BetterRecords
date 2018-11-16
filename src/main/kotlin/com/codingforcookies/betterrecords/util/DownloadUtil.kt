@@ -2,7 +2,6 @@ package com.codingforcookies.betterrecords.util
 
 import com.codingforcookies.betterrecords.BetterRecords
 import com.codingforcookies.betterrecords.ModConfig
-import kotlinx.coroutines.experimental.launch
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream

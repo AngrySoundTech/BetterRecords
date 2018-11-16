@@ -1,8 +1,11 @@
 package com.codingforcookies.betterrecords.handler
 
-import com.codingforcookies.betterrecords.client.gui.*
 import com.codingforcookies.betterrecords.block.tile.TileFrequencyTuner
 import com.codingforcookies.betterrecords.block.tile.TileRecordEtcher
+import com.codingforcookies.betterrecords.client.gui.ContainerFrequencyTuner
+import com.codingforcookies.betterrecords.client.gui.ContainerRecordEtcher
+import com.codingforcookies.betterrecords.client.gui.GuiFrequencyTuner
+import com.codingforcookies.betterrecords.client.gui.GuiRecordEtcher
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World

@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -221,7 +222,7 @@ public class IcyURLConnection extends HttpURLConnection {
     /**
      * Reads one response header line and adds it to the headers map.
      */
-    protected void parseHeaderLine( String line ) throws IOException {
+    protected void parseHeaderLine( String line ) {
         int len = 2;
         int n = line.indexOf( ": " );
 
@@ -289,7 +290,7 @@ public class IcyURLConnection extends HttpURLConnection {
     protected void writeLine( String line ) throws IOException {
         line += '\r';
         line += '\n';
-        outputStream.write( line.getBytes( "UTF-8" ));
+        outputStream.write( line.getBytes(StandardCharsets.UTF_8));
     }
 
 }

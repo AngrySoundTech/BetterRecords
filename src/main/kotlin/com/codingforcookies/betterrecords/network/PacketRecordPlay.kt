@@ -3,11 +3,9 @@ package com.codingforcookies.betterrecords.network
 import com.codingforcookies.betterrecords.api.event.RecordInsertEvent
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.sound.Sound
-import com.codingforcookies.betterrecords.extensions.forEachTag
 import com.codingforcookies.betterrecords.item.ModItems
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.network.ByteBufUtils

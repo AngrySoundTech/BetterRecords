@@ -9,7 +9,6 @@ import com.codingforcookies.betterrecords.extensions.readBlockPos
 import com.codingforcookies.betterrecords.extensions.writeBlockPos
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.network.ByteBufUtils
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage

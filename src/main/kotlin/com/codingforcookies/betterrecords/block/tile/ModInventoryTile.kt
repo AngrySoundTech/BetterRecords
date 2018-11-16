@@ -12,7 +12,7 @@ abstract class ModInventoryTile : ModTile(), IInventory {
     override fun removeStackFromSlot(index: Int) = getStackInSlot(index)
 
     override fun decrStackSize(index: Int, count: Int) = getStackInSlot(index).apply {
-        this?.let {
+        this.let {
             if (this.count <= count) {
                 setInventorySlotContents(index, ItemStack.EMPTY)
             } else {

@@ -1,17 +1,13 @@
 package com.codingforcookies.betterrecords.client
 
 import com.codingforcookies.betterrecords.CommonProxy
-import com.codingforcookies.betterrecords.client.handler.ClientRenderHandler
-import com.codingforcookies.betterrecords.client.handler.RenderEventHandler
 import com.codingforcookies.betterrecords.item.ModItem
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.color.IItemColor
 import net.minecraft.item.Item
-import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 
 class ClientProxy : CommonProxy() {
 

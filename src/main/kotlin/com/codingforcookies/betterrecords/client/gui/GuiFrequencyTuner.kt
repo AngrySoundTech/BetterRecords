@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.util.ResourceLocation
-import org.apache.commons.io.FilenameUtils
-import java.net.MalformedURLException
 import java.net.URL
 
 class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFrequencyTuner) : GuiContainer(ContainerFrequencyTuner(inventoryPlayer, tileEntity)) {

@@ -2,7 +2,6 @@ package com.codingforcookies.betterrecords.item
 
 import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
-import net.minecraft.client.audio.ISound
 import net.minecraft.item.ItemStack
 import net.minecraft.util.text.translation.I18n as ServerI18n
 
