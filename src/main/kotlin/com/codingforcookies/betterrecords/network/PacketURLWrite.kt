@@ -1,10 +1,14 @@
 package com.codingforcookies.betterrecords.network
 
+import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
+import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.block.tile.TileFrequencyTuner
 import com.codingforcookies.betterrecords.block.tile.TileRecordEtcher
 import com.codingforcookies.betterrecords.extensions.readBlockPos
 import com.codingforcookies.betterrecords.extensions.writeBlockPos
 import io.netty.buffer.ByteBuf
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.network.ByteBufUtils
@@ -17,7 +21,6 @@ class PacketURLWrite @JvmOverloads constructor(
         var size: Int = -1,
         var name: String = "",
         var url: String = "",
-        var local: String = "",
         // Color and author can actually be
         // considered optional
         var color: Int = -1,
@@ -30,7 +33,6 @@ class PacketURLWrite @JvmOverloads constructor(
         buf.writeInt(size)
         ByteBufUtils.writeUTF8String(buf, name)
         ByteBufUtils.writeUTF8String(buf, url)
-        ByteBufUtils.writeUTF8String(buf, local)
 
         buf.writeInt(color)
         ByteBufUtils.writeUTF8String(buf, author)
@@ -42,7 +44,6 @@ class PacketURLWrite @JvmOverloads constructor(
         size = buf.readInt()
         name = ByteBufUtils.readUTF8String(buf)
         url = ByteBufUtils.readUTF8String(buf)
-        local = ByteBufUtils.readUTF8String(buf)
 
         color = buf.readInt()
         author = ByteBufUtils.readUTF8String(buf)
@@ -55,60 +56,20 @@ class PacketURLWrite @JvmOverloads constructor(
             val player = ctx.serverHandler.player
             val te = player.world.getTileEntity(message.pos)
 
-            if (te == null || !(te is TileRecordEtcher || te is TileFrequencyTuner)) {
-                return null
+            val itemStack: ItemStack = when (te) {
+                is TileRecordEtcher -> te.record
+                is TileFrequencyTuner -> te.crystal
+                else -> return null
             }
-            with (message) {
-                if (te is TileRecordEtcher) {
-                    val itemStack = te.record
 
-                    if (!itemStack.isEmpty) {
-                        if (!itemStack.hasTagCompound()) {
-                            itemStack.tagCompound = NBTTagCompound()
-                        }
+            (itemStack.item as? ISoundHolder)?.addSound(itemStack, Sound(
+                    url = message.url,
+                    name = message.name,
+                    size = message.size,
+                    author = message.author
+            ))
 
-                        with(itemStack.tagCompound!!) {
-                            setString("name", name)
-                            setString("url", url)
-                            setString("local", local)
-                            setInteger("size", size)
-
-                            if (color != -1) {
-                                setInteger("color", color)
-                            }
-
-                            if (author != "") {
-                                setString("author", author)
-                            }
-                        }
-
-                        val state = player.world.getBlockState(te.pos)
-                        player.world.notifyBlockUpdate(te.pos, state, state, 3)
-                    }
-
-                } else if (te is TileFrequencyTuner) {
-                    val itemStack = te.crystal
-
-                    if (!itemStack.isEmpty) {
-                        if (!itemStack.hasTagCompound()) {
-                            itemStack.tagCompound = NBTTagCompound()
-                        }
-
-                        with (itemStack.tagCompound!!) {
-                            setString("url", url)
-                            setString("name", local)
-                            setString("local", local)
-
-                            if (color != -1) {
-                                setInteger("color", color)
-                            }
-                        }
-
-                        val state = player.world.getBlockState(te.pos)
-                        player.world.notifyBlockUpdate(te.pos, state, state, 3)
-                    }
-                }
-            }
+            (itemStack.item as? IColorableSoundHolder)?.setColor(itemStack, message.color)
 
             return null
         }

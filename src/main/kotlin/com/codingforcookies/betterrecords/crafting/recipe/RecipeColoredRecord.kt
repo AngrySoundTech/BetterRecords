@@ -1,7 +1,9 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
-import com.codingforcookies.betterrecords.item.ItemRecord
+import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
 import com.codingforcookies.betterrecords.item.ModItems
+import net.minecraft.block.Block
+import net.minecraft.init.Blocks
 import net.minecraft.init.Items
 import net.minecraft.inventory.InventoryCrafting
 import net.minecraft.item.EnumDyeColor
@@ -15,21 +17,21 @@ import net.minecraftforge.registries.IForgeRegistryEntry
 class RecipeColoredRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
 
     init {
-        setRegistryName("recipecoloredrecord")
+        setRegistryName("recipecolorable")
     }
 
     override fun canFit(width: Int, height: Int) = width * height >= 2
 
     override fun matches(inventoryCrafting: InventoryCrafting, world: World?): Boolean {
-        var foundRecord = false
+        var foundColorable = false
         var foundDye = false
 
         (0 until inventoryCrafting.sizeInventory)
                 .map { inventoryCrafting.getStackInSlot(it) }
                 .filter { !it.isEmpty }
                 .forEach {
-                    if (it.item is ItemRecord && !foundRecord) {
-                        foundRecord = true
+                    if (it.item is IColorableSoundHolder && !foundColorable) {
+                        foundColorable = true
                     } else if (it.item == Items.DYE && !foundDye) {
                         foundDye = true
                     } else {
@@ -37,33 +39,30 @@ class RecipeColoredRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
                     }
                 }
 
-        return foundRecord && foundDye
+        return foundColorable && foundDye
     }
 
     override fun getCraftingResult(inventoryCrafting: InventoryCrafting): ItemStack? {
-        var record: ItemStack? = null
+        var colorable: ItemStack? = null
         var color = -1
 
         (0 until inventoryCrafting.sizeInventory)
                 .map { inventoryCrafting.getStackInSlot(it) }
                 .filter { !it.isEmpty }
                 .forEach {
-                    if (it.item is ItemRecord && record == null) {
-                        record = it
+                    if (it.item is IColorableSoundHolder && colorable == null) {
+                        colorable = it
                     } else {
                         color = EnumDyeColor.byDyeDamage(it.itemDamage).colorValue
                     }
                 }
 
-        return record?.copy()?.apply {
-            if (!hasTagCompound()) {
-                tagCompound = NBTTagCompound()
-            }
-            tagCompound!!.setInteger("color", color)
+        return colorable?.copy()?.apply {
+            (this.item as IColorableSoundHolder).setColor(this, color)
         }
     }
 
-    override fun getRecipeOutput() = ItemStack(ModItems.itemRecord)
+    override fun getRecipeOutput() = ItemStack(Blocks.AIR)
 
     override fun getRemainingItems(inv: InventoryCrafting): NonNullList<ItemStack> {
         inv.clear()

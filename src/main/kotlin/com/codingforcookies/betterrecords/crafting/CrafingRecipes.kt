@@ -14,9 +14,8 @@ object CrafingRecipes {
     fun registerRecipes(event: RegistryEvent.Register<IRecipe>) {
         event.registry.registerAll(
                 RecipeMultiRecord(),
-                RecipeRecordRepeatable(),
-                RecipeRecordShuffle(),
-                RecipeColoredFreqCrystal(),
+                RecipeRepeatable(),
+                RecipeShufflable(),
                 RecipeColoredRecord()
         )
     }

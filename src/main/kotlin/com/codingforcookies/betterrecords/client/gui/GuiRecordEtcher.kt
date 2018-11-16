@@ -169,9 +169,8 @@ class GuiRecordEtcher(inventoryPlayer: InventoryPlayer, val tileEntity: TileReco
                     PacketHandler.sendToServer(PacketURLWrite(
                             tileEntity.pos,
                             URL(urlField.text).openConnection().contentLength / 1024 / 1024,
-                            FilenameUtils.getName(urlField.text).split("#", "?")[0],
-                            urlField.text,
                             nameField.text.trim(),
+                            urlField.text,
                             color,
                             author
                     ))

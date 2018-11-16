@@ -9,8 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 @Mod.EventBusSubscriber(modid = ID)
 object ModItems {
 
-    val itemRecord: ModItem = ItemRecord("record")
-    val itemMultiRecord: ModItem = ItemMultiRecord("multirecord")
+    val itemNewRecord: ModItem = ItemRecord("record")
     val itemFrequencyCrystal: ModItem = ItemFrequencyCrystal("frequencycrystal")
     val itemWire: ModItem = ItemWire("wire")
     val itemWireCutters: ModItem = ItemWireCutter("wirecutters")
@@ -18,8 +17,7 @@ object ModItems {
     @SubscribeEvent
     fun registerItems(event: RegistryEvent.Register<Item>) {
         event.registry.registerAll(
-                itemRecord,
-                itemMultiRecord,
+                itemNewRecord,
                 itemFrequencyCrystal,
                 itemWire,
                 itemWireCutters

@@ -44,8 +44,7 @@ class ClientProxy : CommonProxy() {
         }
 
         Minecraft.getMinecraft().itemColors.run {
-            registerItemColorHandler(color, ModItems.itemRecord)
-            registerItemColorHandler(color, ModItems.itemMultiRecord)
+            registerItemColorHandler(color, ModItems.itemNewRecord)
             registerItemColorHandler(color, ModItems.itemFrequencyCrystal)
         }
     }

@@ -20,7 +20,7 @@ object BetterRecords {
     lateinit var proxy: CommonProxy
 
     val creativeTab = object : CreativeTabs(ID) {
-        override fun getTabIconItem() = ItemStack(ModItems.itemRecord)
+        override fun getTabIconItem() = ItemStack(ModItems.itemNewRecord)
     }
 
     @Mod.EventHandler fun preInit(event: FMLPreInitializationEvent) = proxy.preInit(event)

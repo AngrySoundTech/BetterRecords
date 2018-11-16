@@ -56,13 +56,11 @@ class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFr
         urlField.mouseClicked(x, y, mouseButton)
 
         if (error == I18n.format("gui.betterrecords.frequencytuner.ready") && x in 44..75 && y in 51..66) {
-            val superName = FilenameUtils.getName(urlField.text).split("#", "?")[0]
             PacketHandler.sendToServer(PacketURLWrite(
                     tileEntity.pos,
                     0,
-                    superName,
-                    urlField.text,
-                    nameField.text
+                    nameField.text,
+                    urlField.text
             ))
         }
     }

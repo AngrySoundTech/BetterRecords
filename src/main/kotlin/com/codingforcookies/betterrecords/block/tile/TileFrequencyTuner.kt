@@ -1,5 +1,6 @@
 package com.codingforcookies.betterrecords.block.tile
 
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.block.tile.delegate.CopyOnSetDelegate
 import com.codingforcookies.betterrecords.item.ItemFrequencyCrystal
 import net.minecraft.inventory.IInventory
@@ -22,7 +23,7 @@ class TileFrequencyTuner : ModInventoryTile(), IInventory, ITickable {
     override fun getStackInSlot(index: Int) = crystal
 
     override fun isItemValidForSlot(index: Int, stack: ItemStack) =
-            stack.item is ItemFrequencyCrystal && (!stack.hasTagCompound() || !stack.tagCompound!!.hasKey("url"))
+            stack.item is ItemFrequencyCrystal && (stack.item as ISoundHolder).getSounds(stack).isEmpty()
 
     override fun setInventorySlotContents(index: Int, stack: ItemStack) {
         crystal = stack
