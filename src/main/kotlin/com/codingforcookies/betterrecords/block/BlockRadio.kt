@@ -1,5 +1,8 @@
 package com.codingforcookies.betterrecords.block
 
+import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.wire.IRecordWire
 import com.codingforcookies.betterrecords.api.wire.IRecordWireManipulator
 import com.codingforcookies.betterrecords.block.tile.TileRadio
@@ -8,6 +11,7 @@ import com.codingforcookies.betterrecords.helper.ConnectionHelper
 import com.codingforcookies.betterrecords.item.ModItems
 import com.codingforcookies.betterrecords.network.PacketHandler
 import com.codingforcookies.betterrecords.network.PacketRadioPlay
+import com.codingforcookies.betterrecords.network.PacketRecordPlay
 import com.codingforcookies.betterrecords.network.PacketSoundStop
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -63,8 +67,8 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
                                 pos,
                                 world.provider.dimension,
                                 te.songRadius,
-                                te.crystal.tagCompound!!.getString("name"),
-                                te.crystal.tagCompound!!.getString("url")
+                                (te.crystal.item as ISoundHolder).getSounds(te.crystal).first().name,
+                                (te.crystal.item as ISoundHolder).getSounds(te.crystal).first().url
                         ))
                     }
                 }
