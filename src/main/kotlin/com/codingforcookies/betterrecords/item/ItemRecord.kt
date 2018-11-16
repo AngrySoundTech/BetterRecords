@@ -9,7 +9,7 @@ import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
-class ItemNewRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoundHolder, IShufflableSoundHolder, IColorableSoundHolder {
+class ItemRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoundHolder, IShufflableSoundHolder, IColorableSoundHolder {
 
     override val maxSounds = 12
 

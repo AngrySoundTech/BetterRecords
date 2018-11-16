@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 @Mod.EventBusSubscriber(modid = ID)
 object ModItems {
 
-    val itemNewRecord: ModItem = ItemNewRecord("newrecord")
+    val itemNewRecord: ModItem = ItemRecord("record")
     val itemFrequencyCrystal: ModItem = ItemFrequencyCrystal("frequencycrystal")
     val itemWire: ModItem = ItemWire("wire")
     val itemWireCutters: ModItem = ItemWireCutter("wirecutters")

@@ -1,9 +1,7 @@
 package com.codingforcookies.betterrecords.block.tile
 
-import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.block.tile.delegate.CopyOnSetDelegate
-import com.codingforcookies.betterrecords.item.ItemFrequencyCrystal
-import com.codingforcookies.betterrecords.item.ItemNewRecord
+import com.codingforcookies.betterrecords.item.ItemRecord
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
@@ -57,7 +55,7 @@ class TileRecordEtcher : ModInventoryTile(), IInventory, ITickable {
     }
 
     override fun isItemValidForSlot(index: Int, stack: ItemStack): Boolean {
-        return stack.item is ItemNewRecord
+        return stack.item is ItemRecord
     }
 
     override fun readFromNBT(compound: NBTTagCompound) = compound.run {

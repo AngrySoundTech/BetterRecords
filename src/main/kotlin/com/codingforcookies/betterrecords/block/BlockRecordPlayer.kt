@@ -1,7 +1,6 @@
 package com.codingforcookies.betterrecords.block
 
 import com.codingforcookies.betterrecords.api.BetterRecordsAPI
-import com.codingforcookies.betterrecords.api.record.IRecord
 import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
@@ -10,8 +9,7 @@ import com.codingforcookies.betterrecords.api.wire.IRecordWireManipulator
 import com.codingforcookies.betterrecords.block.tile.TileRecordPlayer
 import com.codingforcookies.betterrecords.client.render.RenderRecordPlayer
 import com.codingforcookies.betterrecords.helper.ConnectionHelper
-import com.codingforcookies.betterrecords.item.ItemNewRecord
-import com.codingforcookies.betterrecords.item.ModItems
+import com.codingforcookies.betterrecords.item.ItemRecord
 import com.codingforcookies.betterrecords.network.PacketHandler
 import com.codingforcookies.betterrecords.network.PacketRecordPlay
 import com.codingforcookies.betterrecords.network.PacketSoundStop
@@ -22,9 +20,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
@@ -70,7 +66,7 @@ class BlockRecordPlayer(name: String) : ModBlock(Material.WOOD, name), TESRProvi
             }
         } else if (tileRecordPlayer!!.opening) {
             if (tileRecordPlayer.record.isEmpty) {
-                if (player.heldItemMainhand.item is ItemNewRecord && (player.heldItemMainhand.item as ISoundHolder).getSounds(player.heldItemMainhand).isNotEmpty()) {
+                if (player.heldItemMainhand.item is ItemRecord && (player.heldItemMainhand.item as ISoundHolder).getSounds(player.heldItemMainhand).isNotEmpty()) {
                     tileRecordPlayer.record = player.heldItemMainhand
                     world.notifyBlockUpdate(pos, state!!, state, 3)
                     player.heldItemMainhand.count--
