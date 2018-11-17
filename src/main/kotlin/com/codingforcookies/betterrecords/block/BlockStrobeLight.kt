@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
-class BlockStrobeLight(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileStrobeLight>, ItemModelProvider  {
+class BlockStrobeLight(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileStrobeLight>, ItemModelProvider {
 
     init {
         setHardness(2.75f)

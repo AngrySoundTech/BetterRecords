@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.Item
 
-open class ModItem(val name: String): Item() {
+open class ModItem(val name: String) : Item() {
 
     init {
         setRegistryName("betterrecords:$name")

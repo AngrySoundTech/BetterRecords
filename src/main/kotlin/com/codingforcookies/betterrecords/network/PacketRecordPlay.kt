@@ -1,12 +1,11 @@
 package com.codingforcookies.betterrecords.network
 
 import com.codingforcookies.betterrecords.api.event.RecordInsertEvent
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.sound.Sound
-import com.codingforcookies.betterrecords.client.sound.SoundPlayer
-import com.codingforcookies.betterrecords.extensions.forEachTag
+import com.codingforcookies.betterrecords.item.ModItems
 import io.netty.buffer.ByteBuf
-import net.minecraft.client.Minecraft
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.network.ByteBufUtils
@@ -20,24 +19,13 @@ class PacketRecordPlay @JvmOverloads constructor(
         var playRadius: Float = -1F,
         var repeat: Boolean = false,
         var shuffle: Boolean = false,
-        // Following arguments used to construct sounds.
-        // One of the two should be provided.
-        // or both if you want. I'm a comment, not a cop.
-        var sound: Sound = Sound("", ""),
-        var nbt: NBTTagCompound = NBTTagCompound()
+        var recordStack: ItemStack = ItemStack(ModItems.itemNewRecord)
 ) : IMessage {
-
 
     val sounds = mutableListOf<Sound>()
 
     init {
-        if (sound.url != "") {
-            sounds += sound
-        }
-
-        nbt.getTagList("songs", 10).forEachTag {
-            sounds += Sound(it.getString("url"), it.getString("local"))
-        }
+        sounds.addAll((recordStack.item as ISoundHolder).getSounds(recordStack))
     }
 
     override fun toBytes(buf: ByteBuf) {
@@ -52,9 +40,12 @@ class PacketRecordPlay @JvmOverloads constructor(
         // Write the amount of sounds we're going to send,
         // to rebuild on the other side.
         buf.writeInt(sounds.size)
+
         sounds.forEach {
             ByteBufUtils.writeUTF8String(buf, it.url)
-            ByteBufUtils.writeUTF8String(buf, it.localName)
+            ByteBufUtils.writeUTF8String(buf, it.name)
+            buf.writeInt(it.size)
+            ByteBufUtils.writeUTF8String(buf, it.author)
         }
 
         buf.writeBoolean(repeat)
@@ -72,6 +63,8 @@ class PacketRecordPlay @JvmOverloads constructor(
         for (i in 1..amount) {
             sounds.add(Sound(
                     ByteBufUtils.readUTF8String(buf),
+                    ByteBufUtils.readUTF8String(buf),
+                    buf.readInt(),
                     ByteBufUtils.readUTF8String(buf)
             ))
         }

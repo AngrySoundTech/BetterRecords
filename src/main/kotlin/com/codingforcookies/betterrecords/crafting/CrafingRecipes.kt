@@ -1,7 +1,10 @@
 package com.codingforcookies.betterrecords.crafting
 
 import com.codingforcookies.betterrecords.ID
-import com.codingforcookies.betterrecords.crafting.recipe.*
+import com.codingforcookies.betterrecords.crafting.recipe.RecipeColoredRecord
+import com.codingforcookies.betterrecords.crafting.recipe.RecipeMultiRecord
+import com.codingforcookies.betterrecords.crafting.recipe.RecipeRepeatable
+import com.codingforcookies.betterrecords.crafting.recipe.RecipeShufflable
 import net.minecraft.item.crafting.IRecipe
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.fml.common.Mod
@@ -14,9 +17,8 @@ object CrafingRecipes {
     fun registerRecipes(event: RegistryEvent.Register<IRecipe>) {
         event.registry.registerAll(
                 RecipeMultiRecord(),
-                RecipeRecordRepeatable(),
-                RecipeRecordShuffle(),
-                RecipeColoredFreqCrystal(),
+                RecipeRepeatable(),
+                RecipeShufflable(),
                 RecipeColoredRecord()
         )
     }

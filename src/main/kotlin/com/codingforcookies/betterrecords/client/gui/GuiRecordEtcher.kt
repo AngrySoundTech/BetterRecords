@@ -20,12 +20,10 @@ import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.util.ResourceLocation
-import org.apache.commons.io.FilenameUtils
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-import java.net.URLEncoder
 
 class GuiRecordEtcher(inventoryPlayer: InventoryPlayer, val tileEntity: TileRecordEtcher) : GuiContainer(ContainerRecordEtcher(inventoryPlayer, tileEntity)) {
 
@@ -169,9 +167,8 @@ class GuiRecordEtcher(inventoryPlayer: InventoryPlayer, val tileEntity: TileReco
                     PacketHandler.sendToServer(PacketURLWrite(
                             tileEntity.pos,
                             URL(urlField.text).openConnection().contentLength / 1024 / 1024,
-                            FilenameUtils.getName(urlField.text).split("#", "?")[0],
-                            urlField.text,
                             nameField.text.trim(),
+                            urlField.text,
                             color,
                             author
                     ))

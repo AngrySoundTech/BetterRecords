@@ -1,7 +1,6 @@
 package com.codingforcookies.betterrecords.network
 
 import com.codingforcookies.betterrecords.api.event.RadioInsertEvent
-import com.codingforcookies.betterrecords.api.event.RecordInsertEvent
 import com.codingforcookies.betterrecords.api.sound.Sound
 import io.netty.buffer.ByteBuf
 import net.minecraft.util.math.BlockPos

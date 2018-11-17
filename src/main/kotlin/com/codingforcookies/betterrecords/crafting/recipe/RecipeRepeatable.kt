@@ -1,62 +1,56 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
-import com.codingforcookies.betterrecords.item.ItemMultiRecord
-import com.codingforcookies.betterrecords.item.ItemRecord
+import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
 import com.codingforcookies.betterrecords.item.ModItems
-import net.minecraft.init.Blocks
+import net.minecraft.init.Items
 import net.minecraft.inventory.InventoryCrafting
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.IRecipe
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.NonNullList
 import net.minecraft.world.World
 import net.minecraftforge.registries.IForgeRegistryEntry
 
-class RecipeRecordShuffle : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
+class RecipeRepeatable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
 
     init {
-        setRegistryName("reciperecordshuffle")
+        setRegistryName("reciperepeatable")
     }
 
     override fun canFit(width: Int, height: Int) = width * height >= 2
 
     override fun matches(inventoryCrafting: InventoryCrafting, worldIn: World?): Boolean {
-        var foundRecord = false
-        var foundTorch = false
+        var foundRepeatable = false
+        var foundComparator = false
 
         (0 until inventoryCrafting.sizeInventory)
                 .map { inventoryCrafting.getStackInSlot(it) }
                 .filter { !it.isEmpty }
                 .forEach {
-                    if (it.item is ItemMultiRecord && it.hasTagCompound() && !foundRecord) {
-                        foundRecord = true
-                    } else if (it.item == Item.getItemFromBlock(Blocks.REDSTONE_TORCH) && !foundTorch) {
-                        foundTorch = true
+                    if (it.item is IRepeatableSoundHolder && !foundRepeatable) {
+                        foundRepeatable = true
+                    } else if (it.item == Items.COMPARATOR && !foundComparator) {
+                        foundComparator = true
                     } else {
                         return false
                     }
                 }
 
-        return foundRecord && foundTorch
+        return foundRepeatable && foundComparator
     }
 
     override fun getCraftingResult(inventoryCrafting: InventoryCrafting): ItemStack? {
-        val record =
+        val repeatable =
                 (0 until inventoryCrafting.sizeInventory)
                         .map { inventoryCrafting.getStackInSlot(it) }
                         .filter { !it.isEmpty }
-                        .find { it.item is ItemRecord }
+                        .find { it.item is IRepeatableSoundHolder }
 
-        return record?.copy()?.apply {
-            if (!hasTagCompound()) {
-                tagCompound = NBTTagCompound()
-            }
-            tagCompound!!.setBoolean("shuffle", true)
+        return repeatable?.copy()?.apply {
+            (this.item as IRepeatableSoundHolder).setRepeatable(this, true)
         }
     }
 
-    override fun getRecipeOutput() = ItemStack(ModItems.itemMultiRecord)
+    override fun getRecipeOutput() = ItemStack(ModItems.itemNewRecord)
 
     override fun getRemainingItems(inv: InventoryCrafting): NonNullList<ItemStack> {
         inv.clear()

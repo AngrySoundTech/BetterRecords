@@ -13,12 +13,12 @@ class TileRecordEtcher : ModInventoryTile(), IInventory, ITickable {
     var record by CopyOnSetDelegate()
 
     var recordEntity: EntityItem? = null
-    get() {
-        if (!record.isEmpty) {
-            return EntityItem(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), record)
+        get() {
+            if (!record.isEmpty) {
+                return EntityItem(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), record)
+            }
+            return null
         }
-        return null
-    }
 
     var recordRotation = 0F
     var needleLocation = 0F
@@ -55,7 +55,7 @@ class TileRecordEtcher : ModInventoryTile(), IInventory, ITickable {
     }
 
     override fun isItemValidForSlot(index: Int, stack: ItemStack): Boolean {
-        return stack.item is ItemRecord && (!stack.hasTagCompound() || !stack.tagCompound!!.hasKey("url"))
+        return stack.item is ItemRecord
     }
 
     override fun readFromNBT(compound: NBTTagCompound) = compound.run {

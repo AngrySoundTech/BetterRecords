@@ -1,14 +1,17 @@
 package com.codingforcookies.betterrecords.block
 
 import com.codingforcookies.betterrecords.api.BetterRecordsAPI
-import com.codingforcookies.betterrecords.api.record.IRecord
+import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.wire.IRecordWire
 import com.codingforcookies.betterrecords.api.wire.IRecordWireManipulator
 import com.codingforcookies.betterrecords.block.tile.TileRecordPlayer
 import com.codingforcookies.betterrecords.client.render.RenderRecordPlayer
 import com.codingforcookies.betterrecords.helper.ConnectionHelper
-import com.codingforcookies.betterrecords.item.ModItems
+import com.codingforcookies.betterrecords.item.ItemRecord
 import com.codingforcookies.betterrecords.network.PacketHandler
+import com.codingforcookies.betterrecords.network.PacketRecordPlay
 import com.codingforcookies.betterrecords.network.PacketSoundStop
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.BlockStateContainer
@@ -17,9 +20,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
-import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.*
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
@@ -27,7 +28,7 @@ import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 import java.util.*
 
-class BlockRecordPlayer(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileRecordPlayer>, ItemModelProvider  {
+class BlockRecordPlayer(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileRecordPlayer>, ItemModelProvider {
 
     init {
         setHardness(1f)
@@ -64,30 +65,27 @@ class BlockRecordPlayer(name: String) : ModBlock(Material.WOOD, name), TESRProvi
                     world.playSound(pos.x.toDouble(), pos.y.toDouble() + 0.5, pos.z.toDouble(), SoundEvent.REGISTRY.getObject(ResourceLocation("block.chest.open")), SoundCategory.NEUTRAL, 0.2f, world.rand.nextFloat() * 0.2f + 3f, false)
             }
         } else if (tileRecordPlayer!!.opening) {
-            if (!tileRecordPlayer.record.isEmpty) {
-                if (!world.isRemote) dropItem(world, pos)
-                tileRecordPlayer.record = ItemStack.EMPTY
-                world.notifyBlockUpdate(pos, state!!, state, 3)
-            } else if (!player.heldItemMainhand.isEmpty && (player.heldItemMainhand.item === Items.DIAMOND || player.heldItemMainhand.item is IRecord && (player.heldItemMainhand.item as IRecord).isRecordValid(player.heldItemMainhand))) {
-                if (player.heldItemMainhand.item === Items.DIAMOND) {
-                    val itemStack = ItemStack(ModItems.itemRecord)
-                    itemStack.tagCompound = NBTTagCompound()
-                    itemStack.tagCompound!!.setString("name", "easteregg.ogg")
-                    itemStack.tagCompound!!.setString("url", "http://files.enjin.com/788858/SBear'sMods/Songs/easteregg.ogg")
-                    itemStack.tagCompound!!.setString("local", "Darude - Sandstorm")
-                    itemStack.tagCompound!!.setInteger("color", 0x53EAD7)
-                    tileRecordPlayer.record = itemStack
-                    world.notifyBlockUpdate(pos, state!!, state, 3)
-                    player.heldItemMainhand.count--
-                } else {
+            if (tileRecordPlayer.record.isEmpty) {
+                if (player.heldItemMainhand.item is ItemRecord && (player.heldItemMainhand.item as ISoundHolder).getSounds(player.heldItemMainhand).isNotEmpty()) {
                     tileRecordPlayer.record = player.heldItemMainhand
                     world.notifyBlockUpdate(pos, state!!, state, 3)
                     player.heldItemMainhand.count--
-                }
 
-                if (!world.isRemote) {
-                    (tileEntity.record.item as IRecord).onRecordInserted(tileRecordPlayer, tileEntity.record)
+                    if (!world.isRemote) {
+                        PacketHandler.sendToAll(PacketRecordPlay(
+                                tileRecordPlayer.pos,
+                                tileRecordPlayer.world.provider.dimension,
+                                tileRecordPlayer.songRadius,
+                                (tileEntity.record.item as IRepeatableSoundHolder).isRepeatable(tileEntity.record),
+                                (tileEntity.record.item as IShufflableSoundHolder).isShufflable(tileEntity.record),
+                                tileEntity.record
+                        ))
+                    }
                 }
+            } else { // There is a record in the player
+                if (!world.isRemote) dropItem(world, pos)
+                tileRecordPlayer.record = ItemStack.EMPTY
+                world.notifyBlockUpdate(pos, state!!, state, 3)
             }
         }
         return true

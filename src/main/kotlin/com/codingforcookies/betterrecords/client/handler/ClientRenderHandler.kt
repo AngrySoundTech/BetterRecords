@@ -49,19 +49,19 @@ object ClientRenderHandler {
             mc.entityRenderer.setupOverlayRendering()
             if (strobeLinger > 0f) {
                 glMatrix {
-                        GL11.glDisable(GL11.GL_TEXTURE_2D)
-                        GL11.glEnable(GL11.GL_BLEND)
+                    GL11.glDisable(GL11.GL_TEXTURE_2D)
+                    GL11.glEnable(GL11.GL_BLEND)
 
-                        GL11.glBegin(GL11.GL_QUADS)
-                        GL11.glColor4f(1f, 1f, 1f, strobeLinger)
-                        GL11.glVertex2f(width.toFloat(), 0f)
-                        GL11.glVertex2f(0f, 0f)
-                        GL11.glVertex2f(0f, height.toFloat())
-                        GL11.glVertex2f(width.toFloat(), height.toFloat())
-                        GL11.glEnd()
+                    GL11.glBegin(GL11.GL_QUADS)
+                    GL11.glColor4f(1f, 1f, 1f, strobeLinger)
+                    GL11.glVertex2f(width.toFloat(), 0f)
+                    GL11.glVertex2f(0f, 0f)
+                    GL11.glVertex2f(0f, height.toFloat())
+                    GL11.glVertex2f(width.toFloat(), height.toFloat())
+                    GL11.glEnd()
 
-                        GL11.glDisable(GL11.GL_BLEND)
-                        GL11.glEnable(GL11.GL_TEXTURE_2D)
+                    GL11.glDisable(GL11.GL_BLEND)
+                    GL11.glEnable(GL11.GL_TEXTURE_2D)
                 }
                 strobeLinger -= if (ModConfig.client.flashMode < 3) 0.01f else 0.2f
             }

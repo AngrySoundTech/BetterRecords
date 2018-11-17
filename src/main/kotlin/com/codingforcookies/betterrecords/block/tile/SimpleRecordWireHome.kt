@@ -12,11 +12,13 @@ abstract class SimpleRecordWireHome : ModTile(), IRecordWireHome, ITickable {
     var formTreble = ArrayList<Float>()
     var formBass = ArrayList<Float>()
 
-    @Synchronized override fun addTreble(form: Float) {
+    @Synchronized
+    override fun addTreble(form: Float) {
         formTreble.add(form)
     }
 
-    @Synchronized override fun addBass(form: Float) {
+    @Synchronized
+    override fun addBass(form: Float) {
         formBass.add(form)
     }
 

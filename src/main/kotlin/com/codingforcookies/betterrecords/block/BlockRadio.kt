@@ -1,5 +1,6 @@
 package com.codingforcookies.betterrecords.block
 
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.wire.IRecordWire
 import com.codingforcookies.betterrecords.api.wire.IRecordWireManipulator
 import com.codingforcookies.betterrecords.block.tile.TileRadio
@@ -33,7 +34,7 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
     override fun getRenderClass() = RenderRadio::class
 
     override fun onBlockAdded(world: World, pos: BlockPos, state: IBlockState) =
-        world.notifyBlockUpdate(pos, state, state, 3)
+            world.notifyBlockUpdate(pos, state, state, 3)
 
     override fun getBoundingBox(state: IBlockState, block: IBlockAccess, pos: BlockPos) = when (getMetaFromState(state)) {
         0, 2 -> AxisAlignedBB(0.13, 0.0, 0.2, 0.87, 0.98, 0.8)
@@ -54,7 +55,7 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
                     if (!world.isRemote) dropItem(world, pos)
                     te.crystal = ItemStack.EMPTY
                     world.notifyBlockUpdate(pos, state, state, 3)
-                } else if (player.heldItemMainhand?.item == ModItems.itemFrequencyCrystal && player.heldItemMainhand.hasTagCompound() && player.heldItemMainhand.tagCompound!!.hasKey("url")) {
+                } else if (player.heldItemMainhand.item == ModItems.itemFrequencyCrystal && (player.heldItemMainhand.item as ISoundHolder).getSounds(player.heldItemMainhand).isNotEmpty()) {
                     te.crystal = player.heldItemMainhand
                     world.notifyBlockUpdate(pos, state, state, 3)
                     player.heldItemMainhand.count--
@@ -63,8 +64,8 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
                                 pos,
                                 world.provider.dimension,
                                 te.songRadius,
-                                te.crystal.tagCompound!!.getString("name"),
-                                te.crystal.tagCompound!!.getString("url")
+                                (te.crystal.item as ISoundHolder).getSounds(te.crystal).first().name,
+                                (te.crystal.item as ISoundHolder).getSounds(te.crystal).first().url
                         ))
                     }
                 }

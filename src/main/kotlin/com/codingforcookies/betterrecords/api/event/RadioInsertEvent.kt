@@ -9,4 +9,4 @@ data class RadioInsertEvent(
         val dimension: Int,
         val playRadius: Float,
         val sound: Sound
-): Event()
+) : Event()

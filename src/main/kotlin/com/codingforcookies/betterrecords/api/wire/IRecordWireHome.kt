@@ -4,7 +4,7 @@ import com.codingforcookies.betterrecords.api.connection.RecordConnection
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 
-interface  IRecordWireHome {
+interface IRecordWireHome {
 
     fun addTreble(form: Float)
     fun addBass(form: Float)

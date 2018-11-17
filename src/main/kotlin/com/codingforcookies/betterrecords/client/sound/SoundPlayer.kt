@@ -26,7 +26,7 @@ object SoundPlayer {
     fun playSound(pos: BlockPos, dimension: Int, sound: Sound) {
         BetterRecords.logger.info("Playing sound at $pos in Dimension $dimension")
 
-        ClientRenderHandler.nowDownloading = sound.localName
+        ClientRenderHandler.nowDownloading = sound.name
         ClientRenderHandler.showDownloading = true
 
         val targetFile = File(downloadFolder, FilenameUtils.getName(sound.url).replace(Regex("[^a-zA-Z0-9_\\.]"), "_"))
@@ -38,7 +38,7 @@ object SoundPlayer {
                 success = {
                     ClientRenderHandler.showDownloading = false
                     playingSounds[Pair(pos, dimension)] = sound
-                    ClientRenderHandler.showPlayingWithTimeout(sound.localName)
+                    ClientRenderHandler.showPlayingWithTimeout(sound.name)
                     playFile(targetFile, pos, dimension)
                 },
                 failure = {
@@ -58,7 +58,7 @@ object SoundPlayer {
 
         playingSounds[Pair(pos, dimension)] = sound
 
-        ClientRenderHandler.showPlayingWithTimeout(sound.localName)
+        ClientRenderHandler.showPlayingWithTimeout(sound.name)
         playStream(urlConn.inputStream, pos, dimension)
     }
 
@@ -140,8 +140,8 @@ object SoundPlayer {
         val te = Minecraft.getMinecraft().world.getTileEntity(pos)
 
         (te as? IRecordWireHome)?.let {
-                      te.addTreble(getUnscaledWaveform(buffer, true, false))
-                      te.addBass(getUnscaledWaveform(buffer, false, false))
+            te.addTreble(getUnscaledWaveform(buffer, true, false))
+            te.addBass(getUnscaledWaveform(buffer, false, false))
 
             for (connection in te.connections) {
                 val connectedTe = Minecraft.getMinecraft().world.getTileEntity(BlockPos(connection.x2, connection.y2, connection.z2))

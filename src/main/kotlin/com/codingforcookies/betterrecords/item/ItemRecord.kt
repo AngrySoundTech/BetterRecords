@@ -1,56 +1,76 @@
 package com.codingforcookies.betterrecords.item
 
-import com.codingforcookies.betterrecords.api.record.IRecord
-import com.codingforcookies.betterrecords.api.wire.IRecordWireHome
-import com.codingforcookies.betterrecords.api.sound.Sound
-import com.codingforcookies.betterrecords.network.PacketHandler
-import com.codingforcookies.betterrecords.network.PacketRecordPlay
+import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
+import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
-import net.minecraft.util.text.translation.I18n as ServerI18n
 
-open class ItemRecord(name: String) : ModItem(name), IRecord {
+class ItemRecord(name: String) : ModItem(name), ISoundHolder, IRepeatableSoundHolder, IShufflableSoundHolder, IColorableSoundHolder {
+
+    override val maxSounds = 12
 
     init {
         maxStackSize = 1
     }
 
-    override fun isRecordValid(itemStack: ItemStack) =
-        itemStack.hasTagCompound() && itemStack.tagCompound!!.hasKey("name")
+    override fun getUnlocalizedName(stack: ItemStack): String {
+        val songs = getSounds(stack)
 
-    override fun onRecordInserted(wireHome: IRecordWireHome, itemStack: ItemStack) {
-        itemStack.tagCompound?.let {
-            PacketHandler.sendToAll(PacketRecordPlay(
-                    wireHome.tileEntity.pos,
-                    wireHome.tileEntity.world.provider.dimension,
-                    wireHome.songRadius,
-                    it.getBoolean("repeat"),
-                    it.getBoolean("shuffle"),
-                    sound = Sound(it.getString("url"), it.getString("local"))
-            ))
+        return when (songs.count()) {
+            0 -> "item.betterrecords:record.blank"
+        // If there's only one song, the name will be set in [getItemStackDisplayName]
+            else -> "item.betterrecords:record.multi"
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    override fun addInformation(stack: ItemStack, worldIn: World?, tooltip: MutableList<String>, flagIn: ITooltipFlag) {
-        stack.tagCompound?.let {
-            tooltip += I18n.format("item.betterrecords:record.desc.by", it.getString("author"))
-            tooltip += I18n.format("item.betterrecords:record.desc.size", it.getInteger("size"))
-            if (it.getBoolean("repeat")) {
-                tooltip += ""
-                tooltip += "\u00a7e" + I18n.format("item.betterrecords:record.desc.repeat")
-            }
+    override fun getItemStackDisplayName(stack: ItemStack): String {
+        val songs = getSounds(stack)
+
+        // If there's only one song on the record, we don't want to localize anything
+        // and just use that name instead
+        if (songs.count() == 1) {
+            return songs.first().name
         }
+
+        // If it has no songs or more than one, we fall back on localizing it.
+        return super.getItemStackDisplayName(stack)
     }
 
-    override fun getItemStackDisplayName(stack: ItemStack): String =
-            if (stack.hasTagCompound() && stack.tagCompound!!.hasKey("local")) {
-                stack.tagCompound!!.getString("local")
+    override fun addInformation(stack: ItemStack, world: World?, tooltip: MutableList<String>, flag: ITooltipFlag) {
+        val songs = getSounds(stack)
+
+        // We only want to add a tooltip to the record if it is not empty
+        if (songs.isNotEmpty()) {
+
+            // Add the song info to the tooltip
+            if (songs.size > 1) {
+                // If there are multiple songs on the record, we want to display them all in an itemized list
+                songs.forEachIndexed { index, sound ->
+                    tooltip += I18n.format("item.betterrecords:record.desc.song", index + 1, sound.name)
+                }
             } else {
-                ServerI18n.translateToLocal("$unlocalizedName.name")
+                // If there is only one song on the record, we only want to display the author,
+                // Because the name of the song is displayed as the name
+                tooltip += I18n.format("item.betterrecords:record.desc.by", songs.first().author)
             }
+
+            // Add the size to the record.
+            val size = songs.sumBy { it.size }
+            tooltip += I18n.format("item.betterrecords:record.desc.size", size)
+
+            // If it's repeatable, we show that.
+            if (isRepeatable(stack)) {
+                tooltip += "\u00a7e" + I18n.format("item.betterrecords:record.desc.repeatable")
+            }
+
+            // If it's shufflable, we show that.
+            if (isShufflable(stack)) {
+                tooltip += "\u00a7e" + I18n.format("item.betterrecords:record.desc.shufflable")
+            }
+        }
+    }
 }

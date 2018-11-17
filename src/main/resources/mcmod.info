@@ -1,16 +1,20 @@
 [
-{
-  "modid": "betterrecords",
-  "name": "Better Records",
-  "description": "Adds records that can play songs via URLs.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "http://www.codingforcookies.com/",
-  "updateUrl": "",
-  "authors": ["Stumblinbear", "Borlea", "AngrySoundTech"],
-  "credits": "CodingForCookies",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+  {
+    "modid": "betterrecords",
+    "name": "Better Records",
+    "description": "Adds records that can play songs via URLs.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "http://www.codingforcookies.com/",
+    "updateUrl": "",
+    "authors": [
+      "Stumblinbear",
+      "Borlea",
+      "AngrySoundTech"
+    ],
+    "credits": "CodingForCookies",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]
