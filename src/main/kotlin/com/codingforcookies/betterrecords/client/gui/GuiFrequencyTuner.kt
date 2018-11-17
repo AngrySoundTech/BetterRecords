@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.util.ResourceLocation
-import org.apache.commons.io.FilenameUtils
-import java.net.MalformedURLException
 import java.net.URL
 
 class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFrequencyTuner) : GuiContainer(ContainerFrequencyTuner(inventoryPlayer, tileEntity)) {
@@ -66,7 +64,7 @@ class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFr
     }
 
     override fun drawGuiContainerForegroundLayer(mouseX: Int, mouseY: Int) {
-        with (fontRenderer) {
+        with(fontRenderer) {
             drawString(I18n.format("tile.betterrecords:frequencytuner.name"), 8, 6, 4210752)
             drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752)
             drawString(I18n.format("gui.betterrecords.label.name") + ": ", 10, 21, 4210752)
@@ -76,7 +74,7 @@ class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFr
         val x = mouseX - (width - xSize) / 2
         val y = mouseY - (height - ySize) / 2
 
-        with (fontRenderer) {
+        with(fontRenderer) {
             val tuneColor = if (error == I18n.format("gui.betterrecords.frequencytuner.ready")) {
                 if (x in 44..75 && y in 51..66) {
                     0xFFFF55
@@ -129,7 +127,7 @@ class GuiFrequencyTuner(inventoryPlayer: InventoryPlayer, val tileEntity: TileFr
                         I18n.format("gui.betterrecords.frequencytuner.status.invalidUrl")
                     }
 
-                } catch(e: Exception) {
+                } catch (e: Exception) {
                     error = I18n.format("gui.betterrecords.frequencytuner.status.invalidUrl")
                 }
 

@@ -23,7 +23,12 @@ object BetterRecords {
         override fun getTabIconItem() = ItemStack(ModItems.itemNewRecord)
     }
 
-    @Mod.EventHandler fun preInit(event: FMLPreInitializationEvent) = proxy.preInit(event)
-    @Mod.EventHandler fun init(event: FMLInitializationEvent) = proxy.init(event)
-    @Mod.EventHandler fun postInit(event: FMLPostInitializationEvent) = proxy.postInit(event)
+    @Mod.EventHandler
+    fun preInit(event: FMLPreInitializationEvent) = proxy.preInit(event)
+
+    @Mod.EventHandler
+    fun init(event: FMLInitializationEvent) = proxy.init(event)
+
+    @Mod.EventHandler
+    fun postInit(event: FMLPostInitializationEvent) = proxy.postInit(event)
 }

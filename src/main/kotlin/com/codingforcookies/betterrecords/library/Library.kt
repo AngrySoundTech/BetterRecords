@@ -12,7 +12,7 @@ sealed class Library {
     /**
      * The [LibraryContent], to be set after reading from whatever source
      */
-    abstract protected val libraryContent: LibraryContent
+    protected abstract val libraryContent: LibraryContent
 
     val name
         get() = libraryContent.name

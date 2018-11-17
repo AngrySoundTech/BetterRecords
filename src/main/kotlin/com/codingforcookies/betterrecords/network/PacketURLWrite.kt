@@ -9,7 +9,6 @@ import com.codingforcookies.betterrecords.extensions.readBlockPos
 import com.codingforcookies.betterrecords.extensions.writeBlockPos
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.network.ByteBufUtils
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage
@@ -17,7 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext
 
 class PacketURLWrite @JvmOverloads constructor(
-        var pos: BlockPos = BlockPos(0,0,0),
+        var pos: BlockPos = BlockPos(0, 0, 0),
         var size: Int = -1,
         var name: String = "",
         var url: String = "",
@@ -25,7 +24,7 @@ class PacketURLWrite @JvmOverloads constructor(
         // considered optional
         var color: Int = -1,
         var author: String = ""
-): IMessage {
+) : IMessage {
 
     override fun toBytes(buf: ByteBuf) {
         writeBlockPos(buf, pos)

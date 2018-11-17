@@ -13,8 +13,8 @@ object BetterUtils {
     fun wrapInt(x: Int, min: Int, max: Int) =
             when {
                 x in min..max -> x
-                x < min       -> max
-                else          -> min
+                x < min -> max
+                else -> min
             }
 
     /**

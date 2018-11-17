@@ -8,12 +8,10 @@ import com.codingforcookies.betterrecords.network.PacketSendLibrary
 import com.codingforcookies.betterrecords.util.BetterUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayerMP
-import net.minecraft.server.MinecraftServer
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent
-import net.minecraftforge.fml.common.network.FMLNetworkEvent
 import net.minecraftforge.fml.relauncher.Side
 import java.io.File
 import java.net.MalformedURLException
@@ -54,14 +52,14 @@ object Libraries {
 
         // Create the remoteLibraries file if it doesn't exist.
         val remoteLibrariesFile = File(LOCAL_LIBRARY_DIR.parent, "remoteLibraries.txt")
-        with (remoteLibrariesFile) {
+        with(remoteLibrariesFile) {
             if (!exists()) {
                 writeText(BetterUtils.getResourceFromJar("assets/betterrecords/libraries/remoteLibraries.txt").readText())
             }
         }
 
         // Create an empty library for their etchings if it doesn't exist. We need at least one library.
-        with (File(LOCAL_LIBRARY_DIR, "myEtchings.json")) {
+        with(File(LOCAL_LIBRARY_DIR, "myEtchings.json")) {
             if (!exists()) {
                 writeText(BetterUtils.getResourceFromJar("assets/betterrecords/libraries/empty_library.json").readText())
             }

@@ -3,8 +3,8 @@ package com.codingforcookies.betterrecords.block.tile
 import com.codingforcookies.betterrecords.api.connection.RecordConnection
 import com.codingforcookies.betterrecords.api.wire.IRecordWire
 import com.codingforcookies.betterrecords.block.BlockSpeaker
-import com.codingforcookies.betterrecords.helper.ConnectionHelper
 import com.codingforcookies.betterrecords.extensions.set
+import com.codingforcookies.betterrecords.helper.ConnectionHelper
 import net.minecraft.nbt.NBTTagCompound
 
 class TileSpeaker : ModTile(), IRecordWire {

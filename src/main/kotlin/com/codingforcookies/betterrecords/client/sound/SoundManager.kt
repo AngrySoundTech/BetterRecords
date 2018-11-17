@@ -10,7 +10,7 @@ object SoundManager {
 
     fun queueSongsAt(pos: BlockPos, dimension: Int, sounds: List<Sound>, shuffle: Boolean = false, repeat: Boolean = false) {
         val job = thread {
-            while(true) {
+            while (true) {
                 sounds.forEach {
                     SoundPlayer.playSound(pos, dimension, it)
                 }

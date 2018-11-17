@@ -1,7 +1,5 @@
 package com.codingforcookies.betterrecords.block
 
-import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
-import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.wire.IRecordWire
 import com.codingforcookies.betterrecords.api.wire.IRecordWireManipulator
@@ -11,7 +9,6 @@ import com.codingforcookies.betterrecords.helper.ConnectionHelper
 import com.codingforcookies.betterrecords.item.ModItems
 import com.codingforcookies.betterrecords.network.PacketHandler
 import com.codingforcookies.betterrecords.network.PacketRadioPlay
-import com.codingforcookies.betterrecords.network.PacketRecordPlay
 import com.codingforcookies.betterrecords.network.PacketSoundStop
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -37,7 +34,7 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
     override fun getRenderClass() = RenderRadio::class
 
     override fun onBlockAdded(world: World, pos: BlockPos, state: IBlockState) =
-        world.notifyBlockUpdate(pos, state, state, 3)
+            world.notifyBlockUpdate(pos, state, state, 3)
 
     override fun getBoundingBox(state: IBlockState, block: IBlockAccess, pos: BlockPos) = when (getMetaFromState(state)) {
         0, 2 -> AxisAlignedBB(0.13, 0.0, 0.2, 0.87, 0.98, 0.8)

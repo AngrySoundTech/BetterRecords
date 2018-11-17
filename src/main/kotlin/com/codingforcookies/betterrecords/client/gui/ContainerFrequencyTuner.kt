@@ -37,7 +37,7 @@ class ContainerFrequencyTuner(inventoryPlayer: InventoryPlayer, var tileEntity: 
             if (inventorySlots[0].isItemValid(slot)) {
                 mergeItemStack(slot, 0, 1, false)
             }
-        }  else {
+        } else {
             // Etcher Inventory
             mergeItemStack(slot, 1, 37, false)
         }

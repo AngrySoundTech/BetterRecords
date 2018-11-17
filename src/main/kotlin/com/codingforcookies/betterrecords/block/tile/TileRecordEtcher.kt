@@ -13,12 +13,12 @@ class TileRecordEtcher : ModInventoryTile(), IInventory, ITickable {
     var record by CopyOnSetDelegate()
 
     var recordEntity: EntityItem? = null
-    get() {
-        if (!record.isEmpty) {
-            return EntityItem(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), record)
+        get() {
+            if (!record.isEmpty) {
+                return EntityItem(world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), record)
+            }
+            return null
         }
-        return null
-    }
 
     var recordRotation = 0F
     var needleLocation = 0F

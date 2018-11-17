@@ -30,7 +30,7 @@ class TileFrequencyTuner : ModInventoryTile(), IInventory, ITickable {
     }
 
     override fun update() {
-        crystal?.let {
+        crystal.let {
             crystalFloaty += 0.86F
         }
     }

@@ -33,7 +33,7 @@ class RenderSpeaker : TileEntitySpecialRenderer<TileSpeaker>() {
             rotate(te.rotation, 0F, 1F, 0F)
         }
 
-        val size = when(te) {
+        val size = when (te) {
             null -> BlockSpeaker.SpeakerSize.MEDIUM
             else -> te.size
         }

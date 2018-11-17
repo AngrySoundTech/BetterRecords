@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraft.world.World
 
-class BlockLaserCluster(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileLaserCluster>, ItemModelProvider  {
+class BlockLaserCluster(name: String) : ModBlock(Material.WOOD, name), TESRProvider<TileLaserCluster>, ItemModelProvider {
 
     init {
         setHardness(4.8f)
@@ -26,7 +26,7 @@ class BlockLaserCluster(name: String) : ModBlock(Material.WOOD, name), TESRProvi
             AxisAlignedBB(0.12, 0.0, 0.12, 0.88, 0.76, 0.88)
 
     override fun onBlockAdded(world: World, pos: BlockPos, state: IBlockState) =
-        world.notifyBlockUpdate(pos, state, state, 3)
+            world.notifyBlockUpdate(pos, state, state, 3)
 
     //override fun getLightValue(state: IBlockState, access: IBlockAccess, pos: BlockPos): Int TODO: Value from flash
 

@@ -9,8 +9,7 @@ import net.minecraft.item.crafting.IRecipe
 import net.minecraft.util.NonNullList
 import net.minecraft.world.World
 import net.minecraftforge.registries.IForgeRegistryEntry
-
-import java.util.ArrayList
+import java.util.*
 
 class RecipeMultiRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
 
