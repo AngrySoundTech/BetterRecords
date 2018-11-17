@@ -3,7 +3,6 @@ package com.codingforcookies.betterrecords.client.handler
 import com.codingforcookies.betterrecords.ID
 import com.codingforcookies.betterrecords.ModConfig
 import com.codingforcookies.betterrecords.extensions.glMatrix
-import kotlinx.coroutines.experimental.launch
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.resources.I18n
@@ -13,6 +12,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.relauncher.Side
 import org.lwjgl.opengl.GL11
 import java.awt.Color
+import kotlin.concurrent.thread
 
 @Mod.EventBusSubscriber(modid = ID, value = [Side.CLIENT])
 object ClientRenderHandler {
@@ -32,7 +32,7 @@ object ClientRenderHandler {
         showPlaying = true
         showPlayingColor = 0
 
-        launch {
+        thread {
             Thread.sleep(3 * 1000)
             showPlaying = false
         }
