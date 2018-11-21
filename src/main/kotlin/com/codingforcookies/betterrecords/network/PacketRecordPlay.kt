@@ -1,7 +1,6 @@
 package com.codingforcookies.betterrecords.network
 
 import com.codingforcookies.betterrecords.api.event.RecordInsertEvent
-import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.helper.nbt.getSounds
 import com.codingforcookies.betterrecords.item.ModItems
@@ -20,7 +19,7 @@ class PacketRecordPlay @JvmOverloads constructor(
         var playRadius: Float = -1F,
         var repeat: Boolean = false,
         var shuffle: Boolean = false,
-        var recordStack: ItemStack = ItemStack(ModItems.itemNewRecord)
+        var recordStack: ItemStack = ItemStack(ModItems.itemRecord)
 ) : IMessage {
 
     val sounds = mutableListOf<Sound>()

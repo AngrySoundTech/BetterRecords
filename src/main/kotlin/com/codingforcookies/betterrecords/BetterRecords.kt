@@ -20,7 +20,7 @@ object BetterRecords {
     lateinit var proxy: CommonProxy
 
     val creativeTab = object : CreativeTabs(ID) {
-        override fun getTabIconItem() = ItemStack(ModItems.itemNewRecord)
+        override fun getTabIconItem() = ItemStack(ModItems.itemRecord)
     }
 
     @Mod.EventHandler
