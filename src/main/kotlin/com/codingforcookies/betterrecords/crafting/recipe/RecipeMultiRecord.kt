@@ -1,6 +1,5 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
-import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.helper.nbt.addSound
 import com.codingforcookies.betterrecords.helper.nbt.getSounds
 import com.codingforcookies.betterrecords.item.ItemRecord
@@ -49,7 +48,7 @@ class RecipeMultiRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
                     records.add(it)
                 }
 
-        return ItemStack(ModItems.itemNewRecord).apply {
+        return ItemStack(ModItems.itemRecord).apply {
             records.forEach {
                 getSounds(it).forEach {
                     addSound(this, it)
@@ -58,7 +57,7 @@ class RecipeMultiRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
         }
     }
 
-    override fun getRecipeOutput() = ItemStack(ModItems.itemNewRecord)
+    override fun getRecipeOutput() = ItemStack(ModItems.itemRecord)
 
     override fun getRemainingItems(inv: InventoryCrafting): NonNullList<ItemStack> {
         inv.clear()

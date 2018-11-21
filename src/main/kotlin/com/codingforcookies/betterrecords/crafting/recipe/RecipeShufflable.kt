@@ -52,7 +52,7 @@ class RecipeShufflable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
         }
     }
 
-    override fun getRecipeOutput() = ItemStack(ModItems.itemNewRecord)
+    override fun getRecipeOutput() = ItemStack(ModItems.itemRecord)
 
     override fun getRemainingItems(inv: InventoryCrafting): NonNullList<ItemStack> {
         inv.clear()
