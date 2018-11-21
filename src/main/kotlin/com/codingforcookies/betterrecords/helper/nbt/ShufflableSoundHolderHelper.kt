@@ -4,6 +4,8 @@ import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
+private const val SHUFFLABLE_TAG = "shufflable"
+
 fun isShufflable(stack: ItemStack): Boolean {
     if (stack.item !is IShufflableSoundHolder) {
         return false
@@ -12,7 +14,7 @@ fun isShufflable(stack: ItemStack): Boolean {
     if (stack.hasTagCompound()) {
         val tagCompound = stack.tagCompound!!
 
-        return tagCompound.getBoolean("shufflable")
+        return tagCompound.getBoolean(SHUFFLABLE_TAG)
     }
 
     return false
@@ -29,7 +31,7 @@ fun setShufflable(stack: ItemStack, shufflable: Boolean) {
         NBTTagCompound()
     }
 
-    tagCompound.setBoolean("shufflable", shufflable)
+    tagCompound.setBoolean(SHUFFLABLE_TAG, shufflable)
 
     stack.tagCompound = tagCompound
 }

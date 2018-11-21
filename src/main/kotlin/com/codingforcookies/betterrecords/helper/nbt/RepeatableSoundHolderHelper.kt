@@ -4,6 +4,8 @@ import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
+private const val REPEATABLE_TAG = "repeatable"
+
 fun isRepeatable(stack: ItemStack): Boolean {
     if (stack.item !is IRepeatableSoundHolder) {
         return false
@@ -12,7 +14,7 @@ fun isRepeatable(stack: ItemStack): Boolean {
     if (stack.hasTagCompound()) {
         val tagCompound = stack.tagCompound!!
 
-        return tagCompound.getBoolean("repeatable")
+        return tagCompound.getBoolean(REPEATABLE_TAG)
     }
 
     return false
@@ -29,7 +31,7 @@ fun setRepeatable(stack: ItemStack, repeatable: Boolean) {
         NBTTagCompound()
     }
 
-    tagCompound.setBoolean("repeatable", repeatable)
+    tagCompound.setBoolean(REPEATABLE_TAG, repeatable)
 
     stack.tagCompound = tagCompound
 }
