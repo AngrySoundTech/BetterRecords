@@ -1,6 +1,7 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
 import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
+import com.codingforcookies.betterrecords.helper.nbt.setRepeatable
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.init.Items
 import net.minecraft.inventory.InventoryCrafting
@@ -46,7 +47,7 @@ class RecipeRepeatable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
                         .find { it.item is IRepeatableSoundHolder }
 
         return repeatable?.copy()?.apply {
-            (this.item as IRepeatableSoundHolder).setRepeatable(this, true)
+            setRepeatable(this, true)
         }
     }
 

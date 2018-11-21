@@ -6,6 +6,7 @@ import com.codingforcookies.betterrecords.api.wire.IRecordWireManipulator
 import com.codingforcookies.betterrecords.block.tile.TileRadio
 import com.codingforcookies.betterrecords.client.render.RenderRadio
 import com.codingforcookies.betterrecords.helper.ConnectionHelper
+import com.codingforcookies.betterrecords.helper.nbt.getSounds
 import com.codingforcookies.betterrecords.item.ModItems
 import com.codingforcookies.betterrecords.network.PacketHandler
 import com.codingforcookies.betterrecords.network.PacketRadioPlay
@@ -55,7 +56,7 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
                     if (!world.isRemote) dropItem(world, pos)
                     te.crystal = ItemStack.EMPTY
                     world.notifyBlockUpdate(pos, state, state, 3)
-                } else if (player.heldItemMainhand.item == ModItems.itemFrequencyCrystal && (player.heldItemMainhand.item as ISoundHolder).getSounds(player.heldItemMainhand).isNotEmpty()) {
+                } else if (player.heldItemMainhand.item == ModItems.itemFrequencyCrystal && getSounds(player.heldItemMainhand).isNotEmpty()) {
                     te.crystal = player.heldItemMainhand
                     world.notifyBlockUpdate(pos, state, state, 3)
                     player.heldItemMainhand.count--
@@ -64,8 +65,8 @@ class BlockRadio(name: String) : ModBlockDirectional(Material.WOOD, name), TESRP
                                 pos,
                                 world.provider.dimension,
                                 te.songRadius,
-                                (te.crystal.item as ISoundHolder).getSounds(te.crystal).first().name,
-                                (te.crystal.item as ISoundHolder).getSounds(te.crystal).first().url
+                                getSounds(te.crystal).first().name,
+                                getSounds(te.crystal).first().url
                         ))
                     }
                 }

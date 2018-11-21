@@ -1,6 +1,8 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
+import com.codingforcookies.betterrecords.helper.nbt.addSound
+import com.codingforcookies.betterrecords.helper.nbt.getSounds
 import com.codingforcookies.betterrecords.item.ItemRecord
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.inventory.InventoryCrafting
@@ -27,7 +29,7 @@ class RecipeMultiRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
                 .map { inventoryCrafting.getStackInSlot(it) }
                 .filter { !it.isEmpty }
                 .forEach {
-                    if (it.item is ItemRecord && (it.item as ISoundHolder).getSounds(it).isNotEmpty()) {
+                    if (it.item is ItemRecord && getSounds(it).isNotEmpty()) {
                         count++
                     } else {
                         return false
@@ -49,8 +51,8 @@ class RecipeMultiRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
 
         return ItemStack(ModItems.itemNewRecord).apply {
             records.forEach {
-                (it.item as ISoundHolder).getSounds(it).forEach {
-                    (this.item as ISoundHolder).addSound(this, it)
+                getSounds(it).forEach {
+                    addSound(this, it)
                 }
             }
         }

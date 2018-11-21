@@ -1,6 +1,7 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
 import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
+import com.codingforcookies.betterrecords.helper.nbt.setShufflable
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.init.Blocks
 import net.minecraft.inventory.InventoryCrafting
@@ -47,7 +48,7 @@ class RecipeShufflable : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
                         .find { it.item is IShufflableSoundHolder }
 
         return shufflable?.copy()?.apply {
-            (this.item as IShufflableSoundHolder).setShufflable(this, true)
+            setShufflable(this, true)
         }
     }
 

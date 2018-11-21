@@ -3,6 +3,7 @@ package com.codingforcookies.betterrecords.network
 import com.codingforcookies.betterrecords.api.event.RecordInsertEvent
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.sound.Sound
+import com.codingforcookies.betterrecords.helper.nbt.getSounds
 import com.codingforcookies.betterrecords.item.ModItems
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
@@ -25,7 +26,7 @@ class PacketRecordPlay @JvmOverloads constructor(
     val sounds = mutableListOf<Sound>()
 
     init {
-        sounds.addAll((recordStack.item as ISoundHolder).getSounds(recordStack))
+        sounds.addAll(getSounds(recordStack))
     }
 
     override fun toBytes(buf: ByteBuf) {

@@ -1,14 +1,14 @@
 package com.codingforcookies.betterrecords.block
 
 import com.codingforcookies.betterrecords.api.BetterRecordsAPI
-import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
-import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
-import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.wire.IRecordWire
 import com.codingforcookies.betterrecords.api.wire.IRecordWireManipulator
 import com.codingforcookies.betterrecords.block.tile.TileRecordPlayer
 import com.codingforcookies.betterrecords.client.render.RenderRecordPlayer
 import com.codingforcookies.betterrecords.helper.ConnectionHelper
+import com.codingforcookies.betterrecords.helper.nbt.getSounds
+import com.codingforcookies.betterrecords.helper.nbt.isRepeatable
+import com.codingforcookies.betterrecords.helper.nbt.isShufflable
 import com.codingforcookies.betterrecords.item.ItemRecord
 import com.codingforcookies.betterrecords.network.PacketHandler
 import com.codingforcookies.betterrecords.network.PacketRecordPlay
@@ -66,7 +66,7 @@ class BlockRecordPlayer(name: String) : ModBlock(Material.WOOD, name), TESRProvi
             }
         } else if (tileRecordPlayer!!.opening) {
             if (tileRecordPlayer.record.isEmpty) {
-                if (player.heldItemMainhand.item is ItemRecord && (player.heldItemMainhand.item as ISoundHolder).getSounds(player.heldItemMainhand).isNotEmpty()) {
+                if (player.heldItemMainhand.item is ItemRecord && getSounds(player.heldItemMainhand).isNotEmpty()) {
                     tileRecordPlayer.record = player.heldItemMainhand
                     world.notifyBlockUpdate(pos, state!!, state, 3)
                     player.heldItemMainhand.count--
@@ -76,8 +76,8 @@ class BlockRecordPlayer(name: String) : ModBlock(Material.WOOD, name), TESRProvi
                                 tileRecordPlayer.pos,
                                 tileRecordPlayer.world.provider.dimension,
                                 tileRecordPlayer.songRadius,
-                                (tileEntity.record.item as IRepeatableSoundHolder).isRepeatable(tileEntity.record),
-                                (tileEntity.record.item as IShufflableSoundHolder).isShufflable(tileEntity.record),
+                                isRepeatable(tileEntity.record),
+                                isShufflable(tileEntity.record),
                                 tileEntity.record
                         ))
                     }

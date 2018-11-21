@@ -1,12 +1,13 @@
 package com.codingforcookies.betterrecords.network
 
 import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
-import com.codingforcookies.betterrecords.api.sound.ISoundHolder
 import com.codingforcookies.betterrecords.api.sound.Sound
 import com.codingforcookies.betterrecords.block.tile.TileFrequencyTuner
 import com.codingforcookies.betterrecords.block.tile.TileRecordEtcher
 import com.codingforcookies.betterrecords.extensions.readBlockPos
 import com.codingforcookies.betterrecords.extensions.writeBlockPos
+import com.codingforcookies.betterrecords.helper.nbt.addSound
+import com.codingforcookies.betterrecords.helper.nbt.setColor
 import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
@@ -61,14 +62,14 @@ class PacketURLWrite @JvmOverloads constructor(
                 else -> return null
             }
 
-            (itemStack.item as? ISoundHolder)?.addSound(itemStack, Sound(
+            addSound(itemStack, Sound(
                     url = message.url,
                     name = message.name,
                     size = message.size,
                     author = message.author
             ))
 
-            (itemStack.item as? IColorableSoundHolder)?.setColor(itemStack, message.color)
+            setColor(itemStack, message.color)
 
             return null
         }
