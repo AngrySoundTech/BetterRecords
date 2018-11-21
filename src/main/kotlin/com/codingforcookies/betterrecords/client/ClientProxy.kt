@@ -1,6 +1,7 @@
 package com.codingforcookies.betterrecords.client
 
 import com.codingforcookies.betterrecords.CommonProxy
+import com.codingforcookies.betterrecords.helper.nbt.getColor
 import com.codingforcookies.betterrecords.item.ModItem
 import com.codingforcookies.betterrecords.item.ModItems
 import net.minecraft.client.Minecraft
@@ -32,8 +33,8 @@ class ClientProxy : CommonProxy() {
         super.postInit(event)
 
         val color = IItemColor { stack, tintIndex ->
-            if (tintIndex > 0 && stack.hasTagCompound() && stack.tagCompound!!.hasKey("color")) {
-                stack.tagCompound!!.getInteger("color")
+            if (tintIndex > 0) {
+                getColor(stack)
             } else {
                 0xFFFFFF
             }

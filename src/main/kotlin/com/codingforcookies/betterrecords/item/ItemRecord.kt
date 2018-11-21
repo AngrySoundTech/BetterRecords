@@ -4,6 +4,9 @@ import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.IRepeatableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.IShufflableSoundHolder
 import com.codingforcookies.betterrecords.api.sound.ISoundHolder
+import com.codingforcookies.betterrecords.helper.nbt.getSounds
+import com.codingforcookies.betterrecords.helper.nbt.isRepeatable
+import com.codingforcookies.betterrecords.helper.nbt.isShufflable
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.item.ItemStack

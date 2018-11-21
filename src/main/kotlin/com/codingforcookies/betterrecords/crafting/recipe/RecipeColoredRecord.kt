@@ -1,6 +1,7 @@
 package com.codingforcookies.betterrecords.crafting.recipe
 
 import com.codingforcookies.betterrecords.api.sound.IColorableSoundHolder
+import com.codingforcookies.betterrecords.helper.nbt.setColor
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
 import net.minecraft.inventory.InventoryCrafting
@@ -55,7 +56,7 @@ class RecipeColoredRecord : IForgeRegistryEntry.Impl<IRecipe>(), IRecipe {
                 }
 
         return colorable?.copy()?.apply {
-            (this.item as IColorableSoundHolder).setColor(this, color)
+            setColor(this, color)
         }
     }
 
