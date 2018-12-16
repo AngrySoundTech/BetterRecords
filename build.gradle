@@ -1,130 +1,31 @@
 buildscript {
     repositories {
         jcenter()
-        maven {
-            name 'forge'
-            url 'http://files.minecraftforge.net/maven'
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
     }
 }
 
-repositories {
-    jcenter()
-    maven {
-        url 'http://maven.shadowfacts.net/'
-    }
-    maven {
-        url "http://dl.bintray.com/jetbrains/spek"
-    }
-}
-
-apply plugin: 'kotlin'
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'org.junit.platform.gradle.plugin'
-
-junitPlatform {
-    filters {
-        engines {
-            include 'spek'
+subprojects {
+    buildscript {
+        repositories {
+            jcenter()
         }
     }
-}
 
-// Discern the environment we are building in,
-// Based on variables that would only be set in jenkins
-if (System.getenv('CI') && System.getenv('GIT_BRANCH') != 'master') {
-    // We are for sure in jenkins, and not building for
-    // release. This is a snapshot build of a branch.
-    version = "$minecraft_version-${System.getenv('BUILD_TAG')}-${System.getenv('GIT_COMMIT')}"
-} else {
-    // We might be in jenkins, we might be local.
-    // Doesn't matter though.
+    apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
-    // If we're local, we want to build as normal.
-
-    // If we're in Jenkins, and this is the master branch,
-    // We know we're not building a snapshot, because
-    // of our branching model. This is a release build.
-    version = "$minecraft_version-$mod_version"
-}
-
-minecraft {
-    version = "$minecraft_version-$forge_version"
-    mappings = "$forge_mappings"
-    runDir = "run"
-
-    replaceIn "Constants.kt"
-    replace "@VERSION@", project.version
-}
-
-dependencies {
-    shadow group: 'net.shadowfacts', name: 'Forgelin', 'version': forgelin_version
-
-    compile group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5-1'
-    compile group: 'com.googlecode.soundlibs', name: 'vorbisspi', version: '1.0.3.3'
-
-    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test', version: kotlin_version
-    testCompile group: 'org.jetbrains.spek', name: 'spek-api', version: '1.1.5'
-    testRuntime group: 'org.jetbrains.spek', name: 'spek-junit-platform-engine', version : '1.1.5'
-}
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+    repositories {
+        jcenter()
     }
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+    shadowJar {
+        classifier '' // Replace the default jar
+
+        dependencies {
+            exclude dependency('junit:junit')
+        }
     }
-}
-
-build.dependsOn shadowJar
-
-shadowJar {
-    classifier '' // Replace the default jar
-
-    dependencies {
-        exclude dependency('junit:junit')
-    }
-
-    exclude 'dummyThing'
-
-    relocate 'com.jcraft', 'com.codingforcookies.betterrecords.repack.jcraft'
-    relocate 'javazoom', 'com.codingforcookies.betterrecords.repack.javazoom'
-    relocate 'org.tritonus', 'com.codingforcookies.betterrecords.repack.tritonus'
-}
-
-reobf {
-    shadowJar {} // Reobf the shadowed jar
-}
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives deobfJar
-    archives sourcesJar
-    archives javadocJar
 }
