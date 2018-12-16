@@ -1,1 +1,11 @@
-rootProject.name = 'BetterRecords'
+def prefix(String prefix) {
+    rootProject.name = prefix
+    rootProject.children.each {
+        it.name = "$prefix-$it.name"
+    }
+}
+
+include 'common'
+include 'forge'
+
+prefix('BetterRecords')
