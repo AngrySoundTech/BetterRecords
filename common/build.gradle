@@ -1,11 +1,26 @@
+/////////////////////////////
+// BuildScript and Plugins //
+/////////////////////////////
+
 plugins {
     id 'java'
 }
+
+//////////////////
+// Dependencies //
+//////////////////
+
+sourceCompatibility = 8
+targetCompatibility = 8
 
 dependencies {
     compile group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5-1'
     compile group: 'com.googlecode.soundlibs', name: 'vorbisspi', version: '1.0.3.3'
 }
+
+///////////////
+// Artifacts //
+///////////////
 
 version = mod_version
 

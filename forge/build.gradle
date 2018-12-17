@@ -1,3 +1,8 @@
+/////////////////////////////
+// BuildScript and Plugins //
+/////////////////////////////
+
+
 buildscript {
     repositories {
         maven {
@@ -16,6 +21,10 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
+//////////////////
+// Dependencies //
+//////////////////
+
 repositories {
     maven {
         url 'http://maven.shadowfacts.net/'
@@ -28,8 +37,6 @@ dependencies {
     shadow group: 'net.shadowfacts', name: 'Forgelin', 'version': forgelin_version
 }
 
-version = "$minecraft_version-$mod_version"
-
 minecraft {
     version = "$minecraft_version-$forge_version"
     mappings = "$forge_mappings"
@@ -38,6 +45,12 @@ minecraft {
     replaceIn "Constants.kt"
     replace "@VERSION@", project.version
 }
+
+///////////////
+// Artifacts //
+///////////////
+
+version = "$minecraft_version-$mod_version"
 
 processResources {
     inputs.property "version", project.version
