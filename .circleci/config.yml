@@ -15,7 +15,8 @@ jobs:
       - checkout
 
       - restore_cache:
-        key: v2-dependencies-{{ checksum "build.gradle" }}
+        keys:
+          - v2-dependencies-{{ checksum "build.gradle" }}
 
       - run: gradle dependencies
 
