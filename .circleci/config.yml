@@ -5,8 +5,6 @@ jobs:
     docker:
       - image: gradle:4.10-jdk8
 
-    working_directory: ~/repo
-
     environment:
       JVM_OPTS: -Xmx3200m
       TERM: dumb
@@ -15,24 +13,24 @@ jobs:
       - checkout
 
       - restore_cache:
-        keys:
-          - v2-dependencies-{{ checksum "build.gradle" }}
+         keys:
+           - v2-dependencies-{{ checksum "build.gradle" }}
 
       - run: gradle dependencies
 
       - run: gradle setupCiWorkspace
 
       - save_cache:
-        paths:
-          - ~/.gradle
-        key: v2-dependencies-{{ checksum "build.gradle" }}
+         paths:
+           - ~/.gradle
+         key: v2-dependencies-{{ checksum "build.gradle" }}
 
       - run: gradle test
 
       - run: gradle build
 
       - store_artifacts:
-        path: /common/build/libs
+         path: /common/build/libs
 
       - store_artifacts:
-        path: /forge/build/libs
+         path: /forge/build/libs
