@@ -8,6 +8,8 @@ jobs:
     steps:
       - checkout
 
+      - run: echo $(git log --format=%B -n 1 $CIRCLE_SHA1)
+
       - restore_cache:
          keys:
            - v2-dependencies-{{ checksum "build.gradle" }}
