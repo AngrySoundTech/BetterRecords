@@ -62,9 +62,9 @@ jobs:
       - run: gradle artifactoryPublish
 
       - run: >
-          curl -H "Content-Type: application/json"\
-          -X POST $DISCORD_DEV_URL\
-          -d\
+          curl -H "Content-Type: application/json"
+          -X POST $DISCORD_DEV_URL
+          -d
           "
           {
           	\"content\": \"\",
