@@ -58,6 +58,22 @@ jobs:
       - run: gradle setupCiWorkspace
       - run: gradle artifactoryPublish
 
+      - run: |
+          curl -H "Content-Type: application/json"\
+          -X POST $DISCORD_DEV_URL\
+          -d\
+          "
+          {
+          	\"content\": \"\",
+          	\"embeds\": [{
+          		\"title\": \"A New Developer Build is Available for Use\",
+          		\"description\": \"Merged Branch: **$CIRCLE_BRANCH**\",
+          		\"url\": \"https://artifactory.feldman.tech/artifactory/webapp/#/artifacts/browse/tree/General/minecraft/com/codingforcookies/betterrecords/BetterRecords-forge/1.12.2-SNAPSHOT/maven-metadata.xml\",
+          		\"color\": 2068783
+          	}]
+          }
+          "
+
 workflows:
   version: 2
   build-test-deploy:
