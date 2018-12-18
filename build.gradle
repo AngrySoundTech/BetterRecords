@@ -74,10 +74,10 @@ artifactory {
     contextUrl = "https://artifactory.feldman.tech/artifactory/"
     publish {
         repository {
-            repoKey = System.getProperty('CIRCLE_BRANCH') ==~ /^dev$/ ? 'minecraft-snapshots' :
-                      System.getProperty('CIRCLE_BRANCH') ==~ /^master$/ ? 'minecraft-releases' : null
-            username = System.getProperty('ARTIFACTORY_USER')
-            password = System.getProperty('ARTIFACTORY_PASSWORD')
+            repoKey = System.getenv('CIRCLE_BRANCH') ==~ /^dev$/ ? 'minecraft-snapshots' :
+                      System.getenv('CIRCLE_BRANCH') ==~ /^master$/ ? 'minecraft-releases' : null
+            username = System.getenv('ARTIFACTORY_USER')
+            password = System.getenv('ARTIFACTORY_PASSWORD')
         }
         defaults {
             publications('maven')
