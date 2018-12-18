@@ -47,6 +47,9 @@ jobs:
     docker:
       - image: gradle:4.10-jdk8
 
+    environment:
+      GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
+
     steps:
       - checkout
 
@@ -64,12 +67,12 @@ jobs:
           -d\
           "
           {
-          	"content": "",
-          	"embeds": [{
-          		"title\": "A New Developer Build is Available for Use",
-          		"description": "Merged Branch: **$CIRCLE_BRANCH**",
-          		"url": "https://artifactory.feldman.tech/artifactory/webapp/#/artifacts/browse/tree/General/minecraft/com/codingforcookies/betterrecords/BetterRecords-forge/1.12.2-SNAPSHOT/maven-metadata.xml",
-          		"color": 2068783
+          	\"content\": \"\",
+          	\"embeds\": [{
+          		\"title\": \"A New Developer Build is Available for Use\",
+          		\"description\": \"$GIT_COMMIT_DESC\",
+          		\"url\": \"https://artifactory.feldman.tech/artifactory/webapp/#/artifacts/browse/tree/General/minecraft/com/codingforcookies/betterrecords/BetterRecords-forge/1.12.2-SNAPSHOT/maven-metadata.xml\",
+          		\"color\": 2068783
           	}]
           }
           "
