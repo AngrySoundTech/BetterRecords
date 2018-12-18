@@ -61,17 +61,18 @@ jobs:
       - run: |
           curl -H "Content-Type: application/json"\
           -X POST $DISCORD_DEV_URL\
-          -d @- << EOF
+          -d\
+          "
           {
-          	"content": "",
-          	"embeds": [{
-          		"title": "A New Developer Build is Available for Use",
-          		"description": "Merged Branch: **$CIRCLE_BRANCH**",
-          		"url": "https://artifactory.feldman.tech/artifactory/webapp/#/artifacts/browse/tree/General/minecraft/com/codingforcookies/betterrecords/BetterRecords-forge/1.12.2-SNAPSHOT/maven-metadata.xml",
-          		"color": 2068783
+          	\"content\": \"\",
+          	\"embeds\": [{
+          		\"title\": \"A New Developer Build is Available for Use\",
+          		\"description\": \"Merged Branch: **$CIRCLE_BRANCH**\",
+          		\"url\": \"https://artifactory.feldman.tech/artifactory/webapp/#/artifacts/browse/tree/General/minecraft/com/codingforcookies/betterrecords/BetterRecords-forge/1.12.2-SNAPSHOT/maven-metadata.xml\",
+          		\"color\": 2068783
           	}]
           }
-          EOF
+          "
 
 workflows:
   version: 2
