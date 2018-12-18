@@ -63,11 +63,10 @@ workflows:
   build-test-deploy:
     jobs:
       - build
-      - test:
-         requires:
-           - build
+      - test
       - deploy:
          requires:
+           - build
            - test
          filters:
            branches:
