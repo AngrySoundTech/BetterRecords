@@ -30,7 +30,7 @@ jobs:
       - run: gradle build
 
       - store_artifacts:
-         path: /common/build/libs
+         path: common/build/libs
 
       - store_artifacts:
-         path: /forge/build/libs
+         path: forge/build/libs
