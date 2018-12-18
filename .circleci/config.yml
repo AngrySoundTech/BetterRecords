@@ -1,13 +1,9 @@
-version: 2
+version: 2.1
 
 jobs:
   build:
     docker:
       - image: gradle:4.10-jdk8
-
-    environment:
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
 
     steps:
       - checkout
@@ -17,15 +13,12 @@ jobs:
            - v2-dependencies-{{ checksum "build.gradle" }}
 
       - run: gradle dependencies
-
       - run: gradle setupCiWorkspace
 
       - save_cache:
          paths:
            - ~/.gradle
          key: v2-dependencies-{{ checksum "build.gradle" }}
-
-      - run: gradle test
 
       - run: gradle build
 
@@ -34,3 +27,49 @@ jobs:
 
       - store_artifacts:
          path: forge/build/libs
+
+  test:
+    docker:
+      - image: gradle:4.10-jdk8
+
+    steps:
+      - checkout
+
+      - restore_cache:
+         keys:
+          - v2-dependencies-{{ checksum "build.gradle" }}
+
+      - run: gradle dependencies
+      - run: gradle setupCiWorkspace
+      - run: gradle test
+
+  deploy:
+    docker:
+      - image: gradle:4.10-jdk8
+
+    steps:
+      - checkout
+
+      - restore_cache:
+         keys:
+          - v2-dependencies-{{ checksum "build.gradle" }}
+
+      - run: gradle dependencies
+      - run: gradle setupCiWorkspace
+      - run: gradle artifactoryPublish
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build
+      - test
+      - deploy:
+         requires:
+           - build
+           - test
+         filters:
+           branches:
+             only:
+               - dev
+               - master

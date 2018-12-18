@@ -7,6 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
     }
 }
@@ -24,6 +25,8 @@ subprojects {
     }
 
     apply plugin: 'java'
+    apply plugin: 'com.jfrog.artifactory'
+    apply plugin: 'maven-publish'
     apply plugin: 'com.github.johnrengelman.shadow'
 
     //////////////////
@@ -43,6 +46,42 @@ subprojects {
 
         dependencies {
             exclude dependency('junit:junit')
+        }
+    }
+
+    ////////////////
+    // Publishing //
+    ////////////////
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                for (theArtifact in configurations.archives.allArtifacts) {
+                    artifact theArtifact
+                }
+            }
+        }
+    }
+}
+
+////////////////
+// Publishing //
+////////////////
+
+artifactoryPublish.skip = true
+
+artifactory {
+    contextUrl = "https://artifactory.feldman.tech/artifactory/"
+    publish {
+        repository {
+            repoKey = System.getProperty('CIRCLE_BRANCH') ==~ /^dev$/ ? 'minecraft-snapshots' :
+                      System.getProperty('CIRCLE_BRANCH') ==~ /^master$/ ? 'minecraft-releases' : null
+            username = System.getProperty('ARTIFACTORY_USER')
+            password = System.getProperty('ARTIFACTORY_PASSWORD')
+        }
+        defaults {
+            publications('maven')
+            publishArtifacts = true
         }
     }
 }
