@@ -22,8 +22,7 @@ dependencies {
 // Artifacts //
 ///////////////
 
-// TODO: Don't hardcode minecraft version here
-version = System.getenv('CI') ? '1.12.2-SNAPSHOT' : mod_version
+version = mod_version
 
 shadowJar {
     relocate 'com.jcraft', 'com.codingforcookies.betterrecords.repack.jcraft'
