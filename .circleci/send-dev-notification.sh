@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMMITS="$(git reflog dev --since='24 hours ago')"
+COMMITS="$(git --no-pager log --format="%h - %s\n%b" --since="24 hours ago" | sed ':a;N;$!ba;s/\n//g')"
 
 if [[ -n "$COMMITS" ]]; then
     curl -H "Content-Type: application/json"\
