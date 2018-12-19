@@ -50,7 +50,7 @@ minecraft {
 // Artifacts //
 ///////////////
 
-version = System.getenv('CI') ? "$minecraft_version-SNAPSHOT" : "$minecraft_version-$mod_version"
+version = "$minecraft_version-$mod_version"
 
 processResources {
     inputs.property "version", project.version
