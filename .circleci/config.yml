@@ -58,6 +58,12 @@ jobs:
       - run: gradle setupCiWorkspace
       - run: gradle artifactoryPublish
 
+  notify_dev:
+    docker:
+      - image: gradle:4.10-jdk8
+
+    steps:
+      - checkout
       - run: bash .circleci/send-dev-notification.sh
 
 workflows:
@@ -75,3 +81,13 @@ workflows:
              only:
                - dev
                - master
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 20 * * *"
+          filters:
+            branches:
+              only:
+                -dev
+    jobs:
+      - notify_dev
