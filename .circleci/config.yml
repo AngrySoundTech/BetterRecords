@@ -8,8 +8,6 @@ jobs:
     steps:
       - checkout
 
-      - run: echo $(git log --format=%B -n 1 $CIRCLE_SHA1)
-
       - restore_cache:
          keys:
            - v2-dependencies-{{ checksum "build.gradle" }}
@@ -60,21 +58,7 @@ jobs:
       - run: gradle setupCiWorkspace
       - run: gradle artifactoryPublish
 
-      - run: >
-          curl -H "Content-Type: application/json"
-          -X POST $DISCORD_DEV_URL
-          -d
-          "
-          {
-          	\"content\": \"\",
-          	\"embeds\": [{
-          		\"title\": \"A New Developer Build is Available for Use\",
-          		\"description\": \"$(git log --pretty=short -n 1)\",
-          		\"url\": \"https://artifactory.feldman.tech/artifactory/webapp/#/artifacts/browse/tree/General/minecraft/com/codingforcookies/betterrecords/BetterRecords-forge/1.12.2-SNAPSHOT/maven-metadata.xml\",
-          		\"color\": 2068783
-          	}]
-          }
-          "
+      - run: bash .circleci/send-dev-notification.sh
 
 workflows:
   version: 2
