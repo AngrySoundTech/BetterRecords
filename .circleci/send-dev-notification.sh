@@ -11,7 +11,7 @@ if [[ -n "$COMMITS" ]]; then
      {
        \"content\": \"\",
        \"embeds\": [{
-           \"title\": \"A New Nightly Build is Available\",
+           \"title\": \"A New Nightly Build is Available - $MOD_VERSION\",
            \"description\": \"$COMMITS\",
            \"url\": \"https://artifactory.feldman.tech/artifactory/webapp/#/artifacts/browse/tree/General/minecraft/com/codingforcookies/betterrecords/BetterRecords-forge/$MOD_VERSION/maven-metadata.xml\",
            \"color\": 2068783
