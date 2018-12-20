@@ -89,6 +89,6 @@ workflows:
           filters:
             branches:
               only:
-                -dev
+                - dev
     jobs:
       - notify_dev
