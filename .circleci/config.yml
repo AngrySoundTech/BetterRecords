@@ -79,7 +79,6 @@ workflows:
          filters:
            branches:
              only:
-               - dev
                - master
   nightly:
     triggers:
@@ -90,4 +89,7 @@ workflows:
               only:
                 - dev
     jobs:
-      - notify-dev
+      - deploy
+      - notify-dev:
+          requires:
+            - deploy
