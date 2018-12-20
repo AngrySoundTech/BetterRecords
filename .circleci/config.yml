@@ -60,7 +60,7 @@ jobs:
       - run: gradle setupCiWorkspace
       - run: gradle artifactoryPublish
 
-  notify_dev:
+  notify-dev:
     executor: gradle-executor
 
     steps:
@@ -91,4 +91,4 @@ workflows:
               only:
                 - dev
     jobs:
-      - notify_dev
+      - notify-dev
