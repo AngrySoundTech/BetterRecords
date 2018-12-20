@@ -68,7 +68,6 @@ jobs:
       - run: bash .circleci/send-dev-notification.sh
 
 workflows:
-  version: 2
   build-test-deploy:
     jobs:
       - build
