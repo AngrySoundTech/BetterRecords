@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $(cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P)
+
 COMMITS="$(git --no-pager log --format="%h - %s\n%b" --since="24 hours ago" | sed ':a;N;$!ba;s/\n//g')"
 
 MOD_VERSION="$(grep mod_version ../gradle.properties | cut -d "=" -f 2 | cut -d " " -f 2 | tr -d '[:space:]')"
