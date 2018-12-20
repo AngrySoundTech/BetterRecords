@@ -1,9 +1,13 @@
 version: 2.1
 
-jobs:
-  build:
+executors:
+  gradle-executor:
     docker:
       - image: gradle:4.10-jdk8
+
+jobs:
+  build:
+    executor: gradle-executor
 
     steps:
       - checkout
@@ -29,8 +33,7 @@ jobs:
          path: forge/build/libs
 
   test:
-    docker:
-      - image: gradle:4.10-jdk8
+    executor: gradle-executor
 
     steps:
       - checkout
@@ -44,8 +47,7 @@ jobs:
       - run: gradle test
 
   deploy:
-    docker:
-      - image: gradle:4.10-jdk8
+    executor: gradle-executor
 
     steps:
       - checkout
@@ -58,16 +60,14 @@ jobs:
       - run: gradle setupCiWorkspace
       - run: gradle artifactoryPublish
 
-  notify_dev:
-    docker:
-      - image: gradle:4.10-jdk8
+  notify-dev:
+    executor: gradle-executor
 
     steps:
       - checkout
       - run: bash .circleci/send-dev-notification.sh
 
 workflows:
-  version: 2
   build-test-deploy:
     jobs:
       - build
@@ -88,6 +88,6 @@ workflows:
           filters:
             branches:
               only:
-                -dev
+                - dev
     jobs:
-      - notify_dev
+      - notify-dev
