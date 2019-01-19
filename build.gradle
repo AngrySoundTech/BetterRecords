@@ -5,63 +5,110 @@
 buildscript {
     repositories {
         jcenter()
+        maven {
+            name 'forge'
+            url 'http://files.minecraftforge.net/maven'
+        }
     }
     dependencies {
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
-subprojects {
-    
-    /////////////////////////////
-    // BuildScript and Plugins //
-    /////////////////////////////
-    
-    buildscript {
-        repositories {
-            jcenter()
-        }
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "1.3.11"
+}
+
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'maven-publish'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+//////////////////
+// Dependencies //
+//////////////////
+
+repositories {
+    jcenter()
+    maven {
+        url 'http://maven.shadowfacts.net/'
+    }
+}
+
+dependencies {
+    shadow group: 'net.shadowfacts', name: 'Forgelin', 'version': forgelin_version
+
+    compile group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5-1'
+    compile group: 'com.googlecode.soundlibs', name: 'vorbisspi', version: '1.0.3.3'
+}
+
+minecraft {
+    version = "$minecraft_version-$forge_version"
+    mappings = "$forge_mappings"
+    runDir = "run"
+
+    replaceIn "Constants.kt"
+    replace "@VERSION@", project.version
+}
+
+///////////////
+// Artifacts //
+///////////////
+
+version = "$minecraft_version-$mod_version"
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
     }
 
-    apply plugin: 'java'
-    apply plugin: 'com.jfrog.artifactory'
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.github.johnrengelman.shadow'
-
-    //////////////////
-    // Dependencies //
-    //////////////////
-    
-    repositories {
-        jcenter()
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
     }
-    
-    ///////////////
-    // Artifacts //
-    ///////////////
+}
 
-    shadowJar {
-        classifier '' // Replace the default jar
+shadowJar {
+    classifier '' // Replace the default jar
 
-        dependencies {
-            exclude dependency('junit:junit')
-        }
+    dependencies {
+        exclude dependency('junit:junit')
     }
 
-    ////////////////
-    // Publishing //
-    ////////////////
+    exclude 'dummyThing'
 
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                for (theArtifact in configurations.archives.allArtifacts) {
-                    artifact theArtifact
-                }
-            }
-        }
-    }
+    relocate 'com.jcraft', 'com.codingforcookies.betterrecords.repack.jcraft'
+    relocate 'javazoom', 'com.codingforcookies.betterrecords.repack.javazoom'
+    relocate 'org.tritonus', 'com.codingforcookies.betterrecords.repack.tritonus'
+}
+
+reobf {
+    shadowJar {}
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives deobfJar
+    archives sourcesJar
+    archives javadocJar
 }
 
 ////////////////
@@ -70,12 +117,22 @@ subprojects {
 
 artifactoryPublish.skip = true
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            for (theArtifact in configurations.archives.allArtifacts) {
+                artifact theArtifact
+            }
+        }
+    }
+}
+
 artifactory {
     contextUrl = "https://artifactory.feldman.tech/artifactory/"
     publish {
         repository {
             repoKey = System.getenv('CIRCLE_BRANCH') ==~ /^dev$/ ? 'minecraft-snapshots' :
-                      System.getenv('CIRCLE_BRANCH') ==~ /^master$/ ? 'minecraft-releases' : null
+                    System.getenv('CIRCLE_BRANCH') ==~ /^master$/ ? 'minecraft-releases' : null
             username = System.getenv('ARTIFACTORY_USER')
             password = System.getenv('ARTIFACTORY_PASSWORD')
         }
