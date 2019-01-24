@@ -81,9 +81,9 @@ shadowJar {
 
     exclude 'dummyThing'
 
-    relocate 'com.jcraft', 'com.codingforcookies.betterrecords.repack.jcraft'
-    relocate 'javazoom', 'com.codingforcookies.betterrecords.repack.javazoom'
-    relocate 'org.tritonus', 'com.codingforcookies.betterrecords.repack.tritonus'
+    relocate 'com.jcraft', 'tech.feldman.betterrecords.repack.jcraft'
+    relocate 'javazoom', 'tech.feldman.betterrecords.repack.javazoom'
+    relocate 'org.tritonus', 'tech.feldman.betterrecords.repack.tritonus'
 }
 
 reobf {

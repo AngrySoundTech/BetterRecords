@@ -5,14 +5,14 @@
     "description": "Adds records that can play songs via URLs.",
     "version": "${version}",
     "mcversion": "${mcversion}",
-    "url": "http://www.codingforcookies.com/",
+    "url": "https://github.com/NicholasFeldman/BetterRecords",
     "updateUrl": "",
     "authors": [
       "Stumblinbear",
       "Borlea",
       "AngrySoundTech"
     ],
-    "credits": "CodingForCookies",
+    "credits": "",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []
