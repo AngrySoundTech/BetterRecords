@@ -19,6 +19,7 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.kotlin.jvm' version "1.3.11"
+    id "com.github.hierynomus.license" version "0.15.0"
 }
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.artifactory'
@@ -108,6 +109,15 @@ artifacts {
     archives deobfJar
     archives sourcesJar
     archives javadocJar
+}
+
+
+///////////////
+// Licencing //
+///////////////
+
+license {
+    include "**/*.kt"
 }
 
 ////////////////
