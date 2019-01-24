@@ -20,9 +20,8 @@ buildscript {
 plugins {
     id 'org.jetbrains.kotlin.jvm' version "1.3.11"
 }
-
-apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
@@ -114,8 +113,6 @@ artifacts {
 ////////////////
 // Publishing //
 ////////////////
-
-artifactoryPublish.skip = true
 
 publishing {
     publications {
