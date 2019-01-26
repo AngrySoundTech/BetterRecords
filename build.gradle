@@ -124,6 +124,8 @@ license {
 // Publishing //
 ////////////////
 
+artifactoryPublish.dependsOn reobfShadowJar
+
 publishing {
     publications {
         maven(MavenPublication) {
