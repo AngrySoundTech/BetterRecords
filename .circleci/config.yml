@@ -72,24 +72,24 @@ workflows:
     jobs:
       - build
       - test
-      - deploy:
-         requires:
-           - build
-           - test
-         filters:
-           branches:
-             only:
-               - master
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 3 * * *"
-          filters:
-            branches:
-              only:
-                - dev
-    jobs:
-      - deploy
-      - notify-dev:
-          requires:
-            - deploy
+#      - deploy:
+#         requires:
+#           - build
+#           - test
+#         filters:
+#           branches:
+#             only:
+#               - master
+#  nightly:
+#    triggers:
+#      - schedule:
+#          cron: "0 3 * * *"
+#          filters:
+#            branches:
+#              only:
+#                - dev
+#    jobs:
+#      - deploy
+#      - notify-dev:
+#          requires:
+#            - deploy
