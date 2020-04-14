@@ -131,7 +131,7 @@ public class IcyURLConnection extends HttpURLConnection {
         HashMap<String, List<String>> lmap = headers;
 
         if (lmap != null) {
-            List<String> list = lmap.get(name);
+            List<String> list = lmap.get(name.toLowerCase());
 
             if (list != null && !list.isEmpty()) return list.get(0);
         }
@@ -235,7 +235,7 @@ public class IcyURLConnection extends HttpURLConnection {
             if (n == -1) return;
         }
 
-        String key = line.substring(0, n);
+        String key = line.substring(0, n).toLowerCase();
         String val = line.substring(n + len);
 
         List<String> list = headers.get(key);
