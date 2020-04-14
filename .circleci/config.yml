@@ -1,44 +1,95 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
-version: 2
+version: 2.1
+
+executors:
+  gradle-executor:
+    docker:
+      - image: gradle:4.10-jdk8
+
 jobs:
   build:
-    docker:
-    # specify the version you desire here
-    - image: circleci/openjdk:8-jdk
-
-    # Specify service dependencies here if necessary
-    # CircleCI maintains a library of pre-built images
-    # documented at https://circleci.com/docs/2.0/circleci-images/
-    # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
+    executor: gradle-executor
 
     steps:
-    - checkout
+      - checkout
 
-    # Download and cache dependencies
-    - restore_cache:
-        keys:
-        - v1-dependencies-{{ checksum "build.gradle" }}
-        # fallback to using the latest cache if no exact match is found
-        - v1-dependencies-
+      - restore_cache:
+         keys:
+           - v2-dependencies-{{ checksum "build.gradle" }}
 
-    - run: gradle dependencies
+      - run: gradle dependencies
+      - run: gradle setupCiWorkspace
 
-    - run: gradle setupCiWorkspace
+      - save_cache:
+         paths:
+           - ~/.gradle
+         key: v2-dependencies-{{ checksum "build.gradle" }}
 
-    - save_cache:
-        paths:
-        - ~/.gradle
-        key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run: gradle build
 
-    # run tests!
-    - run: gradle test
+      - store_artifacts:
+         path: common/build/libs
+
+      - store_artifacts:
+         path: forge/build/libs
+
+  test:
+    executor: gradle-executor
+
+    steps:
+      - checkout
+
+      - restore_cache:
+         keys:
+          - v2-dependencies-{{ checksum "build.gradle" }}
+
+      - run: gradle dependencies
+      - run: gradle setupCiWorkspace
+      - run: gradle test
+
+  deploy:
+    executor: gradle-executor
+
+    steps:
+      - checkout
+
+      - restore_cache:
+         keys:
+          - v2-dependencies-{{ checksum "build.gradle" }}
+
+      - run: gradle dependencies
+      - run: gradle setupCiWorkspace
+      - run: gradle artifactoryPublish
+
+  notify-dev:
+    executor: gradle-executor
+
+    steps:
+      - checkout
+      - run: bash .circleci/send-dev-notification.sh
+
+workflows:
+  build-test-deploy:
+    jobs:
+      - build
+      - test
+#      - deploy:
+#         requires:
+#           - build
+#           - test
+#         filters:
+#           branches:
+#             only:
+#               - master
+#  nightly:
+#    triggers:
+#      - schedule:
+#          cron: "0 3 * * *"
+#          filters:
+#            branches:
+#              only:
+#                - dev
+#    jobs:
+#      - deploy
+#      - notify-dev:
+#          requires:
+#            - deploy

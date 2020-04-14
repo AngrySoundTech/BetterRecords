@@ -1,14 +1,14 @@
 # Gradle
 /.gradle
-/build/
+build/
 /run*/
 /classes/
 
 # IDEA
 .idea/
-/*.iml
-/*.ipr
-/*.iws
+*.iml
+*.ipr
+*.iws
 
 # OS
 */.DS_Store

@@ -1,3 +1,7 @@
+/////////////////////////////
+// BuildScript and Plugins //
+/////////////////////////////
+
 buildscript {
     repositories {
         jcenter()
@@ -7,52 +11,37 @@ buildscript {
         }
     }
     dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.3'
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
     }
 }
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "1.3.11"
+    id "com.github.hierynomus.license" version "0.15.0"
+}
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+//////////////////
+// Dependencies //
+//////////////////
 
 repositories {
     jcenter()
     maven {
         url 'http://maven.shadowfacts.net/'
     }
-    maven {
-        url "http://dl.bintray.com/jetbrains/spek"
-    }
 }
 
-apply plugin: 'kotlin'
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'org.junit.platform.gradle.plugin'
+dependencies {
+    shadow group: 'net.shadowfacts', name: 'Forgelin', 'version': forgelin_version
 
-junitPlatform {
-    filters {
-        engines {
-            include 'spek'
-        }
-    }
-}
-
-// Discern the environment we are building in,
-// Based on variables that would only be set in jenkins
-if (System.getenv('CI') && System.getenv('GIT_BRANCH') != 'master') {
-    // We are for sure in jenkins, and not building for
-    // release. This is a snapshot build of a branch.
-    version = "$minecraft_version-${System.getenv('BUILD_TAG')}-${System.getenv('GIT_COMMIT')}"
-} else {
-    // We might be in jenkins, we might be local.
-    // Doesn't matter though.
-
-    // If we're local, we want to build as normal.
-
-    // If we're in Jenkins, and this is the master branch,
-    // We know we're not building a snapshot, because
-    // of our branching model. This is a release build.
-    version = "$minecraft_version-$mod_version"
+    compile group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5-1'
+    compile group: 'com.googlecode.soundlibs', name: 'vorbisspi', version: '1.0.3.3'
 }
 
 minecraft {
@@ -64,16 +53,11 @@ minecraft {
     replace "@VERSION@", project.version
 }
 
-dependencies {
-    shadow group: 'net.shadowfacts', name: 'Forgelin', 'version': forgelin_version
+///////////////
+// Artifacts //
+///////////////
 
-    compile group: 'com.googlecode.soundlibs', name: 'mp3spi', version: '1.9.5-1'
-    compile group: 'com.googlecode.soundlibs', name: 'vorbisspi', version: '1.0.3.3'
-
-    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test', version: kotlin_version
-    testCompile group: 'org.jetbrains.spek', name: 'spek-api', version: '1.1.5'
-    testRuntime group: 'org.jetbrains.spek', name: 'spek-junit-platform-engine', version : '1.1.5'
-}
+version = "$minecraft_version-$mod_version"
 
 processResources {
     inputs.property "version", project.version
@@ -88,8 +72,6 @@ processResources {
     }
 }
 
-build.dependsOn shadowJar
-
 shadowJar {
     classifier '' // Replace the default jar
 
@@ -99,13 +81,13 @@ shadowJar {
 
     exclude 'dummyThing'
 
-    relocate 'com.jcraft', 'com.codingforcookies.betterrecords.repack.jcraft'
-    relocate 'javazoom', 'com.codingforcookies.betterrecords.repack.javazoom'
-    relocate 'org.tritonus', 'com.codingforcookies.betterrecords.repack.tritonus'
+    relocate 'com.jcraft', 'tech.feldman.betterrecords.repack.jcraft'
+    relocate 'javazoom', 'tech.feldman.betterrecords.repack.javazoom'
+    relocate 'org.tritonus', 'tech.feldman.betterrecords.repack.tritonus'
 }
 
 reobf {
-    shadowJar {} // Reobf the shadowed jar
+    shadowJar {}
 }
 
 task deobfJar(type: Jar) {
@@ -127,4 +109,45 @@ artifacts {
     archives deobfJar
     archives sourcesJar
     archives javadocJar
+}
+
+
+///////////////
+// Licencing //
+///////////////
+
+license {
+    include "**/*.kt"
+}
+
+////////////////
+// Publishing //
+////////////////
+
+artifactoryPublish.dependsOn reobfShadowJar
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            for (theArtifact in configurations.archives.allArtifacts) {
+                artifact theArtifact
+            }
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "https://artifactory.feldman.tech/artifactory/"
+    publish {
+        repository {
+            repoKey = System.getenv('CIRCLE_BRANCH') ==~ /^dev$/ ? 'minecraft-snapshots' :
+                    System.getenv('CIRCLE_BRANCH') ==~ /^master$/ ? 'minecraft-releases' : null
+            username = System.getenv('ARTIFACTORY_USER')
+            password = System.getenv('ARTIFACTORY_PASSWORD')
+        }
+        defaults {
+            publications('maven')
+            publishArtifacts = true
+        }
+    }
 }
