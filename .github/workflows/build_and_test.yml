@@ -1,10 +1,9 @@
-name: Build and Test with Gradle
+name: Build and Test
 
 on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
