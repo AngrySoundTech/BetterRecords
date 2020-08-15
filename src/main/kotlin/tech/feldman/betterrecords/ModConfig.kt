@@ -81,6 +81,11 @@ object ModConfig {
         var flashMode = -1
 
         @JvmField
+        @Config.Comment("Max speaker wire length")
+        @Config.RangeInt(min = 5, max = 80)
+        var wireLength = 7
+
+        @JvmField
         @Config.Comment("Should the mod's built in libraries be loaded")
         var loadDefaultLibraries = true
     }
