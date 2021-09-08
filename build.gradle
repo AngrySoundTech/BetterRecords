@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
         maven {
             name 'forge'
-            url 'https://files.minecraftforge.net/maven'
+            url 'https://maven.minecraftforge.net/'
         }
     }
     dependencies {
@@ -35,7 +35,7 @@ version = "${minecraft_version}-${mod_version}"
 repositories {
     maven { // Forge
         name 'ForgeFS'
-        url 'https://files.minecraftforge.net/maven'
+        url 'https://maven.minecraftforge.net/'
     }
 }
 
@@ -120,5 +120,18 @@ license {
 
     mapping {
         java='SLASHSTAR_STYLE'
+    }
+
+    sourceSets {
+        main {
+            resources {
+                exclude "**"
+            }
+        }
+        test {
+            resources {
+                exclude "**"
+            }
+        }
     }
 }
