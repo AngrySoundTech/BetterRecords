@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 public class BlockRecordPlayer extends Block {
 
-    private static final VoxelShape SHAPE = makeCuboidShape(3, 0, 3, 13, 10.0, 13);
+    private static final VoxelShape SHAPE = makeCuboidShape(3, 0, 3, 13, 10.0, 13);  // TODO
 
     public BlockRecordPlayer(Properties properties) {
         super(properties);
