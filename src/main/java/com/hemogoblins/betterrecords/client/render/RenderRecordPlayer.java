@@ -1,5 +1,6 @@
 package com.hemogoblins.betterrecords.client.render;
 
+import com.hemogoblins.betterrecords.BetterRecords;
 import com.hemogoblins.betterrecords.block.tile.TileRecordPlayer;
 import com.hemogoblins.betterrecords.client.model.ModelRecordPlayer;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -8,13 +9,12 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
 
 import javax.annotation.Nullable;
 
 public class RenderRecordPlayer extends TileEntityRenderer<TileRecordPlayer> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation("betterrecords:textures/model/recordplayer.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(BetterRecords.MOD_ID, "textures/model/recordplayer.png");
     private static final ModelRecordPlayer MODEL = new ModelRecordPlayer();
 
     public RenderRecordPlayer(TileEntityRendererDispatcher manager) {
@@ -23,15 +23,11 @@ public class RenderRecordPlayer extends TileEntityRenderer<TileRecordPlayer> {
 
     @Override
     public void render(@Nullable TileRecordPlayer recordPlayer, float partialTicks, MatrixStack ms, IRenderTypeBuffer buffers, int light, int overlay) {
-        /// System.out.println("RENDER RENDER RENDER");
-
-        IVertexBuilder buffer = buffers.getBuffer(MODEL.getRenderType(TEXTURE));
-
         //region RENDER_BLOCK
         ms.push();
 
         ms.translate(0.5f, 1.5f, 0.5f);
-        ms.rotate(new Quaternion(180f, 0.0f, 0.0f, 1.0f));
+        ms.scale(1F, -1F, -1F);
 
 //        if (recordPlayer != null) {
 //            switch (recordPlayer.getBlockState().get(BlockStateProperties.HORIZONTAL_FACING)) {
@@ -45,7 +41,9 @@ public class RenderRecordPlayer extends TileEntityRenderer<TileRecordPlayer> {
         float openAmount = 0f;
         float needleLocation = 0f;
         float recordLocation = 0f;
-        MODEL.render(ms, buffer, light, overlay, openAmount, needleLocation, recordLocation, 0.0625f);
+
+        IVertexBuilder buffer = buffers.getBuffer(MODEL.getRenderType(TEXTURE));
+        MODEL.render(ms, buffer, light, overlay, 1, 1, 1, 1, openAmount, needleLocation, recordLocation);
 
         ms.pop();
         //endregion RENDER_BLOCK

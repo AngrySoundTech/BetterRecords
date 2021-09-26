@@ -64,11 +64,10 @@ public class ModelRecordPlayer extends Model {
 
     @Override
     public void render(MatrixStack ms, IVertexBuilder buffer, int light, int overlay, float red, float green, float blue, float alpha) {
-        this.render(ms, buffer, light, overlay, red, green, blue, alpha, 0.0f, 0.0f, 0.0f, 0.0f);
+        this.render(ms, buffer, light, overlay, red, green, blue, alpha, 0.0f, 0.0f, 0.0f);
     }
 
-    // TODO: Make this play better a bit nicer with the renderer and what values are passed.
-    public void render(MatrixStack ms, IVertexBuilder buffer, int light, int overlay, float red, float green, float blue, float alpha, float openAmount, float needleLocation, float recordRotation, float f) {
+    public void render(MatrixStack ms, IVertexBuilder buffer, int light, int overlay, float red, float green, float blue, float alpha, float openAmount, float needleLocation, float recordRotation) {
         lid.rotateAngleX = openAmount;
         needle.rotateAngleY = 3f + needleLocation;
         needle.rotateAngleX = recordRotation / 10 % 0.025f;
@@ -76,13 +75,13 @@ public class ModelRecordPlayer extends Model {
 
         ms.push();
         GL11.glDisable(GL11.GL_CULL_FACE);
-        lid.render(ms, buffer, light, overlay);
+        lid.render(ms, buffer, light, overlay, red, green, blue, alpha);
         GL11.glEnable(GL11.GL_CULL_FACE);
         ms.pop();
 
-        body.render(ms, buffer, light, overlay);
-        holder.render(ms, buffer, light, overlay);
-        needle.render(ms, buffer, light, overlay);
-        needleStand.render(ms, buffer, light, overlay);
+        body.render(ms, buffer, light, overlay, red, green, blue, alpha);
+        holder.render(ms, buffer, light, overlay, red, green, blue, alpha);
+        needle.render(ms, buffer, light, overlay, red, green, blue, alpha);
+        needleStand.render(ms, buffer, light, overlay, red, green, blue, alpha);
     }
 }
