@@ -17,10 +17,6 @@ buildscript {
     }
 }
 
-plugins {
-    id "com.github.hierynomus.license" version "0.15.0"
-}
-
 apply plugin: 'net.minecraftforge.gradle'
 
 sourceCompatibility = '1.8'
@@ -105,33 +101,4 @@ artifacts {
     archives deobfJar
     archives sourcesJar
     archives javadocJar
-}
-
-///////////////
-// Licencing //
-///////////////
-
-license {
-    header new File(projectDir, 'HEADER')
-
-    ext.year = Calendar.getInstance().get(Calendar.YEAR)
-    ext.author = author
-    ext.name = name
-
-    mapping {
-        java='SLASHSTAR_STYLE'
-    }
-
-    sourceSets {
-        main {
-            resources {
-                exclude "**"
-            }
-        }
-        test {
-            resources {
-                exclude "**"
-            }
-        }
-    }
 }
