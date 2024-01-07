@@ -1,0 +1,7 @@
+{
+  "parent": "builtin/generated",
+  "textures": {
+    "layer0": "betterrecords:item/record",
+    "layer1": "betterrecords:item/record_overlay"
+  }
+}

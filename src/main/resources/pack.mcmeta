@@ -1,6 +1,8 @@
 {
   "pack": {
-    "pack_format": 6,
-    "description": "Resources used for BetterRecords"
+    "pack_format": 15,
+    "description": {
+     "text": "Resources used for BetterRecords"
+    }
   }
 }

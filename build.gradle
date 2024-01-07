@@ -1,26 +1,17 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 /////////////////////////////
 // BuildScript and Plugins //
 /////////////////////////////
 
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name 'forge'
-            url 'https://maven.minecraftforge.net/'
-        }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0+', changing: true
-    }
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
+    id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlin_version}"
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+compileKotlin {
+    kotlinOptions.jvmTarget = "17"
+}
 
 version = "${minecraft_version}-${mod_version}"
 
@@ -29,23 +20,26 @@ version = "${minecraft_version}-${mod_version}"
 //////////////////
 
 repositories {
-    maven { // Forge
-        name 'ForgeFS'
-        url 'https://maven.minecraftforge.net/'
+    maven {
+        name 'Kotlin for Forge'
+        url 'https://thedarkcolour.github.io/KotlinForForge/'
+        content { includeGroup "thedarkcolour" }
     }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    implementation "thedarkcolour:kotlinforforge:${kotlinforforge_version}"
 }
 
 minecraft {
     mappings channel: mappings_channel, version: mappings_version
     runs {
         client {
-            properties 'forge.logging.console.level': 'debug'
-            properties 'fml.earlyprogresswindow': 'false'
-            properties 'mixin.env.disableRefMap': 'true'
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'betterrecords'
             workingDirectory project.file('run')
             mods {
                 betterrecords {
@@ -54,8 +48,9 @@ minecraft {
             }
         }
         server {
-            properties 'forge.logging.console.level': 'debug'
-            properties 'mixin.env.disableRefMap': 'true'
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'betterrecords'
             workingDirectory project.file('run')
             mods {
                 betterrecords {
@@ -70,13 +65,19 @@ minecraft {
 // Artifacts //
 //////////////
 
+def replacedProperties = [
+        version: version,
+        loader_range: loader_range,
+        forge_range: forge_range,
+        minecraft_range: minecraft_range,
+]
+
 processResources {
-    filter(ReplaceTokens, tokens: [
-            'VERSION': version.toString(),
-            'LOADER_RANGE': loader_range,
-            'FORGE_RANGE': forge_range,
-            'MINECRAFT_RANGE': minecraft_range,
-    ])
+    inputs.properties(replacedProperties)
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand(replacedProperties)
+    }
 }
 
 task deobfJar(type: Jar) {

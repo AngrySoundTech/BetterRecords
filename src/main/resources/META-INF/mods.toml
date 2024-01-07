@@ -1,29 +1,29 @@
-modLoader="javafml"
-loaderVersion="@LOADER_RANGE@"
-issueTrackerURL="https://github.com/Hemogoblins/BetterRecords/issues"
+modLoader="kotlinforforge"
+loaderVersion="${loader_range}"
+issueTrackerURL="https://github.com/AngrySoundTech/BetterRecords/issues"
 license="GPLv3"
 
 [[mods]]
     modId="betterrecords"
-    version="@VERSION@"
+    version="${version}"
     displayName="BetterRecords"
     authors="Hemogoblins"
     credits=""
     description='''
     BetterRecords
     '''
-    displayURL="https://github.com/Hemogoblins/BetterRecords"
+    displayURL="https://github.com/AngrySoundTech/BetterRecords"
 
 [[dependenices.betterrecords]]
     modid="forge"
     mandatory=true
-    versionRange="@FORGE_RANGE@"
+    versionRange="${forge_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependenices.betterrecords]]
     modid="minecraft"
     mandatory=true
-    versionRange="@MINECRAFT_RANGE@"
+    versionRange="${minecraft_range}"
     ordering="NONE"
     side="BOTH"

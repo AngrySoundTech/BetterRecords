@@ -1,5 +1,7 @@
 {
-  "itemGroup.betterrecords": "Better Records",
+  "item_group.betterrecords": "Better Records",
+
+  "item.betterrecords.record": "Record",
 
   "block.betterrecords.record_etcher": "Record Etcher",
   "block.betterrecords.record_player": "Record Player"
