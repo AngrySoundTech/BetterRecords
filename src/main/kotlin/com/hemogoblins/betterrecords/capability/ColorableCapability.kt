@@ -7,6 +7,7 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilitySerializable
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.common.util.LazyOptional
+import kotlin.concurrent.fixedRateTimer
 
 class ColorableCapability: IColorable, INBTSerializable<CompoundTag> {
 
@@ -22,7 +23,8 @@ class ColorableCapability: IColorable, INBTSerializable<CompoundTag> {
         color = nbt.getInt("color")
     }
 
-    class Provider : ICapabilitySerializable<CompoundTag> {
+    class Provider : ICapabilityCompoundable, ICapabilitySerializable<CompoundTag> {
+        override val key = "colorable"
         private val colorable = ColorableCapability()
 
         override fun <T : Any?> getCapability(cap: Capability<T>, side: Direction?): LazyOptional<T> {

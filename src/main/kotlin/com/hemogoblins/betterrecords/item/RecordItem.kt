@@ -1,6 +1,7 @@
 package com.hemogoblins.betterrecords.item
 
 import com.hemogoblins.betterrecords.capability.ColorableCapability
+import com.hemogoblins.betterrecords.capability.CompoundCapabilityProvider
 import com.hemogoblins.betterrecords.capability.ModCapabilities
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
@@ -22,7 +23,9 @@ class RecordItem(properties: Properties) : Item(properties) {
         super.appendHoverText(stack, world, tooltip, flag)
     }
 
-    override fun initCapabilities(stack: ItemStack, nbt: CompoundTag?): ICapabilityProvider? {
-        return ColorableCapability.Provider()
+    override fun initCapabilities(stack: ItemStack, nbt: CompoundTag?): ICapabilityProvider {
+        return CompoundCapabilityProvider(
+            ColorableCapability.Provider(),
+        )
     }
 }
