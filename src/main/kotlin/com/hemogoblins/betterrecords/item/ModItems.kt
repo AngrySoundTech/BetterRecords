@@ -1,6 +1,8 @@
 package com.hemogoblins.betterrecords.item
 
 import com.hemogoblins.betterrecords.BetterRecords
+import com.hemogoblins.betterrecords.block.ModBlocks
+import com.hemogoblins.betterrecords.capability.ModCapabilities
 import net.minecraft.client.color.item.ItemColor
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -20,19 +22,20 @@ object ModItems {
     val ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BetterRecords.ID)
     val CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, BetterRecords.ID)
 
-    val record = registerItem("record") {
-        Item(Item.Properties())
+    val RECORD = registerItem("record") {
+        RecordItem(Item.Properties())
     }
 
+    // TODO: Move somewhere common to items and blocks
     val CREATIVE_TAB = CREATIVE_TABS.register(BetterRecords.ID) {
         with(CreativeModeTab.builder()) {
             title(Component.translatable("item_group.${BetterRecords.ID}"))
-            icon { ItemStack(record.get()) }
+            icon { ItemStack(RECORD.get()) }
 
             displayItems { params, output ->
                 output.apply {
-                    accept(record.get())
-                    // accept(ModBlocks.TEST_BLOCK.get())
+                    accept(RECORD.get())
+                    accept(ModBlocks.RECORD_ETCHER.get())
                 }
             }
 
@@ -43,14 +46,16 @@ object ModItems {
     @SubscribeEvent
     fun registerItemColors(event: RegisterColorHandlersEvent.Item) {
         val color = ItemColor { stack, tintIndex ->
-            if (tintIndex > 0) {
-                if (stack.tag != null) stack.tag!!.getInt("color") else -1
-            } else {
-                0xFFFFFF
+            if (tintIndex < 1) {
+                return@ItemColor 0xFFFFFF
             }
+
+            val t = stack.getCapability(ModCapabilities.COLORABLE_CAPABILITY)
+
+            return@ItemColor t.map { it.color }.orElse(0xFFFFFF)
         }
 
-        event.register(color, record.get())
+        event.register(color, RECORD.get())
     }
 
     fun register(eventBus: IEventBus) {

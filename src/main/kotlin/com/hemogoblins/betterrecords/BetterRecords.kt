@@ -1,6 +1,7 @@
 package com.hemogoblins.betterrecords
 
 import com.hemogoblins.betterrecords.block.ModBlocks
+import com.hemogoblins.betterrecords.capability.ModCapabilities
 import com.hemogoblins.betterrecords.item.ModItems
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
@@ -22,6 +23,7 @@ object BetterRecords {
 
         ModBlocks.register(MOD_BUS)
         ModItems.register(MOD_BUS)
+        ModCapabilities.register(MOD_BUS)
 
         runForDist(
                 clientTarget = {
