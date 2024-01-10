@@ -36,6 +36,7 @@ object ModItems {
                 output.apply {
                     accept(RECORD.get())
                     accept(ModBlocks.RECORD_ETCHER.get())
+                    accept(ModBlocks.RECORD_PLAYER.get())
                 }
             }
 
