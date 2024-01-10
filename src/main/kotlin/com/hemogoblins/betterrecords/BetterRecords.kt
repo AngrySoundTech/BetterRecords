@@ -2,7 +2,9 @@ package com.hemogoblins.betterrecords
 
 import com.hemogoblins.betterrecords.block.ModBlocks
 import com.hemogoblins.betterrecords.capability.ModCapabilities
+import com.hemogoblins.betterrecords.client.screen.ModScreens
 import com.hemogoblins.betterrecords.item.ModItems
+import com.hemogoblins.betterrecords.menu.ModMenuTypes
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
@@ -26,6 +28,8 @@ object BetterRecords {
         ModBlocks.register(MOD_BUS)
         ModItems.register(MOD_BUS)
         ModCapabilities.register(MOD_BUS)
+        ModMenuTypes.register(MOD_BUS)
+        ModScreens.register(MOD_BUS)
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BRConfig.CLIENT_SPEC)
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BRConfig.COMMON_SPEC)

@@ -1,23 +1,30 @@
 package com.hemogoblins.betterrecords.block.entity
 
+import com.hemogoblins.betterrecords.BetterRecords
 import com.hemogoblins.betterrecords.block.ModBlocks
+import com.hemogoblins.betterrecords.menu.RecordEtcherMenu
 import net.minecraft.core.BlockPos
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.MenuProvider
+import net.minecraft.world.SimpleContainer
 
-class RecordEtcherBlockEntity(pos: BlockPos, state: BlockState): BlockEntity(ModBlocks.RECORD_ETCHER_ENTITY.get(), pos, state) {
+class RecordEtcherBlockEntity(
+    pos: BlockPos,
+    state: BlockState
+): BlockEntity(ModBlocks.RECORD_ETCHER_ENTITY.get(), pos, state), MenuProvider {
 
-    var count = 1
+    val container = SimpleContainer(1)
 
-    override fun serializeNBT(): CompoundTag {
-        return CompoundTag().apply {
-            putInt("count", count)
-        }
+    override fun createMenu(windowId: Int, inventory: Inventory, player: Player): AbstractContainerMenu {
+        return RecordEtcherMenu(windowId, inventory, container)
     }
 
-    override fun deserializeNBT(nbt: CompoundTag) {
-        count = nbt.getInt("count")
+    override fun getDisplayName(): Component {
+        return Component.translatable("menu.${BetterRecords.ID}.record_etcher.title")
     }
-
 }
