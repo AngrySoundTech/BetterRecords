@@ -2,6 +2,7 @@ package com.hemogoblins.betterrecords.block
 
 import com.hemogoblins.betterrecords.BetterRecords
 import com.hemogoblins.betterrecords.block.entity.RecordEtcherBlockEntity
+import com.hemogoblins.betterrecords.block.entity.RecordPlayerBlockEntity
 import com.hemogoblins.betterrecords.item.ModItems
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.Item
@@ -26,8 +27,16 @@ object ModBlocks {
         RecordEtcherBlock(BlockBehaviour.Properties.copy(Blocks.JUKEBOX))
     }
 
+    val RECORD_PLAYER = registerBlock("record_player") {
+        RecordPlayerBlock(BlockBehaviour.Properties.copy(Blocks.JUKEBOX))
+    }
+
     val RECORD_ETCHER_ENTITY = BLOCK_ENTITIES.register("record_etcher") {
         BlockEntityType.Builder.of(::RecordEtcherBlockEntity, RECORD_ETCHER.get()).build(null)
+    }
+
+    val RECORD_PLAYER_ENTITY = BLOCK_ENTITIES.register("record_player") {
+        BlockEntityType.Builder.of(::RecordPlayerBlockEntity, RECORD_PLAYER.get()).build(null)
     }
 
     fun register(eventBus: IEventBus) {
