@@ -8,9 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent
 object ModRenderers {
 
     @SubscribeEvent
-    fun rendererRegister(ere: EntityRenderersEvent.RegisterRenderers) {
+    fun registerRenderers(ere: EntityRenderersEvent.RegisterRenderers) {
         ere.registerBlockEntityRenderer(ModBlocks.RECORD_ETCHER_ENTITY.get(), ::RecordEtcherRenderer)
+    }
 
+    @SubscribeEvent
+    fun registerLayers(ere: EntityRenderersEvent.RegisterLayerDefinitions) {
+        ere.registerLayerDefinition(RecordEtcherRenderer.MODEL_LAYER_LOCATION) { RecordEtcherRenderer.createBodyLayer() }
     }
 
     fun register(eventBus: IEventBus) {
