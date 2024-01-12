@@ -1,0 +1,38 @@
+name: Publish Documentation
+
+# TODO: Should we only update docs on release?
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish-documentation:
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - uses: gradle/gradle-build-action@v2
+      - name: Run Gradle Build
+        run: ./gradlew docs:build
+
+      - uses: actions/configure-pages@v2
+      - uses: actions/upload-pages-artifact@v2
+        with:
+          path: docs/src/.vitepress/dist
+      - uses: actions/deploy-pages@v4
+        id: deployment

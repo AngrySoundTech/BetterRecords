@@ -6,6 +6,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
     id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlin_version}"
+    id 'org.jetbrains.dokka' version "1.9.10"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

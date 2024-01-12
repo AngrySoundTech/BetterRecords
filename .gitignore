@@ -24,3 +24,9 @@ classes/
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# Docs
+node_modules
+docs/src/public/dokka
+docs/src/.vitepress/cache
+docs/src/.vitepress/dist
