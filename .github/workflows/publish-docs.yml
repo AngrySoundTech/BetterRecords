@@ -34,5 +34,5 @@ jobs:
       - uses: actions/upload-pages-artifact@v2
         with:
           path: docs/src/.vitepress/dist
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v3
         id: deployment
