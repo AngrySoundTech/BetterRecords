@@ -8,5 +8,8 @@
     "mermaid": "^10.6.1",
     "vitepress": "^1.0.0-rc.36",
     "vitepress-plugin-mermaid": "^2.0.16"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.6.1"
   }
 }
