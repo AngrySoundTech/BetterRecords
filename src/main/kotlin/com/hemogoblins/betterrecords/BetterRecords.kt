@@ -15,11 +15,18 @@ import org.apache.logging.log4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
 
+/**
+ * The main entrypoint for the mod, this class handles initialization, grabs the event bus,
+ * and delegates registration to any of our registries. Additionally, it contains a place
+ * for us to hook in sided behavior in the future, such as record library initialization.
+ */
 @Mod(BetterRecords.ID)
 object BetterRecords {
 
+    /** ID of the mod. Pretty much everything uses this for registry/localization keys, so this should never change */
     const val ID = "betterrecords"
 
+    /** Global logger instance for the mod */
     val logger: Logger = LogManager.getLogger(ID)
 
     init {
@@ -45,9 +52,15 @@ object BetterRecords {
         )
     }
 
+    /**
+     * Client side setup events
+     */
     private fun onClientSetup(event: FMLClientSetupEvent) {
     }
 
+    /**
+     * Server side setup events
+     */
     private fun onServerSetup(event: FMLDedicatedServerSetupEvent) {
 
     }
