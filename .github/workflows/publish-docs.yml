@@ -1,7 +1,7 @@
 name: Publish Documentation
 
-# TODO: Should we only update docs on release?
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
