@@ -71,3 +71,29 @@ sequenceDiagram
 - Preemptively downloading songs when the user picks up a record
 - Syncing record play time between users
 - Configurable limits for cache filesystem usage and expiring
+
+## MusicCache
+
+The music cache is designed such that it may support different providers and strategies
+in the future, although it likely never will if we're being honest with ourselves.
+
+```mermaid
+flowchart TD
+    request_url(Request file by url)
+    request_chk(Request file by url and checksum)
+    
+    request_url-->download_temp
+    
+    request_chk--Checksum in cache?-->request_chk_if{ }
+    request_chk_if--Yes-->return
+    request_chk_if--Noo-->download_temp
+    
+    
+    download_temp(Download to temp directory)-->download_if
+    download_if{ }
+    download_if--Success-->move(Move to cache)-->return
+    download_if--Failure-->return_err
+    
+    return((Return Checksum))
+    return_err((Return Error))
+```
