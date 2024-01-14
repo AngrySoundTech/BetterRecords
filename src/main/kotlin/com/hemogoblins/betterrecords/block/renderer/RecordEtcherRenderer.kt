@@ -59,6 +59,7 @@ class RecordEtcherRenderer: BlockEntityRenderer<RecordEtcherBlockEntity> {
 
         this.renderNeedle(time, poseStack, bufferSource, packedLight, packedOverlay)
 
+        // todo: rotate peg with record
         // TODO: trigger anim from TE state
     }
 
