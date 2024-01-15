@@ -1,8 +1,8 @@
 package com.hemogoblins.betterrecords.menu
 
+import com.hemogoblins.betterrecords.block.entity.RecordEtcherBlockEntity
 import com.hemogoblins.betterrecords.capability.ModCapabilities
-import net.minecraft.world.Container
-import net.minecraft.world.SimpleContainer
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
@@ -12,10 +12,21 @@ import net.minecraft.world.item.ItemStack
 class RecordEtcherMenu(
     windowId: Int,
     playerInventory: Inventory,
-    val container: Container = SimpleContainer(1),
+    val blockEntity: RecordEtcherBlockEntity,
 ): AbstractContainerMenu(ModMenuTypes.RECORD_ETCHER_MENU.get(), windowId) {
+
+    constructor(
+        windowId: Int,
+        playerInventory: Inventory,
+        buf: FriendlyByteBuf
+    ) : this(
+        windowId,
+        playerInventory,
+        playerInventory.player.level().getBlockEntity(buf.readBlockPos()) as RecordEtcherBlockEntity
+    )
+
     init {
-        addSlot(object : Slot(container, 0, 17 + 0 * 18, 26 + 0 * 18) {
+        addSlot(object : Slot(blockEntity.container, 0, 17 + 0 * 18, 26 + 0 * 18) {
             override fun mayPlace(stack: ItemStack): Boolean {
                 return stack.getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY).isPresent
             }
@@ -39,6 +50,6 @@ class RecordEtcherMenu(
 
     override fun stillValid(p_38874_: Player): Boolean {
         // TODO
-        return true;
+        return true
     }
 }

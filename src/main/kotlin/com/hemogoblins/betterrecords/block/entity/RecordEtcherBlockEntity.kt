@@ -21,7 +21,7 @@ class RecordEtcherBlockEntity(
     val container = SimpleContainer(1)
 
     override fun createMenu(windowId: Int, inventory: Inventory, player: Player): AbstractContainerMenu {
-        return RecordEtcherMenu(windowId, inventory, container)
+        return RecordEtcherMenu(windowId, inventory, this)
     }
 
     override fun getDisplayName(): Component {

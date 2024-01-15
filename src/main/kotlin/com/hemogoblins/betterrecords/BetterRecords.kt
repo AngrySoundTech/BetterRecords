@@ -7,15 +7,15 @@ import com.hemogoblins.betterrecords.client.cache.FilesystemCache
 import com.hemogoblins.betterrecords.client.screen.ModScreens
 import com.hemogoblins.betterrecords.item.ModItems
 import com.hemogoblins.betterrecords.menu.ModMenuTypes
-import net.minecraftforge.fml.ModLoadingContext
+import com.hemogoblins.betterrecords.network.ModNetwork
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
+import kotlin.io.path.Path
 
 /**
  * The main entrypoint for the mod, this class handles initialization, grabs the event bus,
@@ -31,18 +31,23 @@ object BetterRecords {
     /** Global logger instance for the mod */
     val logger: Logger = LogManager.getLogger(ID)
 
-    val cache: MusicCache = FilesystemCache()
+    val cache: MusicCache by lazy {
+        logger.info("Initializing Cache...")
+        FilesystemCache(
+            Path(BRConfig.Client.cacheTempDirectory.get()),
+            Path(BRConfig.Client.cacheDirectory.get())
+        )
+    }
 
     init {
-        logger.info("Hello, World!")
+        BRConfig.register()
 
         ModBlocks.register(MOD_BUS)
         ModItems.register(MOD_BUS)
         ModCapabilities.register(MOD_BUS)
         ModMenuTypes.register(MOD_BUS)
         ModScreens.register(MOD_BUS)
-
-        BRConfig.register()
+        ModNetwork.register()
 
         runForDist(
                 clientTarget = {

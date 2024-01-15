@@ -1,10 +1,16 @@
 package com.hemogoblins.betterrecords.client.cache
 
 import com.hemogoblins.betterrecords.api.client.MusicCache
+import java.nio.file.Path
 
-class FilesystemCache : MusicCache {
+class FilesystemCache(
+    val tempDirectory: Path,
+    val directory: Path,
+) : MusicCache {
 
     override fun get(url: String, checksum: String?): String {
-        TODO("Not yet implemented")
+        println("GET $url, $tempDirectory, $directory")
+
+        return ""
     }
 }

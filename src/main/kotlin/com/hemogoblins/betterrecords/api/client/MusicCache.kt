@@ -21,6 +21,6 @@ interface MusicCache {
      */
     @Throws(Exception::class) // TODO
     @Deprecated("This is NOT stable yet, and may change")
-    fun get(url: String, checksum: String?): String
+    fun get(url: String, checksum: String? = null): String
 
 }

@@ -1,8 +1,6 @@
 package com.hemogoblins.betterrecords
 
-import net.minecraftforge.common.ForgeConfig
 import net.minecraftforge.common.ForgeConfigSpec
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue
 import net.minecraftforge.common.ForgeConfigSpec.Builder
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.config.ModConfig
@@ -41,9 +39,10 @@ object BRConfig {
         }
     }
 
-    class Common(builder: Builder) {
+    object Common {
     }
 
-    class Server(builder: Builder) {
+    object Server {
+
     }
 }
