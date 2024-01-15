@@ -24,11 +24,11 @@ object ModBlocks {
     val BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, BetterRecords.ID)
 
     val RECORD_ETCHER = registerBlock("record_etcher") {
-        RecordEtcherBlock(BlockBehaviour.Properties.copy(Blocks.JUKEBOX))
+        RecordEtcherBlock(BlockBehaviour.Properties.copy(Blocks.JUKEBOX).noOcclusion())
     }
 
     val RECORD_PLAYER = registerBlock("record_player") {
-        RecordPlayerBlock(BlockBehaviour.Properties.copy(Blocks.JUKEBOX))
+        RecordPlayerBlock(BlockBehaviour.Properties.copy(Blocks.JUKEBOX).noOcclusion())
     }
 
     val RECORD_ETCHER_ENTITY = BLOCK_ENTITIES.register("record_etcher") {

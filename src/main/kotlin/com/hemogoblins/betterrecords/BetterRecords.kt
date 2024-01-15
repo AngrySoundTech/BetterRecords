@@ -2,6 +2,7 @@ package com.hemogoblins.betterrecords
 
 import com.hemogoblins.betterrecords.api.client.MusicCache
 import com.hemogoblins.betterrecords.block.ModBlocks
+import com.hemogoblins.betterrecords.block.renderer.ModRenderers
 import com.hemogoblins.betterrecords.capability.ModCapabilities
 import com.hemogoblins.betterrecords.client.cache.FilesystemCache
 import com.hemogoblins.betterrecords.client.screen.ModScreens
@@ -47,6 +48,7 @@ object BetterRecords {
         ModCapabilities.register(MOD_BUS)
         ModMenuTypes.register(MOD_BUS)
         ModScreens.register(MOD_BUS)
+        ModRenderers.register(MOD_BUS)
         ModNetwork.register()
 
         runForDist(
