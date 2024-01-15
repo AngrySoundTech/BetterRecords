@@ -1,7 +1,6 @@
 package com.hemogoblins.betterrecords.menu
 
 import com.hemogoblins.betterrecords.BetterRecords
-import net.minecraft.world.flag.FeatureFlagSet
 import net.minecraft.world.inventory.MenuType
 import net.minecraftforge.common.extensions.IForgeMenuType
 import net.minecraftforge.eventbus.api.IEventBus
@@ -15,7 +14,7 @@ object ModMenuTypes {
     val MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, BetterRecords.ID)
 
     val RECORD_ETCHER_MENU = registerMenu("record_etcher") {
-        MenuType(::RecordEtcherMenu, FeatureFlagSet.of())
+        IForgeMenuType.create(::RecordEtcherMenu)
     }
 
     fun register(eventBus: IEventBus) {

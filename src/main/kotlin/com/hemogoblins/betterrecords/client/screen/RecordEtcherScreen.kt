@@ -2,7 +2,10 @@ package com.hemogoblins.betterrecords.client.screen
 
 import com.hemogoblins.betterrecords.BetterRecords
 import com.hemogoblins.betterrecords.menu.RecordEtcherMenu
+import com.hemogoblins.betterrecords.network.ModNetwork
+import com.hemogoblins.betterrecords.network.serverbound.RequestEtchPacket
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -19,6 +22,18 @@ class RecordEtcherScreen(
     init {
         imageHeight = 202
         inventoryLabelY = imageHeight - 94
+    }
+
+    val etchButton = Button.builder(Component.translatable("menu.${BetterRecords.ID}.record_etcher.etch")) {
+        ModNetwork.channel.sendToServer(RequestEtchPacket(container.blockEntity.blockPos, "Fast Car"))
+    }
+        .pos(guiLeft + 175, guiTop + 40 )
+        .width(20)
+        .build()
+
+    override fun init() {
+        super.init()
+        addRenderableWidget(etchButton)
     }
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {

@@ -6,5 +6,6 @@
   "block.betterrecords.record_etcher": "Record Etcher",
   "block.betterrecords.record_player": "Record Player",
 
-  "menu.betterrecords.record_etcher.title": "Record Etcher"
+  "menu.betterrecords.record_etcher.title": "Record Etcher",
+  "menu.betterrecords.record_etcher.etch": "Etch"
 }

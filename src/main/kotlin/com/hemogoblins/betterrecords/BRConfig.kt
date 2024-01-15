@@ -1,65 +1,48 @@
 package com.hemogoblins.betterrecords
 
 import net.minecraftforge.common.ForgeConfigSpec
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue
 import net.minecraftforge.common.ForgeConfigSpec.Builder
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue
-
+import net.minecraftforge.fml.ModLoadingContext
+import net.minecraftforge.fml.config.ModConfig
 
 object BRConfig {
-    var CLIENT_SPEC: ForgeConfigSpec
-    var COMMON_SPEC: ForgeConfigSpec
-    var SERVER_SPEC: ForgeConfigSpec
 
-    var CLIENT: Client
-    var COMMON: Common
-    var SERVER: Server
+    fun register() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Client.spec)
+    }
 
-    class Client(builder: Builder) {
+    object Client {
+        val spec: ForgeConfigSpec
 
-        val TESTVAL: BooleanValue
-
+        // For now we only support the filesystem cache... This may break
+        // config in the future
+        val cacheTempDirectory: ForgeConfigSpec.ConfigValue<String>
+        val cacheDirectory: ForgeConfigSpec.ConfigValue<String>
 
         init {
-            builder.comment("Client config").push("client")
+            val builder = Builder()
 
-            this.TESTVAL = builder
-                    .comment("Comment for testval")
-                    .define("testval", false)
+            builder
+                .comment("Music Download Cache")
+                .push("cache")
+
+            this.cacheTempDirectory = builder
+                .comment("Temporary directory for downloads")
+                .define("tempDirectory", "test")
+
+            this.cacheDirectory = builder
+                .comment("Location to store cached files")
+                .define("directory", "test")
 
             builder.pop()
-        }
-
-    }
-
-
-    class Common(builder: Builder) {
-
-        init {
-
-        }
-
-    }
-
-    class Server(builder: Builder) {
-
-        init {
-
+            spec = builder.build()
         }
     }
 
-    init {
-        val specPairClient: org.apache.commons.lang3.tuple.Pair<Client, ForgeConfigSpec> = ForgeConfigSpec.Builder().configure(::Client)
-        CLIENT = specPairClient.left
-        CLIENT_SPEC = specPairClient.right
+    object Common {
+    }
 
-        val specPairCommon: org.apache.commons.lang3.tuple.Pair<Common, ForgeConfigSpec> = ForgeConfigSpec.Builder().configure(::Common)
-        COMMON = specPairCommon.left
-        COMMON_SPEC = specPairCommon.right
-
-        val specPairServer: org.apache.commons.lang3.tuple.Pair<Server, ForgeConfigSpec> = ForgeConfigSpec.Builder().configure(::Server)
-        SERVER = specPairServer.left
-        SERVER_SPEC = specPairServer.right
+    object Server {
 
     }
 }

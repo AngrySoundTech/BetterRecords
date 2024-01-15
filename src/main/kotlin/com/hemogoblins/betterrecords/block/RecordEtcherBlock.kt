@@ -1,15 +1,10 @@
 package com.hemogoblins.betterrecords.block
 
-import com.hemogoblins.betterrecords.BetterRecords
-import com.hemogoblins.betterrecords.menu.RecordEtcherMenu
 import com.hemogoblins.betterrecords.block.entity.RecordEtcherBlockEntity
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.MenuProvider
-import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -22,7 +17,6 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraftforge.network.NetworkHooks
-import java.awt.Menu
 
 class RecordEtcherBlock(properties: Properties): Block(properties), EntityBlock {
 
@@ -46,14 +40,17 @@ class RecordEtcherBlock(properties: Properties): Block(properties), EntityBlock 
         hand: InteractionHand,
         hit: BlockHitResult
     ): InteractionResult {
-        println("USE")
-        if (!level.isClientSide && player is ServerPlayer) {
-            println("OPEN")
-            player.openMenu(level.getBlockEntity(pos) as MenuProvider)
-            // NetworkHooks.openScreen(player, state.getMenuProvider(level, pos))
+        if (level.isClientSide) {
+            return InteractionResult.PASS
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide)
+        NetworkHooks.openScreen(
+            player as ServerPlayer,
+            level.getBlockEntity(pos) as RecordEtcherBlockEntity,
+            pos
+        )
+
+        return InteractionResult.CONSUME
     }
 
     override fun getShape(state: BlockState, getter: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
