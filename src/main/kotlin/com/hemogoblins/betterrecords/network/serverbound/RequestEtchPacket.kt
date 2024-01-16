@@ -28,7 +28,7 @@ class RequestEtchPacket(
                 val blockEntity = player.serverLevel().getBlockEntity(msg.pos)
 
                 if (blockEntity is RecordEtcherBlockEntity) {
-                    val stack = blockEntity.getSlottedRecord()
+                    val stack = blockEntity.getSlottedItem()
                     val cap = stack.getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY)
 
                     cap.ifPresent {

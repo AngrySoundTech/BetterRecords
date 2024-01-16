@@ -3,7 +3,6 @@ package com.hemogoblins.betterrecords.menu
 import com.hemogoblins.betterrecords.BetterRecords
 import com.hemogoblins.betterrecords.block.ModBlocks
 import com.hemogoblins.betterrecords.block.entity.RecordEtcherBlockEntity
-import com.hemogoblins.betterrecords.capability.ModCapabilities
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
@@ -49,7 +48,7 @@ class RecordEtcherMenu(
 
         addSlot(object : SlotItemHandler(itemHandler, 0, 17 + 0 * 18, 26 + 0 * 18) {
             override fun mayPlace(stack: ItemStack): Boolean {
-                return stack.getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY).isPresent
+                return itemHandler.isItemValid(0, stack)
             }
         })
     }
@@ -63,7 +62,7 @@ class RecordEtcherMenu(
         if (slotIndex < 36) {
             // Inventory has 4*9 (36) slots, so the slot is in the player inventory.
             // If the third argument isn't higher, it doesn't work.
-            if (!moveItemStackTo(stack, 36, 36, false)) return ItemStack.EMPTY
+            if (!moveItemStackTo(stack, 36, 37, false)) return ItemStack.EMPTY
         } else if (slotIndex == 36) {
             // Our only slot, so move to the player inventory.
             if (!moveItemStackTo(stack, 0, 35, false)) return ItemStack.EMPTY

@@ -50,6 +50,7 @@ class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
     private val model_peg: ModelPart
     private val model_arm: ModelPart
 
+    // todo: move to separate model file?
     constructor(context: BlockEntityRendererProvider.Context) {
         this.itemRenderer = context.itemRenderer
         val model = context.bakeLayer(RecordPlayerRenderer.MODEL_LAYER_LOCATION)
@@ -82,15 +83,16 @@ class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
         this.renderArm(entity, partialTick, poseStack, consumer, packedLight, packedOverlay)
 
         val rot = (((entity.level?.gameTime ?: 0) + partialTick) * 3f) % 360
+        val toRot = if (entity.isPlaying) rot else 0f
 
         poseStack.pushPose()
-        poseStack.mulPose(Axis.YP.rotationDegrees(if (entity.isPlaying) rot else 0f))
+        poseStack.mulPose(Axis.YP.rotationDegrees(toRot))
         this.model_peg.render(poseStack, consumer, packedLight, packedOverlay)
         poseStack.popPose()
 
-        if (entity.isPlaying) {
-            this.renderRecord(entity.getSlottedRecord(), rot, poseStack, bufferSource, packedLight, packedOverlay, entity.level)
-        }
+        /** Might as well render anything that's in the slot,
+         * so it's easier to tell what's happened in the event something else gets in somehow. */
+        this.renderRecord(entity.getSlottedItem(), toRot, poseStack, bufferSource, packedLight, packedOverlay, entity.level)
 
         poseStack.popPose()
     }
@@ -105,7 +107,7 @@ class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
     ) {
         val consumerNoCull: VertexConsumer = bufferSource.getBuffer(RenderType.armorCutoutNoCull(ResourceLocation(BetterRecords.ID, "textures/block/record_player.png")))
 
-        var f1 = entity.lidController.getOpenness(partialTick)
+        var f1 = entity.getLidOpenness(partialTick)
         f1 = 1.0f - f1
         f1 = 1.0f - f1 * f1 * f1 * f1
         val lidDegrees = mapRange(0f, 1f, 0f, 60f, f1)
@@ -124,7 +126,7 @@ class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
             packedLight: Int,
             packedOverlay: Int
     ) {
-        var f1 = entity.armController.getOpenness(partialTick)
+        var f1 = entity.getArmOpenness(partialTick)
         f1 = 1.0f - f1
         f1 = 1.0f - f1 * f1 * f1
         val lidDegrees = mapRange(0f, 1f, 0f, 20f, f1)
@@ -157,9 +159,13 @@ class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
         poseStack.popPose()
     }
 
-    private fun pix(float: Float) = (float/16)
 
-    private fun mapRange(fromMin: Float, fromMax: Float, toMin: Float, toMax: Float, value: Float): Float {
-        return (value-fromMin) / (fromMax-fromMin) * (toMax-toMin) + toMin
-    }
+}
+
+/** For adjusting values in 16ths (1 = 1 pixel). */
+private fun pix(float: Float) = (float/16)
+
+/** My very favorite function in the whole world, MapRange, my beloved... */
+private fun mapRange(fromMin: Float, fromMax: Float, toMin: Float, toMax: Float, value: Float): Float {
+    return (value-fromMin) / (fromMax-fromMin) * (toMax-toMin) + toMin
 }

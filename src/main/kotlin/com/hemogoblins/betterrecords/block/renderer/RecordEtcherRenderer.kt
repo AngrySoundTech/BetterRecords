@@ -18,8 +18,9 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
+import kotlin.math.abs
 
-class RecordEtcherRenderer: BlockEntityRenderer<RecordEtcherBlockEntity> {
+class RecordEtcherRenderer(context: BlockEntityRendererProvider.Context): BlockEntityRenderer<RecordEtcherBlockEntity> {
 
     companion object {
         val MODEL_LAYER_LOCATION = ModelLayerLocation(ResourceLocation(BetterRecords.ID, "record_etcher_model"), "main")
@@ -35,13 +36,8 @@ class RecordEtcherRenderer: BlockEntityRenderer<RecordEtcherBlockEntity> {
 
     }
 
-    private val itemRenderer: ItemRenderer
-    private val model: ModelPart
-
-    constructor(context: BlockEntityRendererProvider.Context) {
-        this.itemRenderer = context.itemRenderer
-        this.model = context.bakeLayer(MODEL_LAYER_LOCATION).getChild("body")
-    }
+    private val itemRenderer: ItemRenderer = context.itemRenderer
+    private val model: ModelPart = context.bakeLayer(MODEL_LAYER_LOCATION).getChild("body")
 
     override fun render(
             etcher: RecordEtcherBlockEntity,
@@ -53,7 +49,7 @@ class RecordEtcherRenderer: BlockEntityRenderer<RecordEtcherBlockEntity> {
     ) {
         val time = (etcher.level?.gameTime ?: 0) + partialTick
 
-        etcher.getSlottedRecord().takeIf { !it.isEmpty }?.let {
+        etcher.getSlottedItem().takeIf { !it.isEmpty }?.let {
             renderRecord(it, (time * 3f) % 360, etcher, poseStack, bufferSource, packedLight, packedOverlay)
         }
 
@@ -67,7 +63,7 @@ class RecordEtcherRenderer: BlockEntityRenderer<RecordEtcherBlockEntity> {
         val consumer: VertexConsumer = bufferSource.getBuffer(RenderType.entityCutout(ResourceLocation(BetterRecords.ID, "textures/block/record_etcher.png")))
 
         var shift = time * .002f
-        shift = Math.abs((shift % 2) - 1) // Ping-pong 0..1
+        shift = abs((shift % 2) - 1) // Ping-pong 0..1
 
         poseStack.pushPose()
         poseStack.apply {
