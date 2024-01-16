@@ -41,7 +41,7 @@ class RecordEtcherBlock(properties: Properties): Block(properties), EntityBlock 
         hit: BlockHitResult
     ): InteractionResult {
         if (level.isClientSide) {
-            return InteractionResult.PASS
+            return InteractionResult.SUCCESS
         }
 
         NetworkHooks.openScreen(
@@ -51,6 +51,16 @@ class RecordEtcherBlock(properties: Properties): Block(properties), EntityBlock 
         )
 
         return InteractionResult.CONSUME
+    }
+
+    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+        if (state.block != newState.block) {
+            level.getBlockEntity(pos).takeIf { it is RecordEtcherBlockEntity }.let {
+                (it as RecordEtcherBlockEntity).dropContents()
+            }
+        }
+
+        super.onRemove(state, level, pos, newState, isMoving)
     }
 
     override fun getShape(state: BlockState, getter: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {

@@ -28,13 +28,15 @@ class RequestEtchPacket(
                 val blockEntity = player.serverLevel().getBlockEntity(msg.pos)
 
                 if (blockEntity is RecordEtcherBlockEntity) {
-                    val stack = blockEntity.container.getItem(0)
+                    val stack = blockEntity.getSlottedRecord()
                     val cap = stack.getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY)
 
                     cap.ifPresent {
                         BetterRecords.logger.info("Etching record at ${msg.pos}") // TODO: More information
                         it.songName = msg.name
                     }
+
+                    blockEntity.triggerUpdate() // Notifies clients
                 }
             }
             ctx.get().packetHandled = true

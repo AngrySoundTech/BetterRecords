@@ -23,7 +23,7 @@ object ModItems {
     val CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, BetterRecords.ID)
 
     val RECORD = registerItem("record") {
-        RecordItem(Item.Properties())
+        RecordItem(Item.Properties().stacksTo(1))
     }
 
     // TODO: Move somewhere common to items and blocks
