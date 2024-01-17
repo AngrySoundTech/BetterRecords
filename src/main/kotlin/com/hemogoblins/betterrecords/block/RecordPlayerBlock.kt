@@ -93,6 +93,16 @@ class RecordPlayerBlock(properties: Properties) : BaseEntityBlock(properties) {
         return if (didInteract) InteractionResult.sidedSuccess(level.isClientSide) else InteractionResult.FAIL // todo: should this be PASS?
     }
 
+    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+        if (state.block != newState.block) {
+            level.getBlockEntity(pos).takeIf { it is RecordPlayerBlockEntity }.let {
+                (it as RecordPlayerBlockEntity).dropContents()
+            }
+        }
+
+        super.onRemove(state, level, pos, newState, isMoving)
+    }
+
     override fun getShape(state: BlockState, getter: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         // todo: collider for lid state?
         return SHAPE
