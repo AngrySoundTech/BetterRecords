@@ -10,16 +10,22 @@ import net.minecraftforge.common.util.LazyOptional
 
 class MusicHolderCapability: IMusicHolder, INBTSerializable<CompoundTag> {
 
-    override var songName = "DEFAULT"
+    override var songName = ""
+    override var url = ""
+    override var checksum = ""
 
     override fun serializeNBT():CompoundTag {
         val tag = CompoundTag()
         tag.putString("songName", songName)
+        tag.putString("url", url)
+        tag.putString("checksum", checksum)
         return tag
     }
 
     override fun deserializeNBT(tag: CompoundTag) {
         songName = tag.getString("songName")
+        url = tag.getString("url")
+        checksum = tag.getString("checksum")
     }
 
     class Provider : ICapabilityCompoundable, ICapabilitySerializable<CompoundTag> {

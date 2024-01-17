@@ -14,11 +14,15 @@ import java.util.function.Supplier
 class RequestEtchPacket(
     val pos: BlockPos,
     val name: String,
+    val url: String,
+    val checksum: String,
 ) {
 
     fun encode(buf: FriendlyByteBuf) {
         buf.writeBlockPos(pos)
         buf.writeUtf(name)
+        buf.writeUtf(url)
+        buf.writeUtf(checksum)
     }
 
     companion object {
@@ -34,6 +38,8 @@ class RequestEtchPacket(
                     cap.ifPresent {
                         BetterRecords.logger.info("Etching record at ${msg.pos}") // TODO: More information
                         it.songName = msg.name
+                        it.url = msg.url
+                        it.checksum = msg.checksum
                     }
                 }
             }
@@ -44,6 +50,8 @@ class RequestEtchPacket(
             return RequestEtchPacket(
                 buf.readBlockPos(),
                 buf.readUtf(),
+                buf.readUtf(),
+                buf.readUtf()
             )
         }
     }

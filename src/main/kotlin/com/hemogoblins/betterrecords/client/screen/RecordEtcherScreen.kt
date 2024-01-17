@@ -25,7 +25,23 @@ class RecordEtcherScreen(
     }
 
     val etchButton = Button.builder(Component.translatable("menu.${BetterRecords.ID}.record_etcher.etch")) {
-        ModNetwork.channel.sendToServer(RequestEtchPacket(container.blockEntity.blockPos, "Fast Car"))
+        try {
+            // TODO URL From text field
+            val url = "https://betterrecords-files.s3.amazonaws.com/fastcar.mp3"
+
+            val cacheEntry = BetterRecords.cache.get(url ) { progressPercent ->
+                // TODO: Progress Bar
+            }
+
+            ModNetwork.channel.sendToServer(RequestEtchPacket(
+                container.blockEntity.blockPos,
+                name = "Fast Car",
+                url = url,
+                checksum = cacheEntry.checksum
+            ))
+        } catch (e: Exception) {
+            println(e)
+        }
     }
         .pos(guiLeft + 175, guiTop + 40 )
         .width(20)

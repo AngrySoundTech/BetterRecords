@@ -1,5 +1,15 @@
 package com.hemogoblins.betterrecords.api.client
 
+import java.io.File
+
+/**
+ * Simple object to represent a file in the cache, with extra information
+ */
+data class CacheEntry(
+    val checksum: String,
+    val file: File,
+)
+
 /**
  * The cache is responsible for managing the download and hashing of
  * music files. Files may be requested through the cache, and barring any errors
@@ -21,6 +31,10 @@ interface MusicCache {
      */
     @Throws(Exception::class) // TODO
     @Deprecated("This is NOT stable yet, and may change")
-    fun get(url: String, checksum: String? = null): String
+    fun get(url: String, checksum: String, progress: (progressPercent: Int) -> Unit): CacheEntry
+
+    @Throws(Exception::class) // TODO
+    @Deprecated("This is NOT stable yet, and may change")
+    fun get(url: String, progress: (progressPercent: Int) -> Unit): CacheEntry
 
 }

@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
+import java.io.File
 import kotlin.io.path.Path
 
 /**
@@ -35,8 +36,8 @@ object BetterRecords {
     val cache: MusicCache by lazy {
         logger.info("Initializing Cache...")
         FilesystemCache(
-            Path(BRConfig.Client.cacheTempDirectory.get()),
-            Path(BRConfig.Client.cacheDirectory.get())
+            File(BRConfig.Client.cacheTempDirectory.get()),
+            File(BRConfig.Client.cacheDirectory.get())
         )
     }
 
