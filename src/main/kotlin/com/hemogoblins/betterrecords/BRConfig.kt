@@ -1,9 +1,11 @@
 package com.hemogoblins.betterrecords
 
+import net.minecraft.client.Minecraft
 import net.minecraftforge.common.ForgeConfigSpec
 import net.minecraftforge.common.ForgeConfigSpec.Builder
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.config.ModConfig
+import java.io.File
 
 object BRConfig {
 
@@ -28,11 +30,17 @@ object BRConfig {
 
             this.cacheTempDirectory = builder
                 .comment("Temporary directory for downloads")
-                .define("tempDirectory", "test")
+                .define("tempDirectory", File(Minecraft.getInstance().gameDirectory, "betterrecords/temp").toString()) {
+                    val file = File(it as String)
+                    file.mkdirs() || file.isDirectory
+                }
 
             this.cacheDirectory = builder
                 .comment("Location to store cached files")
-                .define("directory", "test")
+                .define("directory", File(Minecraft.getInstance().gameDirectory, "betterrecords/cache").toString()) {
+                    val file = File(it as String)
+                    file.mkdirs() || file.isDirectory
+                }
 
             builder.pop()
             spec = builder.build()

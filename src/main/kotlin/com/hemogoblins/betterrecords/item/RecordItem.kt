@@ -24,6 +24,8 @@ class RecordItem(properties: Properties) : Item(properties) {
 
         musicHolderCapability.ifPresent {
             tooltip.add(Component.literal(it.songName))
+            tooltip.add(Component.literal(it.url))
+            tooltip.add(Component.literal(it.checksum))
         }
 
         super.appendHoverText(stack, world, tooltip, flag)
