@@ -8,17 +8,19 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraftforge.network.NetworkHooks
 
-class RecordEtcherBlock(properties: Properties): Block(properties), EntityBlock {
+class RecordEtcherBlock(properties: Properties): BaseEntityBlock(properties) {
 
     /* (Y-Up)
     / X1 Y1 Z1
@@ -41,7 +43,7 @@ class RecordEtcherBlock(properties: Properties): Block(properties), EntityBlock 
         hit: BlockHitResult
     ): InteractionResult {
         if (level.isClientSide) {
-            return InteractionResult.PASS
+            return InteractionResult.SUCCESS
         }
 
         NetworkHooks.openScreen(
@@ -53,11 +55,27 @@ class RecordEtcherBlock(properties: Properties): Block(properties), EntityBlock 
         return InteractionResult.CONSUME
     }
 
+    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
+        if (state.block != newState.block) {
+            level.getBlockEntity(pos).takeIf { it is RecordEtcherBlockEntity }.let {
+                (it as RecordEtcherBlockEntity).dropContents()
+            }
+        }
+
+        super.onRemove(state, level, pos, newState, isMoving)
+    }
+
     override fun getShape(state: BlockState, getter: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         return SHAPE
     }
 
     override fun getRenderShape(state: BlockState): RenderShape {
         return RenderShape.MODEL
+    }
+
+    override fun <T : BlockEntity> getTicker(level: Level, state: BlockState, entityType: BlockEntityType<T>): BlockEntityTicker<T>? {
+        return if (level.isClientSide) {
+            createTickerHelper(entityType, ModBlocks.RECORD_ETCHER_ENTITY.get(), RecordEtcherBlockEntity.animationTicker)
+        } else null
     }
 }
