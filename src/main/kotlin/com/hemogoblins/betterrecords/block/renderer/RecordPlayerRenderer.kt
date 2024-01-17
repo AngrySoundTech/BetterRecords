@@ -23,11 +23,12 @@ import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
-class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
+class RecordPlayerRenderer(context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<RecordPlayerBlockEntity> {
 
     companion object {
         val MODEL_LAYER_LOCATION = ModelLayerLocation(ResourceLocation(BetterRecords.ID, "record_player_model"), "main")
 
+        // todo: move to separate model file? or maybe this is fine
         fun createBodyLayer(): LayerDefinition {
             val offset = PartPose.ZERO // PartPose.offset(0.0f, 0.0f, 0.0f)
             val deformation = CubeDeformation.NONE //CubeDeformation(0.0f)
@@ -44,20 +45,19 @@ class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
         }
     }
 
-    private val itemRenderer: ItemRenderer
+    private val itemRenderer: ItemRenderer = context.itemRenderer
     private val model_base: ModelPart
     private val model_lid: ModelPart
     private val model_peg: ModelPart
     private val model_arm: ModelPart
 
-    // todo: move to separate model file?
-    constructor(context: BlockEntityRendererProvider.Context) {
-        this.itemRenderer = context.itemRenderer
-        val model = context.bakeLayer(RecordPlayerRenderer.MODEL_LAYER_LOCATION)
-        this.model_base = model.getChild("base")
-        this.model_lid = model.getChild("lid")
-        this.model_peg = model.getChild("peg")
-        this.model_arm = model.getChild("arm")
+    init {
+        context.bakeLayer(RecordPlayerRenderer.MODEL_LAYER_LOCATION).also {
+            model_base = it.getChild("base")
+            model_lid = it.getChild("lid")
+            model_peg = it.getChild("peg")
+            model_arm = it.getChild("arm")
+        }
     }
 
     override fun render(
@@ -158,8 +158,6 @@ class RecordPlayerRenderer: BlockEntityRenderer<RecordPlayerBlockEntity> {
 
         poseStack.popPose()
     }
-
-
 }
 
 /** For adjusting values in 16ths (1 = 1 pixel). */

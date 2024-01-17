@@ -81,7 +81,6 @@ class RecordPlayerBlockEntity(
     override fun triggerUpdate() {
         togglePlaying(shouldBePlaying())
         super.triggerUpdate()
-
     }
 
     // todo: once playback is implemented, save and resume song playback state
