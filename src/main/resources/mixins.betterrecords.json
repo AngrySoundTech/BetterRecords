@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.hemogoblins.betterrecords.mixin",
+  "refmap": "mixins.betterrecords.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinSoundEngine"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
