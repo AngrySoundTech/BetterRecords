@@ -28,18 +28,31 @@ object BRConfig {
                 .comment("Music Download Cache")
                 .push("cache")
 
+            val defaultTempDirectory = File(Minecraft.getInstance().gameDirectory, "betterrecords/temp")
             this.cacheTempDirectory = builder
                 .comment("Temporary directory for downloads")
-                .define("tempDirectory", File(Minecraft.getInstance().gameDirectory, "betterrecords/temp").toString()) {
-                    val file = File(it as String)
-                    file.mkdirs() || file.isDirectory
+                .define("tempDirectory", defaultTempDirectory.toString()) {
+                    when (it) {
+                        is String -> {
+                            val file = File(it )
+                            file.mkdirs() || file.isDirectory
+                        }
+                        else -> defaultTempDirectory.mkdirs() || defaultTempDirectory.isDirectory
+
+                    }
                 }
 
+            val defaultCacheDirectory = File(Minecraft.getInstance().gameDirectory, "betterrecords/cache")
             this.cacheDirectory = builder
                 .comment("Location to store cached files")
-                .define("directory", File(Minecraft.getInstance().gameDirectory, "betterrecords/cache").toString()) {
-                    val file = File(it as String)
-                    file.mkdirs() || file.isDirectory
+                .define("directory", defaultCacheDirectory.toString()) {
+                    when (it) {
+                        is String -> {
+                            val file = File(it )
+                            file.mkdirs() || file.isDirectory
+                        }
+                        else -> defaultCacheDirectory.mkdirs() || defaultCacheDirectory.isDirectory
+                    }
                 }
 
             builder.pop()
