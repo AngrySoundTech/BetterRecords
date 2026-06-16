@@ -19,7 +19,16 @@ object BRConfig {
         // For now we only support the filesystem cache... This may break
         // config in the future
         val cacheTempDirectory: ForgeConfigSpec.ConfigValue<String>
+            get() {
+                File(Minecraft.getInstance().gameDirectory, field.get()).mkdirs()
+                return field
+            }
+
         val cacheDirectory: ForgeConfigSpec.ConfigValue<String>
+            get() {
+                File(Minecraft.getInstance().gameDirectory, field.get()).mkdirs()
+                return field
+            }
 
         init {
             val builder = Builder()
@@ -30,17 +39,11 @@ object BRConfig {
 
             this.cacheTempDirectory = builder
                 .comment("Temporary directory for downloads")
-                .define("tempDirectory", File(Minecraft.getInstance().gameDirectory, "betterrecords/temp").toString()) {
-                    val file = File(it as String)
-                    file.mkdirs() || file.isDirectory
-                }
+                .define("tempDirectory", "betterrecords/temp")
 
             this.cacheDirectory = builder
                 .comment("Location to store cached files")
-                .define("directory", File(Minecraft.getInstance().gameDirectory, "betterrecords/cache").toString()) {
-                    val file = File(it as String)
-                    file.mkdirs() || file.isDirectory
-                }
+                .define("directory", "betterrecords/cache")
 
             builder.pop()
             spec = builder.build()
