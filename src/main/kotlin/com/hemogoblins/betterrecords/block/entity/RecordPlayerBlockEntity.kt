@@ -96,16 +96,16 @@ class RecordPlayerBlockEntity(
     }
 
     private fun sendPlayRecord() {
-        val checksum = getSlottedItem()
-            .getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY)
-            .map { it.checksum }
-            .orElse("")
+        val cap = getSlottedItem().getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY)
+        val checksum = cap.map { it.checksum }.orElse("")
+        val url = cap.map { it.url }.orElse("")
+        val name = cap.map { it.songName }.orElse("")
 
         if (checksum.isEmpty()) return
 
         ModNetwork.channel.send(
             PacketDistributor.TRACKING_CHUNK.with { level!!.getChunkAt(blockPos) },
-            PlayRecordPacket(blockPos, checksum),
+            PlayRecordPacket(blockPos, checksum, url, name),
         )
     }
 

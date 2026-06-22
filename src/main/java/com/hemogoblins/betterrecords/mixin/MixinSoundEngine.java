@@ -3,6 +3,8 @@ package com.hemogoblins.betterrecords.mixin;
 import com.hemogoblins.betterrecords.BRConfig;
 import com.hemogoblins.betterrecords.BetterRecords;
 import com.hemogoblins.betterrecords.api.client.sound.FileSoundInstance;
+import com.hemogoblins.betterrecords.client.sound.ProgressInputStream;
+import com.hemogoblins.betterrecords.client.sound.RecordSoundManager;
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.Library;
 import com.mojang.blaze3d.audio.OggAudioStream;
@@ -25,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -87,19 +90,21 @@ public abstract class MixinSoundEngine {
 
         File soundFile = new File(BRConfig.Client.INSTANCE.getCacheDirectory().get(), fileSound.getFile());
 
-        // Mark the sound as loading so a stop() arriving before it is ready can cancel it.
+        // Mark the sound as loading so a stop() arriving before it is ready can cancel it,
         betterRecords$loading.add(fileSound);
+        fileSound.setLoading(true);
 
         CompletableFuture<SoundBuffer> bufferFuture =
-                CompletableFuture.supplyAsync(() -> betterRecords$decode(soundFile), Util.backgroundExecutor());
+                CompletableFuture.supplyAsync(() -> betterRecords$decode(fileSound, soundFile), Util.backgroundExecutor());
         bufferFuture
 
                 .thenAcceptBothAsync(
-                        this.channelAccess.createHandle(Library.Pool.STREAMING),
+                        this.channelAccess.createHandle(Library.Pool.STATIC),
                         (soundBuffer, channelHandle) -> betterRecords$startPlaying(fileSound, soundBuffer, channelHandle),
                         Minecraft.getInstance())
                 .exceptionally(throwable -> {
                     betterRecords$loading.remove(fileSound);
+                    fileSound.setLoading(false);
                     BetterRecords.INSTANCE.getLogger().error("Failed to play record sound", throwable);
                     return null;
                 });
@@ -107,14 +112,17 @@ public abstract class MixinSoundEngine {
 
     /** Reads and decodes an OGG file into a static buffer. Runs off the main thread. */
     @Unique
-    private SoundBuffer betterRecords$decode(File soundFile) {
+    private SoundBuffer betterRecords$decode(FileSoundInstance fileSound, File soundFile) {
         if (!soundFile.exists()) {
             throw new RuntimeException("Sound file not found: " + soundFile.getAbsolutePath());
         }
 
         try (FileInputStream stream = new FileInputStream(soundFile);
-             OggAudioStream oggStream = new OggAudioStream(stream)) {
-            return new SoundBuffer(oggStream.readAll(), oggStream.getFormat());
+             ProgressInputStream progressStream = new ProgressInputStream(stream, soundFile.length(), fileSound);
+             OggAudioStream oggStream = new OggAudioStream(progressStream)) {
+            SoundBuffer soundBuffer = new SoundBuffer(oggStream.readAll(), oggStream.getFormat());
+            fileSound.setLoadProgress(1.0F);
+            return soundBuffer;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -125,6 +133,7 @@ public abstract class MixinSoundEngine {
     private void betterRecords$startPlaying(FileSoundInstance fileSound, SoundBuffer soundBuffer, ChannelAccess.ChannelHandle channelHandle) {
         // If the sound was stopped while it was still loading, don't start it.
         boolean wanted = betterRecords$loading.remove(fileSound);
+        fileSound.setLoading(false);
 
         if (channelHandle == null) {
             return;
@@ -145,6 +154,7 @@ public abstract class MixinSoundEngine {
             channel.play();
         });
 
+        fileSound.setStartedPlayingAt(Util.getMillis());
         betterRecords$soundHandles.put(fileSound, channelHandle);
     }
 
@@ -169,9 +179,20 @@ public abstract class MixinSoundEngine {
      */
     @Inject(method="tick", at = @At("TAIL"))
     public void onTick(CallbackInfo ci) {
-        for (Map.Entry<FileSoundInstance, ChannelAccess.ChannelHandle> entry : betterRecords$soundHandles.entrySet()) {
+        Iterator<Map.Entry<FileSoundInstance, ChannelAccess.ChannelHandle>> iterator =
+                betterRecords$soundHandles.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<FileSoundInstance, ChannelAccess.ChannelHandle> entry = iterator.next();
             FileSoundInstance sound = entry.getKey();
             ChannelAccess.ChannelHandle handle = entry.getValue();
+
+            if (handle.isStopped()) {
+                iterator.remove();
+                RecordSoundManager.INSTANCE.onFinished(sound);
+                continue;
+            }
+
             Vec3 soundPos = new Vec3(sound.getX(), sound.getY(), sound.getZ());
             float volume = betterRecords$calculateVolumeByDistance(soundPos);
             handle.execute(channel -> channel.setVolume(volume));

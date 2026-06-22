@@ -14,15 +14,18 @@ license="GPLv3"
     '''
     displayURL="https://github.com/AngrySoundTech/BetterRecords"
 
-[[dependenices.betterrecords]]
-    modid="forge"
+[[mixins]]
+    config="mixins.betterrecords.json"
+
+[[dependencies.betterrecords]]
+    modId="forge"
     mandatory=true
     versionRange="${forge_range}"
     ordering="NONE"
     side="BOTH"
 
-[[dependenices.betterrecords]]
-    modid="minecraft"
+[[dependencies.betterrecords]]
+    modId="minecraft"
     mandatory=true
     versionRange="${minecraft_range}"
     ordering="NONE"

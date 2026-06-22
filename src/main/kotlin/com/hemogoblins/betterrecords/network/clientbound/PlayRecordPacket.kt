@@ -14,18 +14,22 @@ import java.util.function.Supplier
 class PlayRecordPacket(
     val pos: BlockPos,
     val checksum: String,
+    val url: String,
+    val name: String,
 ) {
 
     fun encode(buf: FriendlyByteBuf) {
         buf.writeBlockPos(pos)
         buf.writeUtf(checksum)
+        buf.writeUtf(url)
+        buf.writeUtf(name)
     }
 
     companion object {
         fun handle(msg: PlayRecordPacket, ctx: Supplier<Context>) {
             ctx.get().enqueueWork {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT) {
-                    Runnable { RecordSoundManager.play(msg.pos, msg.checksum) }
+                    Runnable { RecordSoundManager.play(msg.pos, msg.checksum, msg.url, msg.name) }
                 }
             }
             ctx.get().packetHandled = true
@@ -34,6 +38,8 @@ class PlayRecordPacket(
         fun decode(buf: FriendlyByteBuf): PlayRecordPacket {
             return PlayRecordPacket(
                 buf.readBlockPos(),
+                buf.readUtf(),
+                buf.readUtf(),
                 buf.readUtf(),
             )
         }

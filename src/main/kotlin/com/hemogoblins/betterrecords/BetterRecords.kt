@@ -5,6 +5,7 @@ import com.hemogoblins.betterrecords.block.ModBlocks
 import com.hemogoblins.betterrecords.block.renderer.ModRenderers
 import com.hemogoblins.betterrecords.capability.ModCapabilities
 import com.hemogoblins.betterrecords.client.cache.FilesystemCache
+import com.hemogoblins.betterrecords.client.gui.ModOverlays
 import com.hemogoblins.betterrecords.client.screen.ModScreens
 import com.hemogoblins.betterrecords.item.ModItems
 import com.hemogoblins.betterrecords.menu.ModMenuTypes
@@ -55,6 +56,7 @@ object BetterRecords {
         runForDist(
                 clientTarget = {
                     MOD_BUS.addListener(::onClientSetup)
+                    MOD_BUS.addListener(ModOverlays::register)
                 },
                 serverTarget = {
                     MOD_BUS.addListener(::onServerSetup)
