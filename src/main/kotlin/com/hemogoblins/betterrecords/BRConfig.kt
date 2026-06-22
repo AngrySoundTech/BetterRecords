@@ -19,7 +19,16 @@ object BRConfig {
         // For now we only support the filesystem cache... This may break
         // config in the future
         val cacheTempDirectory: ForgeConfigSpec.ConfigValue<String>
+            get() {
+                File(Minecraft.getInstance().gameDirectory, field.get()).mkdirs()
+                return field
+            }
+
         val cacheDirectory: ForgeConfigSpec.ConfigValue<String>
+            get() {
+                File(Minecraft.getInstance().gameDirectory, field.get()).mkdirs()
+                return field
+            }
 
         init {
             val builder = Builder()
@@ -28,32 +37,13 @@ object BRConfig {
                 .comment("Music Download Cache")
                 .push("cache")
 
-            val defaultTempDirectory = File(Minecraft.getInstance().gameDirectory, "betterrecords/temp")
             this.cacheTempDirectory = builder
                 .comment("Temporary directory for downloads")
-                .define("tempDirectory", defaultTempDirectory.toString()) {
-                    when (it) {
-                        is String -> {
-                            val file = File(it )
-                            file.mkdirs() || file.isDirectory
-                        }
-                        else -> defaultTempDirectory.mkdirs() || defaultTempDirectory.isDirectory
+                .define("tempDirectory", "betterrecords/temp")
 
-                    }
-                }
-
-            val defaultCacheDirectory = File(Minecraft.getInstance().gameDirectory, "betterrecords/cache")
             this.cacheDirectory = builder
                 .comment("Location to store cached files")
-                .define("directory", defaultCacheDirectory.toString()) {
-                    when (it) {
-                        is String -> {
-                            val file = File(it )
-                            file.mkdirs() || file.isDirectory
-                        }
-                        else -> defaultCacheDirectory.mkdirs() || defaultCacheDirectory.isDirectory
-                    }
-                }
+                .define("directory", "betterrecords/cache")
 
             builder.pop()
             spec = builder.build()
