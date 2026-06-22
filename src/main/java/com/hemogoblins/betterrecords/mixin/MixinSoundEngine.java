@@ -2,12 +2,13 @@ package com.hemogoblins.betterrecords.mixin;
 
 import com.hemogoblins.betterrecords.BRConfig;
 import com.hemogoblins.betterrecords.BetterRecords;
+import com.hemogoblins.betterrecords.api.client.sound.AudioStreamRegistry;
 import com.hemogoblins.betterrecords.api.client.sound.FileSoundInstance;
+import com.hemogoblins.betterrecords.api.client.sound.RecordAudioStream;
 import com.hemogoblins.betterrecords.client.sound.ProgressInputStream;
 import com.hemogoblins.betterrecords.client.sound.RecordSoundManager;
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.Library;
-import com.mojang.blaze3d.audio.OggAudioStream;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -110,7 +111,9 @@ public abstract class MixinSoundEngine {
                 });
     }
 
-    /** Reads and decodes an OGG file into a static buffer. Runs off the main thread. */
+    /**
+     * Reads and decodes a cached audio file into a static buffer.
+     */
     @Unique
     private SoundBuffer betterRecords$decode(FileSoundInstance fileSound, File soundFile) {
         if (!soundFile.exists()) {
@@ -119,8 +122,8 @@ public abstract class MixinSoundEngine {
 
         try (FileInputStream stream = new FileInputStream(soundFile);
              ProgressInputStream progressStream = new ProgressInputStream(stream, soundFile.length(), fileSound);
-             OggAudioStream oggStream = new OggAudioStream(progressStream)) {
-            SoundBuffer soundBuffer = new SoundBuffer(oggStream.readAll(), oggStream.getFormat());
+             RecordAudioStream audioStream = AudioStreamRegistry.INSTANCE.open(progressStream)) {
+            SoundBuffer soundBuffer = new SoundBuffer(audioStream.readAll(), audioStream.getFormat());
             fileSound.setLoadProgress(1.0F);
             return soundBuffer;
         } catch (Exception e) {
