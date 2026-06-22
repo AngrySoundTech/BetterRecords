@@ -27,7 +27,7 @@ class RecordEtcherScreen(
     val etchButton = Button.builder(Component.translatable("menu.${BetterRecords.ID}.record_etcher.etch")) {
         try {
             // TODO URL From text field
-            val url = "https://betterrecords-files.s3.amazonaws.com/fastcar.mp3"
+            val url = "https://betterrecords-files.s3.amazonaws.com/fastcar.ogg"
 
             val cacheEntry = BetterRecords.cache.get(url ) { progressPercent ->
                 // TODO: Progress Bar
