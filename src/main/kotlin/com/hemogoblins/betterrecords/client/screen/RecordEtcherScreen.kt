@@ -1,21 +1,15 @@
 package com.hemogoblins.betterrecords.client.screen
 
 import com.hemogoblins.betterrecords.BetterRecords
-import com.hemogoblins.betterrecords.api.client.sound.FileSoundInstance
 import com.hemogoblins.betterrecords.menu.RecordEtcherMenu
 import com.hemogoblins.betterrecords.network.ModNetwork
 import com.hemogoblins.betterrecords.network.serverbound.RequestEtchPacket
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
-import net.minecraft.client.sounds.SoundManager
-import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
 
 class RecordEtcherScreen(
     container: RecordEtcherMenu,
@@ -45,14 +39,6 @@ class RecordEtcherScreen(
                 url = url,
                 checksum = cacheEntry.checksum
             ))
-
-            // TODO: Temporary! This is just a good place to trigger the playing and stopping of the file for testing
-            val soundInstance = FileSoundInstance(cacheEntry.checksum, container.blockEntity.blockPos)
-            Minecraft.getInstance().soundManager.play(soundInstance)
-            CompletableFuture.delayedExecutor(10, TimeUnit.SECONDS).execute {
-                Minecraft.getInstance().soundManager.stop(soundInstance)
-            }
-
         } catch (e: Exception) {
             println(e)
         }

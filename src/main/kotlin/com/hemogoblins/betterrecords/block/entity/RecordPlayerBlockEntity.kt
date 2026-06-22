@@ -3,6 +3,10 @@ package com.hemogoblins.betterrecords.block.entity
 import com.hemogoblins.betterrecords.block.ModBlocks
 import com.hemogoblins.betterrecords.block.RecordPlayerBlock
 import com.hemogoblins.betterrecords.block.RecordPlayerBlock.Companion.FACING
+import com.hemogoblins.betterrecords.capability.ModCapabilities
+import com.hemogoblins.betterrecords.network.ModNetwork
+import com.hemogoblins.betterrecords.network.clientbound.PlayRecordPacket
+import com.hemogoblins.betterrecords.network.clientbound.StopRecordPacket
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.entity.item.ItemEntity
@@ -10,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.ChestLidController
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
+import net.minecraftforge.network.PacketDistributor
 import thedarkcolour.kotlinforforge.forge.vectorutil.v3d.toVec3
 
 class RecordPlayerBlockEntity(
@@ -79,8 +84,36 @@ class RecordPlayerBlockEntity(
     }
 
     override fun triggerUpdate() {
+        val wasPlaying = isPlaying
         togglePlaying(shouldBePlaying())
+
+        // Server side, send a start or stop packet if the state changed.
+        if (level?.isClientSide == false && wasPlaying != isPlaying) {
+            if (isPlaying) sendPlayRecord() else sendStopRecord()
+        }
+
         super.triggerUpdate()
+    }
+
+    private fun sendPlayRecord() {
+        val checksum = getSlottedItem()
+            .getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY)
+            .map { it.checksum }
+            .orElse("")
+
+        if (checksum.isEmpty()) return
+
+        ModNetwork.channel.send(
+            PacketDistributor.TRACKING_CHUNK.with { level!!.getChunkAt(blockPos) },
+            PlayRecordPacket(blockPos, checksum),
+        )
+    }
+
+    private fun sendStopRecord() {
+        ModNetwork.channel.send(
+            PacketDistributor.TRACKING_CHUNK.with { level!!.getChunkAt(blockPos) },
+            StopRecordPacket(blockPos),
+        )
     }
 
     // todo: once playback is implemented, save and resume song playback state

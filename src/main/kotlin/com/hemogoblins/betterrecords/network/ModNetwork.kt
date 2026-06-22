@@ -1,6 +1,8 @@
 package com.hemogoblins.betterrecords.network
 
 import com.hemogoblins.betterrecords.BetterRecords
+import com.hemogoblins.betterrecords.network.clientbound.PlayRecordPacket
+import com.hemogoblins.betterrecords.network.clientbound.StopRecordPacket
 import com.hemogoblins.betterrecords.network.serverbound.RequestEtchPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.network.NetworkRegistry
@@ -22,6 +24,20 @@ object ModNetwork {
         var i = 0
 
         // Clientbound
+        channel.registerMessage(
+            i++,
+            PlayRecordPacket::class.java,
+            PlayRecordPacket::encode,
+            PlayRecordPacket::decode,
+            PlayRecordPacket::handle,
+        )
+        channel.registerMessage(
+            i++,
+            StopRecordPacket::class.java,
+            StopRecordPacket::encode,
+            StopRecordPacket::decode,
+            StopRecordPacket::handle,
+        )
 
         // Serverbound
         channel.registerMessage(
