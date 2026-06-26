@@ -8,6 +8,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
     id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlin_version}"
     id 'org.jetbrains.dokka' version "1.9.10"
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -22,11 +23,17 @@ version = "${minecraft_version}-${mod_version}"
 //////////////////
 
 repositories {
+    mavenCentral()
     maven {
         name 'Kotlin for Forge'
         url 'https://thedarkcolour.github.io/KotlinForForge/'
         content { includeGroup "thedarkcolour" }
     }
+}
+
+configurations {
+    shade
+    implementation.extendsFrom shade
 }
 
 dependencies {
@@ -35,11 +42,22 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation "thedarkcolour:kotlinforforge:${kotlinforforge_version}"
+
+    shade "com.googlecode.soundlibs:jlayer:1.0.1.4"
 }
 
 minecraft {
     mappings channel: mappings_channel, version: mappings_version
     runs {
+        configureEach {
+            lazyToken('minecraft_classpath') {
+                configurations.shade
+                    .copyRecursive()
+                    .resolve()
+                    .collect { it.absolutePath }
+                    .join(File.pathSeparator)
+            }
+        }
         client {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
@@ -89,21 +107,37 @@ processResources {
     }
 }
 
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+
+    relocate 'javazoom', 'com.hemogoblins.betterrecords.shadow.javazoom'
+
+    finalizedBy 'reobfShadowJar'
+}
+
+reobf {
+    shadowJar {}
+}
+
+tasks.named('jar') {
+    archiveClassifier = 'slim'
+}
+
+assemble.dependsOn shadowJar
+
 task deobfJar(type: Jar) {
     from sourceSets.main.output
-    //noinspection GroovyAccessibility
     archiveClassifier = 'deobf'
 }
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
-    //noinspection GroovyAccessibility
     archiveClassifier = 'sources'
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
-    //noinspection GroovyAccessibility
     archiveClassifier = 'javadoc'
 }
 

@@ -1,11 +1,14 @@
 package com.hemogoblins.betterrecords
 
 import com.hemogoblins.betterrecords.api.client.MusicCache
+import com.hemogoblins.betterrecords.api.client.sound.AudioStreamRegistry
 import com.hemogoblins.betterrecords.block.ModBlocks
 import com.hemogoblins.betterrecords.block.renderer.ModRenderers
 import com.hemogoblins.betterrecords.capability.ModCapabilities
 import com.hemogoblins.betterrecords.client.cache.FilesystemCache
 import com.hemogoblins.betterrecords.client.gui.ModOverlays
+import com.hemogoblins.betterrecords.client.sound.format.Mp3AudioStreamProvider
+import com.hemogoblins.betterrecords.client.sound.format.OggAudioStreamProvider
 import com.hemogoblins.betterrecords.client.screen.ModScreens
 import com.hemogoblins.betterrecords.item.ModItems
 import com.hemogoblins.betterrecords.menu.ModMenuTypes
@@ -68,6 +71,8 @@ object BetterRecords {
      * Client side setup events
      */
     private fun onClientSetup(event: FMLClientSetupEvent) {
+        AudioStreamRegistry.register(OggAudioStreamProvider)
+        AudioStreamRegistry.register(Mp3AudioStreamProvider)
     }
 
     /**
