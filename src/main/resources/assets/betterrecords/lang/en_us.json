@@ -7,5 +7,12 @@
   "block.betterrecords.record_player": "Record Player",
 
   "menu.betterrecords.record_etcher.title": "Record Etcher",
-  "menu.betterrecords.record_etcher.etch": "Etch"
+  "menu.betterrecords.record_etcher.etch": "Etch",
+  "menu.betterrecords.record_etcher.url": "Song URL",
+  "menu.betterrecords.record_etcher.name": "Record Name",
+  "menu.betterrecords.record_etcher.success": "Etched \"%s\"!",
+  "menu.betterrecords.record_etcher.error.empty_url": "Enter a song URL",
+  "menu.betterrecords.record_etcher.error.no_record": "Insert a record to etch",
+  "menu.betterrecords.record_etcher.error.download_failed": "Could not download song",
+  "menu.betterrecords.record_etcher.error.not_audio": "Not an audio file: (%s)"
 }
