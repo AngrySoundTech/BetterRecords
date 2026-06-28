@@ -3,9 +3,13 @@ package com.hemogoblins.betterrecords.client.cache
 import com.hemogoblins.betterrecords.BetterRecords
 import com.hemogoblins.betterrecords.api.client.CacheEntry
 import com.hemogoblins.betterrecords.api.client.MusicCache
+import net.minecraft.Util
+import net.minecraft.client.Minecraft
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionException
 
 class FilesystemCache(
     private val tempDirectory: File,
@@ -51,5 +55,14 @@ class FilesystemCache(
         BetterRecords.logger.info("$url downloaded and moved to cache: $newChecksum")
 
         return CacheEntry(newChecksum, targetFile)
+    }
+
+    override fun download(url: String, progress: (progressPercent: Int) -> Unit): CompletableFuture<CacheEntry> {
+        return CompletableFuture
+            .supplyAsync({ get(url, progress) }, Util.ioPool())
+            .handleAsync({ entry, error ->
+                if (error != null) throw CompletionException(error)
+                entry
+            }, Minecraft.getInstance())
     }
 }

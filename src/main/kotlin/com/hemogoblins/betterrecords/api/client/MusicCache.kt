@@ -1,6 +1,7 @@
 package com.hemogoblins.betterrecords.api.client
 
 import java.io.File
+import java.util.concurrent.CompletableFuture
 
 /**
  * Simple object to represent a file in the cache, with extra information
@@ -36,5 +37,12 @@ interface MusicCache {
     @Throws(Exception::class) // TODO
     @Deprecated("This is NOT stable yet, and may change")
     fun get(url: String, progress: (progressPercent: Int) -> Unit): CacheEntry
+
+    /**
+     * Downloads [url] into the cache, reporting download percentage through [progress] as it runs.
+     *
+     * The future completes with the cached entry, or completes exceptionally if the download fails.
+     */
+    fun download(url: String, progress: (progressPercent: Int) -> Unit): CompletableFuture<CacheEntry>
 
 }
