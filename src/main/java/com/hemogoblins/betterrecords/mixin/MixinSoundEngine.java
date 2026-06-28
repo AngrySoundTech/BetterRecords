@@ -3,7 +3,7 @@ package com.hemogoblins.betterrecords.mixin;
 import com.hemogoblins.betterrecords.BRConfig;
 import com.hemogoblins.betterrecords.BetterRecords;
 import com.hemogoblins.betterrecords.api.client.sound.AudioStreamRegistry;
-import com.hemogoblins.betterrecords.api.client.sound.FileSoundInstance;
+import com.hemogoblins.betterrecords.client.sound.RecordPlayingSound;
 import com.hemogoblins.betterrecords.api.client.sound.RecordAudioStream;
 import com.hemogoblins.betterrecords.client.sound.ProgressInputStream;
 import com.hemogoblins.betterrecords.client.sound.RecordSoundManager;
@@ -39,7 +39,7 @@ public abstract class MixinSoundEngine {
     @Shadow @Final private ChannelAccess channelAccess;
 
     @Unique
-    private final Map<FileSoundInstance, ChannelAccess.ChannelHandle> betterRecords$soundHandles = new HashMap<>();
+    private final Map<RecordPlayingSound, ChannelAccess.ChannelHandle> betterRecords$soundHandles = new HashMap<>();
 
     /**
      * Sounds whose audio is still being decoded off-thread. A stop() that
@@ -47,7 +47,7 @@ public abstract class MixinSoundEngine {
      * Only ever touched on the main thread.
      */
     @Unique
-    private final Set<FileSoundInstance> betterRecords$loading = new HashSet<>();
+    private final Set<RecordPlayingSound> betterRecords$loading = new HashSet<>();
 
     // TODO: Ability to boost and reduce the distance of sounds based on their network.
     // For now, four chunks is pretty good.
@@ -82,30 +82,30 @@ public abstract class MixinSoundEngine {
 
     @Inject(method="play", at = @At("HEAD"), cancellable = true)
     public void onPlay(SoundInstance sound, CallbackInfo ci) {
-        if (!(sound instanceof FileSoundInstance fileSound)) {
+        if (!(sound instanceof RecordPlayingSound recordSound)) {
             return;
         }
 
         // We fully handle our own file-backed sounds, so skip vanilla's handling.
         ci.cancel();
 
-        File soundFile = new File(BRConfig.Client.INSTANCE.getCacheDirectory().get(), fileSound.getFile());
+        File soundFile = new File(BRConfig.Client.INSTANCE.getCacheDirectory().get(), recordSound.getFile());
 
         // Mark the sound as loading so a stop() arriving before it is ready can cancel it,
-        betterRecords$loading.add(fileSound);
-        fileSound.setLoading(true);
+        betterRecords$loading.add(recordSound);
+        recordSound.setLoading(true);
 
         CompletableFuture<SoundBuffer> bufferFuture =
-                CompletableFuture.supplyAsync(() -> betterRecords$decode(fileSound, soundFile), Util.backgroundExecutor());
+                CompletableFuture.supplyAsync(() -> betterRecords$decode(recordSound, soundFile), Util.backgroundExecutor());
         bufferFuture
 
                 .thenAcceptBothAsync(
                         this.channelAccess.createHandle(Library.Pool.STATIC),
-                        (soundBuffer, channelHandle) -> betterRecords$startPlaying(fileSound, soundBuffer, channelHandle),
+                        (soundBuffer, channelHandle) -> betterRecords$startPlaying(recordSound, soundBuffer, channelHandle),
                         Minecraft.getInstance())
                 .exceptionally(throwable -> {
-                    betterRecords$loading.remove(fileSound);
-                    fileSound.setLoading(false);
+                    betterRecords$loading.remove(recordSound);
+                    recordSound.setLoading(false);
                     BetterRecords.INSTANCE.getLogger().error("Failed to play record sound", throwable);
                     return null;
                 });
@@ -115,16 +115,16 @@ public abstract class MixinSoundEngine {
      * Reads and decodes a cached audio file into a static buffer.
      */
     @Unique
-    private SoundBuffer betterRecords$decode(FileSoundInstance fileSound, File soundFile) {
+    private SoundBuffer betterRecords$decode(RecordPlayingSound recordSound, File soundFile) {
         if (!soundFile.exists()) {
             throw new RuntimeException("Sound file not found: " + soundFile.getAbsolutePath());
         }
 
         try (FileInputStream stream = new FileInputStream(soundFile);
-             ProgressInputStream progressStream = new ProgressInputStream(stream, soundFile.length(), fileSound);
+             ProgressInputStream progressStream = new ProgressInputStream(stream, soundFile.length(), recordSound);
              RecordAudioStream audioStream = AudioStreamRegistry.INSTANCE.open(progressStream)) {
             SoundBuffer soundBuffer = new SoundBuffer(audioStream.readAll(), audioStream.getFormat());
-            fileSound.setLoadProgress(1.0F);
+            recordSound.setLoadProgress(1.0F);
             return soundBuffer;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -133,10 +133,10 @@ public abstract class MixinSoundEngine {
 
     /** Attaches the decoded buffer to a channel and starts playback. Runs on the main thread. */
     @Unique
-    private void betterRecords$startPlaying(FileSoundInstance fileSound, SoundBuffer soundBuffer, ChannelAccess.ChannelHandle channelHandle) {
+    private void betterRecords$startPlaying(RecordPlayingSound recordSound, SoundBuffer soundBuffer, ChannelAccess.ChannelHandle channelHandle) {
         // If the sound was stopped while it was still loading, don't start it.
-        boolean wanted = betterRecords$loading.remove(fileSound);
-        fileSound.setLoading(false);
+        boolean wanted = betterRecords$loading.remove(recordSound);
+        recordSound.setLoading(false);
 
         if (channelHandle == null) {
             return;
@@ -148,26 +148,26 @@ public abstract class MixinSoundEngine {
         }
 
         // TODO: Should this just be a blockpos?
-        Vec3 soundPos = new Vec3(fileSound.getX(), fileSound.getY(), fileSound.getZ());
+        Vec3 soundPos = new Vec3(recordSound.getX(), recordSound.getY(), recordSound.getZ());
 
         channelHandle.execute((channel) -> {
-            channel.setPitch(fileSound.getPitch());
+            channel.setPitch(recordSound.getPitch());
             channel.setVolume(betterRecords$calculateVolumeByDistance(soundPos));
             channel.attachStaticBuffer(soundBuffer);
             channel.play();
         });
 
-        fileSound.setStartedPlayingAt(Util.getMillis());
-        betterRecords$soundHandles.put(fileSound, channelHandle);
+        recordSound.setStartedPlayingAt(Util.getMillis());
+        betterRecords$soundHandles.put(recordSound, channelHandle);
     }
 
     @Inject(method="stop", at = @At("HEAD"), cancellable = true)
     public void onStop(SoundInstance sound, CallbackInfo ci) {
-        if (sound instanceof FileSoundInstance fileSound) {
+        if (sound instanceof RecordPlayingSound recordSound) {
             // Cancel playback if the sound is still being decoded
-            betterRecords$loading.remove(fileSound);
+            betterRecords$loading.remove(recordSound);
 
-            ChannelAccess.ChannelHandle channelHandle = betterRecords$soundHandles.remove(fileSound);
+            ChannelAccess.ChannelHandle channelHandle = betterRecords$soundHandles.remove(recordSound);
 
             if (channelHandle != null) {
                 channelHandle.execute(Channel::stop);
@@ -182,12 +182,12 @@ public abstract class MixinSoundEngine {
      */
     @Inject(method="tick", at = @At("TAIL"))
     public void onTick(CallbackInfo ci) {
-        Iterator<Map.Entry<FileSoundInstance, ChannelAccess.ChannelHandle>> iterator =
+        Iterator<Map.Entry<RecordPlayingSound, ChannelAccess.ChannelHandle>> iterator =
                 betterRecords$soundHandles.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry<FileSoundInstance, ChannelAccess.ChannelHandle> entry = iterator.next();
-            FileSoundInstance sound = entry.getKey();
+            Map.Entry<RecordPlayingSound, ChannelAccess.ChannelHandle> entry = iterator.next();
+            RecordPlayingSound sound = entry.getKey();
             ChannelAccess.ChannelHandle handle = entry.getValue();
 
             if (handle.isStopped()) {

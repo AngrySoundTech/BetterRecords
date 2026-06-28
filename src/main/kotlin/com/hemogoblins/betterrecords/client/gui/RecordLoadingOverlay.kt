@@ -1,6 +1,6 @@
 package com.hemogoblins.betterrecords.client.gui
 
-import com.hemogoblins.betterrecords.api.client.sound.FileSoundInstance
+import com.hemogoblins.betterrecords.api.client.sound.PlayingSound
 import com.hemogoblins.betterrecords.client.sound.RecordSoundManager
 import net.minecraft.Util
 import net.minecraft.client.Minecraft
@@ -54,14 +54,14 @@ object RecordLoadingOverlay : IGuiOverlay {
         }
     }
 
-    private fun renderLoading(guiGraphics: GuiGraphics, font: Font, sound: FileSoundInstance, top: Int): Int {
+    private fun renderLoading(guiGraphics: GuiGraphics, font: Font, sound: PlayingSound, top: Int): Int {
         val panelWidth = BAR_WIDTH + PADDING * 2
         val rowHeight = font.lineHeight + GAP + BAR_HEIGHT
         val progress = sound.loadProgress.coerceIn(0f, 1f)
         val percent = "${(progress * 100).roundToInt()}%"
 
         guiGraphics.fill(PADDING - 2, top - 2, PADDING + panelWidth, top + rowHeight + 2, COLOR_PANEL)
-        guiGraphics.drawString(font, "♪ " + sound.displayName(), PADDING + 2, top, COLOR_TEXT)
+        guiGraphics.drawString(font, "♪ " + sound.name, PADDING + 2, top, COLOR_TEXT)
         guiGraphics.drawString(font, percent, PADDING + panelWidth - font.width(percent) - 2, top, COLOR_SUBTEXT)
 
         val barX = PADDING + 2
@@ -73,8 +73,8 @@ object RecordLoadingOverlay : IGuiOverlay {
         return top + rowHeight + PADDING + GAP
     }
 
-    private fun renderNowPlaying(guiGraphics: GuiGraphics, font: Font, sound: FileSoundInstance, top: Int): Int {
-        val label = "♪ Now Playing: " + sound.displayName()
+    private fun renderNowPlaying(guiGraphics: GuiGraphics, font: Font, sound: PlayingSound, top: Int): Int {
+        val label = "♪ Now Playing: " + sound.name
         val panelWidth = font.width(label) + PADDING * 2
 
         guiGraphics.fill(PADDING - 2, top - 2, PADDING + panelWidth, top + font.lineHeight + 2, COLOR_PANEL)
@@ -82,6 +82,4 @@ object RecordLoadingOverlay : IGuiOverlay {
 
         return top + font.lineHeight + PADDING + GAP
     }
-
-    private fun FileSoundInstance.displayName(): String = name.ifEmpty { "Record" }
 }

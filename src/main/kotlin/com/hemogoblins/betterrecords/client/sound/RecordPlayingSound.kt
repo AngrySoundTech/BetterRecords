@@ -1,6 +1,7 @@
-package com.hemogoblins.betterrecords.api.client.sound
+package com.hemogoblins.betterrecords.client.sound
 
 import com.hemogoblins.betterrecords.BetterRecords
+import com.hemogoblins.betterrecords.api.client.sound.PlayingSound
 import net.minecraft.client.resources.sounds.Sound
 import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.client.sounds.SoundManager
@@ -10,26 +11,29 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.valueproviders.ConstantFloat
 
-class FileSoundInstance(
+/**
+ * [com.hemogoblins.betterrecords.api.client.sound.PlayingSound] for a record
+ */
+class RecordPlayingSound(
     val file: String,
     val pos: BlockPos,
     /** Human-readable name */
-    val name: String = "",
-) : SoundInstance {
+    override val name: String,
+) : SoundInstance, PlayingSound {
 
     /** True while still being decoded by  [com.hemogoblins.betterrecords.mixin.MixinSoundEngine]. */
     @Volatile
-    var loading: Boolean = false
+    override var loading: Boolean = false
 
     /** Decode progress in the range 0..1. */
     @Volatile
-    var loadProgress: Float = 0f
+    override var loadProgress: Float = 0f
 
     /**
      * Timestamp at which playback actually started
      */
     @Volatile
-    var startedPlayingAt: Long = 0L
+    override var startedPlayingAt: Long = 0L
 
     override fun getLocation() = ResourceLocation(BetterRecords.ID, file)
 

@@ -1,6 +1,5 @@
 package com.hemogoblins.betterrecords.client.sound
 
-import com.hemogoblins.betterrecords.api.client.sound.FileSoundInstance
 import java.io.FilterInputStream
 import java.io.InputStream
 
@@ -10,7 +9,7 @@ import java.io.InputStream
 class ProgressInputStream(
     delegate: InputStream,
     private val total: Long,
-    private val sound: FileSoundInstance,
+    private val sound: RecordPlayingSound,
 ) : FilterInputStream(delegate) {
 
     private var read = 0L
