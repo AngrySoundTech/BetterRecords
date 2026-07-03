@@ -3,7 +3,6 @@ package com.hemogoblins.betterrecords.block.entity
 import com.hemogoblins.betterrecords.block.ModBlocks
 import com.hemogoblins.betterrecords.block.RecordPlayerBlock
 import com.hemogoblins.betterrecords.block.RecordPlayerBlock.Companion.FACING
-import com.hemogoblins.betterrecords.capability.ModCapabilities
 import com.hemogoblins.betterrecords.network.ModNetwork
 import com.hemogoblins.betterrecords.network.clientbound.PlayRecordPacket
 import com.hemogoblins.betterrecords.network.clientbound.StopRecordPacket
@@ -96,17 +95,20 @@ class RecordPlayerBlockEntity(
     }
 
     private fun sendPlayRecord() {
-        val cap = getSlottedItem().getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY)
-        val checksum = cap.map { it.checksum }.orElse("")
-        val url = cap.map { it.url }.orElse("")
-        val name = cap.map { it.songName }.orElse("")
-
-        if (checksum.isEmpty()) return
+        val source = PlayRecordPacket.RecordSource.of(getSlottedItem()) ?: return
 
         ModNetwork.channel.send(
             PacketDistributor.TRACKING_CHUNK.with { level!!.getChunkAt(blockPos) },
-            PlayRecordPacket(blockPos, checksum, url, name),
+            PlayRecordPacket(blockPos, source),
         )
+    }
+
+    fun stopPlaying() {
+        if (level?.isClientSide == false && isPlaying) {
+            togglePlaying(false)
+            sendStopRecord()
+            dropContents()
+        }
     }
 
     private fun sendStopRecord() {

@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.item.RecordItem as VanillaRecordItem
 
 class RecordPlayerRenderer(context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<RecordPlayerBlockEntity> {
 
@@ -153,10 +154,37 @@ class RecordPlayerRenderer(context: BlockEntityRendererProvider.Context) : Block
             mulPose(Axis.ZN.rotationDegrees(rotation))
         }
 
-        itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight,
-                packedOverlay, poseStack, bufferSource, level, 1)
+        if (itemStack.item is VanillaRecordItem) {
+            renderVanillaDisc(itemStack, poseStack, bufferSource, packedLight, packedOverlay, level)
+        } else {
+            renderItem(itemStack, poseStack, bufferSource, packedLight, packedOverlay, level)
+        }
 
         poseStack.popPose()
+    }
+
+    private fun renderVanillaDisc(
+            itemStack: ItemStack,
+            poseStack: PoseStack,
+            bufferSource: MultiBufferSource,
+            packedLight: Int,
+            packedOverlay: Int,
+            level: Level?
+    ) {
+        val proxy = VanillaDiscProxies.proxyFor(itemStack, itemRenderer, level)
+        renderItem(proxy, poseStack, bufferSource, packedLight, packedOverlay, level)
+    }
+
+    private fun renderItem(
+            itemStack: ItemStack,
+            poseStack: PoseStack,
+            bufferSource: MultiBufferSource,
+            packedLight: Int,
+            packedOverlay: Int,
+            level: Level?
+    ) {
+        itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight,
+                packedOverlay, poseStack, bufferSource, level, 1)
     }
 }
 

@@ -96,7 +96,7 @@ class RecordPlayerBlock(properties: Properties) : BaseEntityBlock(properties) {
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, isMoving: Boolean) {
         if (state.block != newState.block) {
             level.getBlockEntity(pos).takeIf { it is RecordPlayerBlockEntity }.let {
-                (it as RecordPlayerBlockEntity).dropContents()
+                (it as RecordPlayerBlockEntity).stopPlaying()
             }
         }
 

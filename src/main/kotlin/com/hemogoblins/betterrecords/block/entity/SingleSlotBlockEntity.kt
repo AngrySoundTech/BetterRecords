@@ -10,6 +10,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.Containers
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.RecordItem
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -31,10 +32,8 @@ open class SingleSlotBlockEntity<T : BlockEntity?>(
     companion object {
         const val NBT_TAG_INVENTORY = "inventory"
 
-        /** might want to change this to check capabilities by generic
-         * or just move out of static and override in subs */
-        fun isItemValid(itemStack: ItemStack): Boolean {
-            return itemStack.getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY).isPresent
+        fun isItemValid(stack: ItemStack): Boolean {
+            return stack.getCapability(ModCapabilities.MUSIC_HOLDER_CAPABILITY).isPresent || stack.item is RecordItem
         }
     }
 
