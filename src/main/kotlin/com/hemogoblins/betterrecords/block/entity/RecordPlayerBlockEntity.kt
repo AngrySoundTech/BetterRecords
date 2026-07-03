@@ -103,6 +103,14 @@ class RecordPlayerBlockEntity(
         )
     }
 
+    fun stopPlaying() {
+        if (level?.isClientSide == false && isPlaying) {
+            togglePlaying(false)
+            sendStopRecord()
+            dropContents()
+        }
+    }
+
     private fun sendStopRecord() {
         ModNetwork.channel.send(
             PacketDistributor.TRACKING_CHUNK.with { level!!.getChunkAt(blockPos) },
